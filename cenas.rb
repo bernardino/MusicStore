@@ -1,12 +1,4 @@
-require 'rubygems' if RUBY_VERSION < '1.9'
-require 'sinatra'
-require 'yaml'
-require "sinatra/reloader" if development?
-require 'erb'
 require 'oci8'
-require 'net/http'
-require 'uri'
-require 'rexml/document'
 
 class pessoa
 
@@ -22,6 +14,7 @@ class pessoa
 		end
 		res.cler
 		arr
+	end
 
 	def execute(query)
 		@conn.exec(query)
