@@ -7,7 +7,7 @@ require 'oci8'
 require 'net/http'
 require 'uri'
 require 'rexml/document'
-
+require 'cenas'
 
 get '/' do
   erb :index
@@ -15,8 +15,7 @@ end
 
 get '/artist/:id' do
 	#@artistID = params[:id]
-	conn = OCI8.new('bd1','bd1','ORCL')
-	conn.exec("SELECT artist_id from artist") do |r| 
+	db.select("SELECT artist_id from artist") do |r|
 		@artistID = r.last
 	end
   erb :artist
