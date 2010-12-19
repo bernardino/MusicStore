@@ -7,17 +7,19 @@ require 'oci8'
 require 'net/http'
 require 'uri'
 require 'rexml/document'
-require 'cenas'
+require './database.rb'
+
+configure do
+	$db = Database.new
+end
 
 get '/' do
   erb :index
 end
 
 get '/artist/:id' do
-	#@artistID = params[:id]
-	db.select("SELECT artist_id from artist") do |r|
-		@artistID = r.last
-	end
+	res = $db.select("SELECT artist_name from artist")
+	@artistID = res.last
   erb :artist
 end
 

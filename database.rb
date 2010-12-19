@@ -2,18 +2,20 @@ require 'oci8'
 
 class Database
 
-	def initialize(info)
-		@conn = OCI8.new('bd1','bd1','orcl')
+	def initialize()
+		@conn = OCI8.new('bd1','bd1','ORCL')
 	end
 	
 	def select(query)
-		res = @conn.exec(query)
 		arr = Array.new
-		res.each do |row|
-			arr << row
+		cursor = @conn.exec(query)
+		while r = cursor.fetch()
+			arr.concat(r)
 		end
-		res.cler
+		cursor.close
 		arr
+	end
+	
 
 	def execute(query)
 		@conn.exec(query)
