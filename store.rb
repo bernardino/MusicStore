@@ -7,10 +7,14 @@ require 'oci8'
 require 'net/http'
 require 'uri'
 require 'rexml/document'
+
 require './database.rb'
+require './lastfm.rb'
 
 configure do
 	$db = Database.new
+	$lf = Lastfm.new
+	#$lf.update_artist(params[:id])
 end
 
 get '/' do
@@ -18,22 +22,12 @@ get '/' do
 end
 
 get '/artist/:id' do
-	#res = $db.select("SELECT artist_name from artist")
-	#@artistID = res.last
-	@artistID = params[:id]
-	url = "http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=#{params[:id]}&api_key=b25b959554ed76058ac220b7b2e0a026" #LAST.FM REST API
-	resp = Net::HTTP.get_response(URI.parse(url)).body
-	
-	doc = REXML::Document.new resp
-	doc.elements.each("lfm/artist/image") do |r|
-		if r.attributes["size"] == 'large'
-			@image = r.text
-		end
-	end
-	
-	doc.elements.each("lfm/artist/bio/summary") do |r|
-		@bio = r.text
-	end
+	res = $db.select("SELECT artist_name,artist_bio,artist_image FROM artist
+						WHERE upper(artist_name) like upper('#{params[:id]}')")
+	@artistID = String.new(params[:id])
+	@bio = res[1]
+	@image = res[2]
+	#result = $db.select("SELECT album_name")
   erb :artist
 end
 
@@ -56,16 +50,7 @@ end
 get '/album/:id' do
   @albumID = params[:id]
   
-  url = 'http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=b25b959554ed76058ac220b7b2e0a026&artist=Cher&album=Believe' #LAST.FM REST API
-	resp = Net::HTTP.get_response(URI.parse(url)).body
-	
-	doc = REXML::Document.new resp
-	doc.elements.each("lfm/album/image") do |r|
-		if r.attributes["size"] == 'large'
-			@image = r.text
-		end
-		
-	end
+  #$lf.update_album(params[:id])
   
   erb :album
 end

@@ -16,8 +16,8 @@ class Database
 		arr
 	end
 	
-
 	def execute(query)
 		@conn.exec(query)
 	end
+	
 end
