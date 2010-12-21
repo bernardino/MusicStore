@@ -5,3 +5,5 @@ INSERT INTO product(product_id,artist_id,current_price,product_name,stock,descri
 
 INSERT INTO album
 	VALUES(5,2004,'48m','Merge','Indie Rock');
+
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
