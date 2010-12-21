@@ -19,9 +19,12 @@ class Lastfm
 		doc.elements.each("lfm/artist/bio/summary") do |r|
 			bio = r.text
 		end
-		$db.execute("UPDATE artist SET artist_image='#{image}',
-					artist_bio='#{bio}'
-					WHERE upper(artist_name) LIKE upper('#{name}')")
+		puts image
+		puts bio
+		$db.execute("UPDATE artist 
+					SET artist_image = '#{image}' ,
+					artist_bio = 'aaa'
+					WHERE artist_name LIKE '#{name}'")
 		$db.execute("Commit")
 	end
 	

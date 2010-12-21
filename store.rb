@@ -1,6 +1,5 @@
 require 'rubygems' if RUBY_VERSION < '1.9'
 require 'sinatra'
-require 'yaml'
 require "sinatra/reloader" if development?
 require 'erb'
 require 'oci8'
@@ -28,6 +27,7 @@ get '/artist/:id' do
 	@bio = res[1]
 	@image = res[2]
 	#result = $db.select("SELECT album_name")
+	#$lf.update_artist(params[:id])
   erb :artist
 end
 
@@ -48,11 +48,11 @@ get '/song/:id' do
 end
 
 get '/album/:id' do
-  @albumID = params[:id]
-  
-  #$lf.update_album(params[:id])
-  
-  erb :album
+	@albumID = params[:id]
+	res
+	#$lf.update_album(params[:id])
+	
+	erb :album
 end
 
 get '/search' do
