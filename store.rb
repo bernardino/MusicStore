@@ -9,10 +9,12 @@ require 'rexml/document'
 
 require './database.rb'
 require './lastfm.rb'
+require './searches.rb'
 
 configure do
 	$db = Database.new
 	$lf = Lastfm.new
+	$search = Search.new
 	#$lf.update_artist(params[:id])
 end
 
@@ -21,13 +23,11 @@ get '/' do
 end
 
 get '/artist/:id' do
-	res = $db.select("SELECT artist_name,artist_bio,artist_image FROM artist
-						WHERE upper(artist_name) like upper('#{params[:id]}')")
-	@artistID = String.new(params[:id])
-	@bio = res[1]
-	@image = res[2]
-	#result = $db.select("SELECT album_name")
-	#$lf.update_artist(params[:id])
+	#res = $search.artist(params[:id])
+	#@artistID = String.new(params[:id])
+	#@bio = res[1]
+	#@image = res[2]
+	$lf.update_artist(params[:id])
   erb :artist
 end
 

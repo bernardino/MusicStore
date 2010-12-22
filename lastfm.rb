@@ -21,9 +21,9 @@ class Lastfm
 		end
 		puts image
 		puts bio
-		$db.execute("UPDATE artist 
+		$db.execute("UPDATE artist
 					SET artist_image = '#{image}' ,
-					artist_bio = 'aaa'
+						artist_bio = '#{bio}'
 					WHERE artist_name LIKE '#{name}'")
 		$db.execute("Commit")
 	end
