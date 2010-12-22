@@ -49,6 +49,13 @@
 			<p>Price: <%= @albumPrice %> euros</p> 
 			<br />
 			<p>Track Listing: </p>
+			<% 	tracks = @songs.length
+				i=0
+				while i < tracks %>
+					<p> <%= @songs[i] %>- &nbsp;<%= @songs[i+1] %> &nbsp; <%= @songs[i+2] %></p>
+				<% i=i+3 %>
+				<% end  %>
+			
 			<p>More Albuns From this Artist: </p>
 		</div>
       </div>

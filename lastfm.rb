@@ -6,10 +6,14 @@ class Lastfm
 	end
 	
 	def get_artist(name)
+		header = {
+			'Content-type' => 'application/x-www-form-urlencoded; charset=UTF-8'
+		}
 		url = "http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=#{name.gsub(' ','+')}&api_key=b25b959554ed76058ac220b7b2e0a026" #LAST.FM REST API
-		resp = Net::HTTP.get_response(URI.parse(url)).body
+		resp = Net::HTTP.get_response(URI.parse(url))
 		arr = Array.new
-		doc = REXML::Document.new resp
+		
+		doc = REXML::Document.new resp.body
 		doc.elements.each("lfm/artist/image") do |r|
 			if r.attributes["size"] == 'large'
 				arr[0] = r.text
@@ -18,6 +22,7 @@ class Lastfm
 		doc.elements.each("lfm/artist/bio/summary") do |r|
 			arr[1] = r.text
 		end	
+		
 		arr
 	end
 	
@@ -70,14 +75,17 @@ class Lastfm
 		date = String.new
 		
 		doc = REXML::Document.new resp
+		arr[0] = ' '
 		doc.elements.each("lfm/album/image") do |r|
 			if r.attributes["size"] == 'large'
 				arr[0] = r.text
 			end
 		end
+		arr[1] = ' '
 		doc.elements.each("lfm/album/wiki/summary") do |r|
-			arr[1] = r.text
+			arr[1] = r.text.gsub(/\\/, '\&\&').gsub(/'/, "''").gsub('&quot;','')#.gsub(/[^\' '-~]/,'')
 		end
+		date = '0'
 		doc.elements.each("lfm/album/releasedate") do |r|
 			date = r.text
 		end
@@ -86,6 +94,12 @@ class Lastfm
 			if date[i] == ','
 				arr[2] = date[i-4,4]
 			end
+			i=i+1
+		end
+		
+		i=3
+		doc.elements.each("lfm/album/tracks/track/name") do |r|
+			arr[i] = r.text
 			i=i+1
 		end
 		arr	
@@ -123,7 +137,7 @@ class Lastfm
 					release_date = #{res[2]}
 					WHERE product_id = #{info[i]} "
 					)	
-		$db.execute("commit")
+		$db.execute("commit")		
 	end
 	
 	
@@ -135,33 +149,76 @@ class Lastfm
 					WHERE upper(artist_name) LIKE upper('#{artist_name}')
 					")
 					
-		#exist = get_album_id(artist_name,album_name)
+		exist = get_album_id(artist_name,album_name)
 		
-		id_product = $db.select("SELECT product_number.nextval FROM dual")
-		puts 'aaa'
-		puts res[1]
+		if exist == 1
 		
-		#THE DESCRIPTION MAY CREATE A CONFLICT DUE TO STRANGE CHARACTERS
-		$db.execute("INSERT INTO product(product_id,artist_id,current_price,stock,description,image,rating,release_date,votes)
-					VALUES(#{id_product[0]},
-						#{id[0]},
-						15,50,
-						'#{res[1]}',
-						'#{res[0]}',
-						0,
-						'#{res[2]}',0)
-					")
-		
-		$db.execute("INSERT INTO album(product_id,album_name,album_length,album_label,album_genre)
-					VALUES(#{id_product[0]},'#{album_name}','60','Merge','Rock')
-					")
-		$db.execute("Commit")
-		
+			id_product = $db.select("SELECT product_number.nextval FROM dual")
+			
+			THE DESCRIPTION MAY CREATE A CONFLICT DUE TO STRANGE CHARACTERS
+			$db.execute("INSERT INTO product(product_id,artist_id,current_price,stock,description,image,rating,release_date,votes)
+						VALUES(#{id_product[0]},
+							#{id[0]},
+							15,50,
+							'#{res[1]}',
+							'#{res[0]}',
+							0,
+							'#{res[2]}',0)
+						")
+			
+			$db.execute("INSERT INTO album(product_id,album_name,album_length,album_label,album_genre)
+						VALUES(#{id_product[0]},'#{album_name}','60m','Merge','Rock')
+						")
+						
+			i = 3		
+			while i < res.length
+				song_id = $db.select("SELECT product_number.nextval FROM DUAL")
+				
+				$db.execute("INSERT INTO product(product_id,artist_id,current_price,stock,description,image,rating,release_date,votes)
+							VALUES(#{song_id[0]}, 
+								#{id[0]},
+								1,-1,
+								'N/A',
+								0,
+								'#{res[2]}',0)
+							")
+				$db.execute("INSERT INTO song(product_id,alb_product_id,song_name,song_length,song_genre,song_number)
+							VALUES(#{song_id[0]},
+									#{id_product[0]},
+									'#{res[i]}',
+									'3m',
+									'Indie',
+									#{(i-2)})
+							")
+				i=i+1
+			end				
+					
+			$db.execute("Commit")
+		else
+			puts 'That album already exists'
+		end
 	
 	end
 	
 	def get_album_id(artist_name,album_name)
-		# TODO
+		res = $search.album(album_name)
+		i=0
+		while i < res.length/2
+			if res[i+1] == artist_name
+				return 0
+			else
+				return 1
+			end
+			i=i+2
+		end
+		return 1;
+	end
+	
+	
+	def get_song(artist_name,song_name)
+		
+	
+	
 	end
 
 

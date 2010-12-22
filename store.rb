@@ -6,15 +6,18 @@ require 'oci8'
 require 'net/http'
 require 'uri'
 require 'rexml/document'
+require 'iconv'
 
 require './database.rb'
 require './lastfm.rb'
-require './searches.rb'
+require './search.rb'
+require './get.rb'
 
 configure do
 	$db = Database.new
 	$lf = Lastfm.new
 	$search = Search.new
+	$get = Get.new
 	#$lf.update_artist(params[:id])
 	#$lf.create_artist(params[:id])
 	#$lf.get_artist_id THIS METHOD MIGHT HAVE A BUGGGGGGGG PLEASE BEWARE
@@ -25,40 +28,26 @@ get '/' do
   erb :index
 end
 
-get '/artist/:id' do
-	res = $db.select("SELECT artist_bio,artist_image FROM artist
-						WHERE upper(artist_name) like upper('#{params[:id]}')")
+get '/artist/:id' do	
+	
+	res = $get.artist(params[:id])
 	@artistID = String.new(params[:id])
-	@bio = res[0]
-	@image = res[1]
-	#res = $search.artist(params[:id])
-	#@artistID = String.new(params[:id])
-	#@bio = res[1]
-	#@image = res[2]
-	#$lf.update_artist(params[:id])
+	@bio = res[1]
+	@image = res[2]
   erb :artist
 end
 
 get '/song/:id' do
 	#@songID = params[:id]
   
-	url = 'http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=Cher&api_key=b25b959554ed76058ac220b7b2e0a026' #LAST.FM REST API
-	resp = Net::HTTP.get_response(URI.parse(url)).body
 	
-	doc = REXML::Document.new resp
-	doc.elements.each("lfm/artist/image") do |r|
-		if r.attributes["size"] == 'large'
-			@songID = r.text
-		end
-		
-	end
   erb :song
 end
 
 get '/artist/:name/album/:id' do
 	@artistID = params[:name]
 	@albumID = params[:id]
-	res = $db.select("SELECT artist_name, album_name, image, description, release_date, album_length, album_genre, album_label, rating, votes, current_price
+	res = $db.select("SELECT artist_name, album_name, image, description, release_date, album_length, album_genre, album_label, rating, votes, current_price, al.product_id
 						FROM album al, artist ar, product p
 						WHERE ar.artist_id = p.artist_id
 						AND p.product_id = al.product_id
@@ -72,8 +61,17 @@ get '/artist/:name/album/:id' do
 	@albumLabel = res[7]
 	@albumRating = res[8]
 	@albumPrice = res[10]
+	album_id = res[11]
 	
+	@songs = $db.select("SELECT song_number, song_name, song_length
+							FROM song
+							WHERE alb_product_id = #{album_id}
+							ORDER BY song_number
+						")
+						
 	#$lf.create_album(params[:name],params[:id])
+	
+	#$lf.update_album(params[:name],params[:id])
 	
 	erb :album
 end
