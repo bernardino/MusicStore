@@ -14,6 +14,9 @@ configure do
 	$db = Database.new
 	$lf = Lastfm.new
 	#$lf.update_artist(params[:id])
+	#$lf.create_artist(params[:id])
+	#$lf.get_artist_id THIS METHOD MIGHT HAVE A BUGGGGGGGG PLEASE BEWARE
+	#$lf.update_album(params[:name],params[:id])
 end
 
 get '/' do
@@ -21,14 +24,12 @@ get '/' do
 end
 
 get '/artist/:id' do
-	res = $db.select("SELECT artist_name,artist_bio,artist_image FROM artist
+	res = $db.select("SELECT artist_bio,artist_image FROM artist
 						WHERE upper(artist_name) like upper('#{params[:id]}')")
 	@artistID = String.new(params[:id])
-	@bio = res[1]
-	@image = res[2]
-	#result = $db.select("SELECT album_name")
-	#$lf.update_artist(params[:id])
-  erb :artist
+	@bio = res[0]
+	@image = res[1]
+	erb :artist
 end
 
 get '/song/:id' do
@@ -47,10 +48,25 @@ get '/song/:id' do
   erb :song
 end
 
-get '/album/:id' do
+get '/artist/:name/album/:id' do
+	@artistID = params[:name]
 	@albumID = params[:id]
-	res
-	#$lf.update_album(params[:id])
+	res = $db.select("SELECT artist_name, album_name, image, description, release_date, album_length, album_genre, album_label, rating, votes, current_price
+						FROM album al, artist ar, product p
+						WHERE ar.artist_id = p.artist_id
+						AND p.product_id = al.product_id
+						AND upper(album_name) like upper('#{params[:id]}')
+					")
+	@image = res[2]
+	@albumInfo = res[3]
+	@albumDate = res[4]
+	@albumLength = res[5]
+	@albumGenre = res[6]
+	@albumLabel = res[7]
+	@albumRating = res[8]
+	@albumPrice = res[10]
+	
+	#$lf.create_album(params[:name],params[:id])
 	
 	erb :album
 end
