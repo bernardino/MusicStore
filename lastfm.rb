@@ -56,7 +56,9 @@ class Lastfm
 		$db.execute("UPDATE artist 
 					SET artist_image = '#{res[0]}' ,
 					artist_bio = '#{res[1]}'
-					WHERE upper(artist_name) LIKE upper('#{name}')")
+					WHERE upper(artist_name) LIKE upper('#{name}')
+					")
+					
 		$db.execute("Commit")
 	end
 	

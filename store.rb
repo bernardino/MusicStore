@@ -9,10 +9,12 @@ require 'rexml/document'
 
 require './database.rb'
 require './lastfm.rb'
+require './searches.rb'
 
 configure do
 	$db = Database.new
 	$lf = Lastfm.new
+	$search = Search.new
 	#$lf.update_artist(params[:id])
 	#$lf.create_artist(params[:id])
 	#$lf.get_artist_id THIS METHOD MIGHT HAVE A BUGGGGGGGG PLEASE BEWARE
@@ -29,7 +31,12 @@ get '/artist/:id' do
 	@artistID = String.new(params[:id])
 	@bio = res[0]
 	@image = res[1]
-	erb :artist
+	#res = $search.artist(params[:id])
+	#@artistID = String.new(params[:id])
+	#@bio = res[1]
+	#@image = res[2]
+	#$lf.update_artist(params[:id])
+  erb :artist
 end
 
 get '/song/:id' do
