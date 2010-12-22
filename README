@@ -1,7 +1,7 @@
 Creating albums:
 
-INSERT INTO product(product_id,artist_id,current_price,product_name,stock,description,product_image,rating,release_date,votes)
-	VALUES(product_number.nextval,4,15,'Funeral',50,' ',' ',0,sysdate,0);
-	
+INSERT INTO product(product_id,artist_id,current_price,stock,description,product_image,rating,release_date,votes)
+	VALUES(product_number.nextval,4,15,50,' ',' ',0,2010,0);
 INSERT INTO album
 	VALUES(5,2004,'48m','Merge','Indie Rock');
+

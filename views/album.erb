@@ -50,11 +50,15 @@
 			<img src="<%=@image %>" />
 		</div>
       	<div align="left" style="margin: 10px;"><!-- Artist Info -->
-			<p>Artist Name: <%= @albumID %></p>
-			<p>Album Name: </p>
-			<p>Label: </p>
-			<p>Release Date: </p>
-			<p>Rating: </p> <br />
+			<p>Artist Name: <%= @artistID %></p>
+			<p>Album Name: <%= @albumID %></p>
+			<p>Info: <%= @albumInfo %></p>
+			<p>Length: <%= @albumLength %></p>
+			<p>Label: <%= @albumLabel %></p>
+			<p>Release Date: <%= @albumDate %></p>
+			<p>Rating: <%= @albumRating %></p> 
+			<p>Price: <%= @albumPrice %> euros</p> 
+			<br />
 			<p>Track Listing: </p>
 			<p>More Albuns From this Artist: </p>
 		</div>
