@@ -26,13 +26,24 @@
          </div>
 	  </div>
       <!-- !LOGGED_IN -->
-      <div style="background-color:#EEE; float:left;width:20%">
-      <h1>Login</h1>
-      <h3>Username</h3><input type="text" />
-      <h3>Password</h3><input type="text" />
-      <br />
-      <br />
-      </div>
+      	<% if @logged %>
+		<div style="background-color:#EEE; float:left;width:20%">
+			<h3>Welcome <%= session[:id] %>!!</h3><br />
+			<a href="/logout">Logout</a>
+		</div>
+		<% else %>
+			<div style="background-color:#EEE; float:left;width:20%">
+				<form action="/login" method="post" accept-charset="utf-8">
+					<h1>Login</h1>
+					<h3>Username</h3><input type="text" name="username" />
+					<h3>Password</h3><input type="password" name="password"/><br />
+					<input type="submit" value="Login">
+					<br />
+					<a href="/register">Not Registered?</a>
+					<br />
+				</form>
+			</div>
+		<% end %>
       <!-- Cenas -->
       <div style="background-color:#CCC; float:left;width:60%">
       <h1><%= @merchID %></h1>
