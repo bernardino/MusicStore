@@ -48,7 +48,7 @@ class Get
 							FROM song s, product p
 							WHERE s.product_id = p.product_id
 							AND p.artist_id = #{artist_id}
-							ORDER BY release_date DESC, album_name ASC, song_number ASC;
+							ORDER BY release_date DESC, album_name ASC, song_number ASC
 						")
 	end
 	
