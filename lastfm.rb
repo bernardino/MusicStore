@@ -21,7 +21,7 @@ class Lastfm
 		end
 		
 		#THIS IS JUST TEMPORARY NEED TO IMPROVE
-		arr[1] = (doc/"lfm/artist/bio/summary").inner_html.gsub(']]>','').gsub('<![CDATA[','').
+		arr[1] = (doc/"lfm/artist/bio/summary").inner_html.gsub(']]>','').gsub('<![CDATA[','')
 		
 		arr
 	end

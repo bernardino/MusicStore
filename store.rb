@@ -78,8 +78,8 @@ get '/logout' do
 end
 
 get '/artist/:id' do
-	
 	res = $get.artist(params[:id])
+	
 	@artistID = res[0]
 	@bio = res[1]
 	@image = res[2]
