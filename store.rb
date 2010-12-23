@@ -5,7 +5,6 @@ require 'erb'
 require 'oci8'
 require 'net/http'
 require 'uri'
-require 'rexml/document'
 
 require './database.rb'
 require './lastfm.rb'
@@ -80,11 +79,15 @@ end
 
 get '/artist/:id' do
 	#res = $get.artist(params[:id])
-	$lf.create_artist(params[:id])
-	res = $db.select("SELECT artist_name,artist_bio,artist_image from artist where artist_name like '#{params[:id]}'")
-	@artistID = res[0]
+	#$lf.create_artist(params[:id])	
+	#$lf.update_artist(params[:id])
+	#res = $db.select("SELECT artist_name,artist_bio,artist_image from artist where artist_name like '#{params[:id]}'")
+	res = $lf.get_artist(params[:id])
+	#@artistID = res[0]
 	@bio = res[1]
-	@image = res[2]
+	@image = res[0]
+	
+	puts res[1]
 	
 	erb :artist
 end
@@ -96,6 +99,10 @@ get '/song/:id' do
 end
 
 get '/artist/:name/album/:id' do
+	#res = $get.album(params[:id])
+	#res = $lf.get_album(params[:name],params[:id])
+	#$lf.update_album(params[:name],params[:id])
+	
 	@res = $get.album(params[:id])
 	
 	@songs = $db.select("SELECT song_number, song_name, song_length
@@ -103,6 +110,8 @@ get '/artist/:name/album/:id' do
 							WHERE alb_product_id = #{params[:id]}
 							ORDER BY song_number
 						")
+	
+	
 	
 	erb :album
 end
@@ -117,6 +126,7 @@ end
 post '/search' do
   @cenas = params[:option] #artist / merch / song / album
   @searchTerm = params[:term]
+  puts params[:term]
   @res = $search.artist(params[:term])
   
   erb :search
