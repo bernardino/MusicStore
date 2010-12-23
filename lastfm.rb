@@ -10,8 +10,7 @@ class Lastfm
 		url = "http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=#{name.gsub(' ','+')}&api_key=b25b959554ed76058ac220b7b2e0a026" #LAST.FM REST API
 		resp = Net::HTTP.get_response(URI.parse(url))
 		arr = Array.new
-		
-		
+
 		doc = Hpricot resp.body
 		
 		(doc/"lfm/artist/image").each do |ing|
@@ -22,6 +21,7 @@ class Lastfm
 		
 		#THIS IS JUST TEMPORARY NEED TO IMPROVE
 		arr[1] = (doc/"lfm/artist/bio/summary").inner_html.gsub(']]>','').gsub('<![CDATA[','')
+		
 		
 		arr
 	end
@@ -74,21 +74,20 @@ class Lastfm
 		arr = Array.new
 		date = String.new
 		
-		doc = REXML::Document.new resp
+		doc = Hpricot resp
 		arr[0] = ' '
-		doc.elements.each("lfm/album/image") do |r|
+		(doc/"lfm/album/image").each do |r|
 			if r.attributes["size"] == 'large'
-				arr[0] = r.text
+				arr[0] = r.inner_html
 			end
 		end
 		arr[1] = ' '
-		doc.elements.each("lfm/album/wiki/summary") do |r|
-			arr[1] = r.text.gsub(/\\/, '\&\&').gsub(/'/, "''").gsub('&quot;','')#.gsub(/[^\' '-~]/,'')
-		end
+		arr[1] = (doc/"lfm/album/wiki/summary").inner_html.gsub(']]>','').gsub('<![CDATA[','').gsub(/\\/, '\&\&').gsub(/'/, "''")
+			#arr[1] = r.text.gsub(/\\/, '\&\&').gsub(/'/, "''").gsub('&quot;','')#.gsub(/[^\' '-~]/,'')
+			
 		date = '0'
-		doc.elements.each("lfm/album/releasedate") do |r|
-			date = r.text
-		end
+		date = (doc/"lfm/album/releasedate").inner_html 
+		
 		i=0
 		while i < date.length
 			if date[i] == ','
@@ -98,8 +97,8 @@ class Lastfm
 		end
 		
 		i=3
-		doc.elements.each("lfm/album/tracks/track/name") do |r|
-			arr[i] = r.text
+		(doc/"lfm/album/tracks/track/name").each do |r|
+			arr[i] = r.inner_html
 			i=i+1
 		end
 		arr	
@@ -130,6 +129,7 @@ class Lastfm
 			end
 		end
 		
+		puts res[1]
 		
 		$db.execute("UPDATE product
 					SET description = '#{res[1]}',
@@ -155,7 +155,7 @@ class Lastfm
 		
 			id_product = $db.select("SELECT product_number.nextval FROM dual")
 			
-			THE DESCRIPTION MAY CREATE A CONFLICT DUE TO STRANGE CHARACTERS
+			#THE DESCRIPTION MAY CREATE A CONFLICT DUE TO STRANGE CHARACTERS
 			$db.execute("INSERT INTO product(product_id,artist_id,current_price,stock,description,image,rating,release_date,votes)
 						VALUES(#{id_product[0]},
 							#{id[0]},
