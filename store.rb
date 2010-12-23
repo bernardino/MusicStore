@@ -107,9 +107,16 @@ end
 
 get '/search/:id' do
 	@res = $search.artist(params[:id])
-	
 
 	
+  erb :search
+end
+
+post '/search' do
+  @cenas = params[:option] #artist / merch / song / album
+  @searchTerm = params[:term]
+  @res = $search.artist(params[:term])
+  
   erb :search
 end
 
