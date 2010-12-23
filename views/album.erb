@@ -47,17 +47,18 @@
       <!-- Cenas -->
       <div style="background-color:#CCC; float:left;width:60%">
 		<div style="float:left;margin:10px;">
-			<img src="<%=@image %>" />
+			<img src="<%=@res[2] %>" />
 		</div>
       	<div align="left" style="margin: 10px;"><!-- Artist Info -->
-			<p>Artist Name: <%= @artistID %></p>
-			<p>Album Name: <%= @albumID %></p>
-			<p>Info: <%= @albumInfo %></p>
-			<p>Length: <%= @albumLength %></p>
-			<p>Label: <%= @albumLabel %></p>
-			<p>Release Date: <%= @albumDate %></p>
-			<p>Rating: <%= @albumRating %></p> 
-			<p>Price: <%= @albumPrice %> euros</p> 
+			<p>Artist Name: <%= @res[0] %></p>
+			<p>Album Name: <%= @res[1] %></p>
+			<p>Info: <%= @res[3] %></p>
+			<p>Length: <%= @res[5] %></p>
+			<p>Label: <%= @res[7] %></p>
+			<p>Genre: <%= @res[6] %></p>
+			<p>Release Date: <%= @res[4] %></p>
+			<p>Rating: <%= @res[8] %></p> 
+			<p>Price: <%= @res[10] %> euros</p> 
 			<br />
 			<p>Track Listing: </p>
 			<% 	tracks = @songs.length

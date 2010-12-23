@@ -98,7 +98,7 @@ create table ARTIST
 /*==============================================================*/
 create table CLIENT 
 (
-   CLIENT_ID            VARCHAR2(20)              not null,
+   CLIENT_ID            VARCHAR2(20)         not null,
    ADDRESS              VARCHAR2(100)        not null,
    TELEPHONE            INTEGER              not null,
    NAME                 VARCHAR2(50)         not null,
@@ -123,7 +123,7 @@ create table MERCHANDISE
 create table "ORDER" 
 (
    REGISTRY_ID          INTEGER               not null,
-   CLIENT_ID            VARCHAR2(20)               not null,
+   CLIENT_ID            VARCHAR2(20)          not null,
    TOTAL_PRICE          FLOAT                 not null,
    ORDER_DATE           DATE                  not null,
    constraint PK_ORDER primary key (REGISTRY_ID)
