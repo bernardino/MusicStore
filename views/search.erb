@@ -47,6 +47,11 @@
       <!-- Cenas -->
       <div style="background-color:#CCC; float:left;width:60%">
       <h1>Search Results</h1>
+		<% 	i=0
+			while i < @res.length %>
+				<p> <%= @res[i+1] %></p> 
+				<% i=i+2 %>
+			<% end %>
       </div>
       <!-- Shopping Cart -->
       <div style="background-color:#DDD; float:left;width:20%">
