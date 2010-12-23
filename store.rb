@@ -79,9 +79,9 @@ get '/logout' do
 end
 
 get '/artist/:id' do
-	res = $get.artist(params[:id])
-	#$lf.create_artist(params[:id])
-	#res = $db.select("SELECT artist_name,artist_bio,artist_image from artist where artist_name like '#{params[:id]}'")
+	#res = $get.artist(params[:id])
+	$lf.create_artist(params[:id])
+	res = $db.select("SELECT artist_name,artist_bio,artist_image from artist where artist_name like '#{params[:id]}'")
 	@artistID = res[0]
 	@bio = res[1]
 	@image = res[2]
