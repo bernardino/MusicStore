@@ -9,7 +9,7 @@ require 'rexml/document'
 
 require './database.rb'
 require './lastfm.rb'
-require './searches.rb'
+require './search.rb'
 
 configure do
 	$db = Database.new
