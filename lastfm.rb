@@ -1,3 +1,4 @@
+require 'hpricot'
 
 class Lastfm
 	
@@ -6,22 +7,21 @@ class Lastfm
 	end
 	
 	def get_artist(name)
-		header = {
-			'Content-type' => 'application/x-www-form-urlencoded; charset=UTF-8'
-		}
 		url = "http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=#{name.gsub(' ','+')}&api_key=b25b959554ed76058ac220b7b2e0a026" #LAST.FM REST API
 		resp = Net::HTTP.get_response(URI.parse(url))
 		arr = Array.new
 		
-		doc = REXML::Document.new resp.body
-		doc.elements.each("lfm/artist/image") do |r|
-			if r.attributes["size"] == 'large'
-				arr[0] = r.text
+		
+		doc = Hpricot resp.body
+		
+		(doc/"lfm/artist/image").each do |ing|
+			if ing.attributes["size"] == 'large'
+				arr[0] = ing.inner_html
 			end
 		end
-		doc.elements.each("lfm/artist/bio/summary") do |r|
-			arr[1] = r.text
-		end	
+		
+		#THIS IS JUST TEMPORARY NEED TO IMPROVE
+		arr[1] = (doc/"lfm/artist/bio/summary").inner_html.gsub(']]>','').gsub('<![CDATA[','').
 		
 		arr
 	end
