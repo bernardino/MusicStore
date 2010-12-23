@@ -72,6 +72,20 @@ drop index HAS_SEVERAL_FK;
 
 drop table SONG cascade constraints;
 
+drop sequence artist_number;
+
+drop sequence product_number;
+
+CREATE sequence artist_number
+START with 1
+INCREMENT by 1
+NOCYCLE;
+
+CREATE sequence product_number
+START with 1
+INCREMENT by 1
+NOCYCLE;
+
 /*==============================================================*/
 /* Table: ALBUM                                                 */
 /*==============================================================*/

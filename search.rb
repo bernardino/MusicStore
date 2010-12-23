@@ -62,7 +62,7 @@ class Search
 	
 	
 	def client_by_name(name)
-		return $db.select("	SELECT name, client_id
+		return $db.select("	SELECT client_id, name
 							FROM client
 							WHERE upper(name) like upper('%#{name}%')
 							ORDER BY name, client_id
