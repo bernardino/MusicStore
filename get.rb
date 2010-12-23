@@ -79,5 +79,4 @@ class Get
 							WHERE c.client_id = #{client_id}
 						")
 	end
-	
 end

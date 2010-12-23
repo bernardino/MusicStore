@@ -5,7 +5,7 @@
 
 
 /*==============================================================*/
-/*                      Patch Notes 2.0							*/
+/*                      Patch Notes 2.6							*/
 /*   										                    */
 /*	SONG's ALB_PRODUCT_ID can now be null						*/
 /*	SONG's SONG NUMBER can now be null							*/
@@ -13,8 +13,12 @@
 /*	MERCHANDISE now has field MERCHANDISE_NAME					*/
 /*	ALBUM now has field ALBUM_NAME								*/
 /*	ALBUM no longer has field ALBUM_YEAR						*/
-/*	Changed field PRODUCT's PRODUCT_IMAGE to just IMAGE			*/
-/*  PRODUCT'S Description field resized to varchar2(1000)       */
+/*	Changed PRODUCT's PRODUCT_IMAGE to just IMAGE				*/
+/*	Switched PRODUCT'S field order. Switched RELEASE_DATE with	*/
+/*	RATING														*/
+/*  PRODUCT'S DESCRIPTION field resized to varchar2(1000)       */
+/*	CLIENT_ID's type changed from INTEGER to VARCHAR2(20)		*/
+/*	CURRENT_PRICE is now a FLOAT								*/
 /*==============================================================*/
 
 
@@ -170,9 +174,9 @@ create table PRODUCT
 (
    PRODUCT_ID           INTEGER              not null,
    ARTIST_ID            INTEGER              not null,
-   CURRENT_PRICE        INTEGER              not null,
+   CURRENT_PRICE        FLOAT	             not null,
    STOCK                INTEGER              not null,
-   DESCRIPTION          VARCHAR2(1000)        not null,
+   DESCRIPTION          VARCHAR2(1000)       not null,
    IMAGE		        VARCHAR2(80)         not null,
    RELEASE_DATE         INTEGER              not null,
    RATING               FLOAT                not null,
