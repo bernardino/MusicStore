@@ -17,12 +17,18 @@
 		  <span width="100" class="link">ALBUNS</span>
 		  <span width="100" class="link">MERCHANDISE</span>
           
-          <div style="float:right">
-		  <span> SEARCH </span><input type="text" style="border-style:double" />
-          <select>
-          <option>Albuns</option><option>Artists</option><option>Merchandise</option><option>Songs</option>
-          </select>
-          </div>
+          	<div style="float:right">
+				<form name="searchForm" action="/search" method="post">
+				<span> SEARCH </span><input type="text" name="term" style="border-style:double" />
+				<select name="option">
+					<option value="album">Albums</option>
+					<option value="artist">Artists</option>
+					<option value="merch">Merchandise</option>
+					<option value="song">Songs</option>
+				</select>
+				<input type="submit" value="Go">
+				</form>
+			</div>
          </div>
 	  </div>
       <!-- !LOGGED_IN -->

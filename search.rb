@@ -49,4 +49,23 @@ class Search
 							ORDER BY merchandise_name, artist_name
 						")
 	end
+	
+	
+	def client_by_username(username)
+		return $db.select("	SELECT client_id, name
+							FROM client
+							WHERE upper(client_id) like upper('%#{username}%')
+							ORDER BY client_id, name
+						")
+	
+	end
+	
+	
+	def client_by_name(name)
+		return $db.select("	SELECT name, client_id
+							FROM client
+							WHERE upper(name) like upper('%#{name}%')
+							ORDER BY name, client_id
+						")
+	end
 end

@@ -12,6 +12,7 @@ require './lastfm.rb'
 require './search.rb'
 require './get.rb'
 
+
 configure do
 	$db = Database.new
 	$lf = Lastfm.new
@@ -79,11 +80,13 @@ end
 
 get '/artist/:id' do
 	res = $get.artist(params[:id])
-	
+	#$lf.create_artist(params[:id])
+	#res = $db.select("SELECT artist_name,artist_bio,artist_image from artist where artist_name like '#{params[:id]}'")
 	@artistID = res[0]
 	@bio = res[1]
 	@image = res[2]
-  erb :artist
+	
+	erb :artist
 end
 
 get '/song/:id' do
@@ -106,9 +109,16 @@ end
 
 get '/search/:id' do
 	@res = $search.artist(params[:id])
-	
 
 	
+  erb :search
+end
+
+post '/search' do
+  @cenas = params[:option] #artist / merch / song / album
+  @searchTerm = params[:term]
+  @res = $search.artist(params[:term])
+  
   erb :search
 end
 
