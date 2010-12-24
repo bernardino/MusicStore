@@ -5,6 +5,7 @@ require 'erb'
 require 'oci8'
 require 'net/http'
 require 'uri'
+require 'cgi'
 
 require './database.rb'
 require './lastfm.rb'
@@ -82,13 +83,11 @@ get '/artist/:id' do
 	#res = $get.artist(params[:id])
 	$lf.create_artist(params[:id])	
 	#$lf.update_artist(params[:id])
-	#res = $db.select("SELECT artist_name,artist_bio,artist_image from artist where artist_name like '#{params[:id]}'")
-	res = $lf.get_artist(params[:id])
+	res = $db.select("SELECT artist_bio, artist_image from artist where artist_name like '#{params[:id]}'")
+	#res = $lf.get_artist(params[:id])
 	@artistID = params[:id]
-	@bio = res[1]
-	@image = res[0]
-	
-	#puts res[1]
+	@bio = CGI.unescape(res[0])
+	@image = res[1]
 	
 	erb :artist
 end
