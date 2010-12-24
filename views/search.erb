@@ -52,12 +52,34 @@
 		<% end %>
       <!-- Cenas -->
       <div style="background-color:#CCC; float:left;width:60%">
-      <h1>Search Results <%= @cenas %> <%= @searchTerm %></h1>
-		<% 	i=0
-			while i < @res.length %>
-				<p> <%= @res[i+1] %></p> 
-				<% i=i+2 %>
+      <h1>Search results for <%= @options %> <%= @searchTerm %></h1>
+		<% 	
+			i=0
+			if @searchTerm.length < 2 %>
+				<p>Please narrow your search</p>
+			<% elsif @options == 'artist'
+				while i < @res.length %>
+					<p> <%= @res[i+1] %></p> 
+					<% i=i+2 %>
+				<% end %>
+			<% elsif @options == 'album' 
+				while i <@res.length %>
+					<p> <%= @res[i+1] %></p>
+					<% i=i+3 %>
+				<% end %>
+			<% elsif @options =='song' 
+				while i<@res.length %>
+					<p><%= @res[i+1] %> </p>
+					<% i=i+4 %>
+				<% end %>
+			<% elsif @options =='merch'
+				while i< @res.length %>
+					<p><%= @res[i+1] %>
+					<% i=i+3 %>
+				<% end %>
 			<% end %>
+			
+			
       </div>
       <!-- Shopping Cart -->
       <div style="background-color:#DDD; float:left;width:20%">

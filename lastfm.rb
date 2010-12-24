@@ -1,5 +1,5 @@
 require 'hpricot'
-
+# coding: Windows-1252
 class Lastfm
 	
 	def initialize()
@@ -129,13 +129,12 @@ class Lastfm
 			end
 		end
 		
-		puts res[1]
 		
 		$db.execute("UPDATE product
-					SET description = '#{res[1]}',
+					SET description = 'cenas',
 					image = '#{res[0]}',
 					release_date = #{res[2]}
-					WHERE product_id = #{info[i]} "
+					WHERE product_id = #{info[i]}"
 					)	
 		$db.execute("commit")		
 	end

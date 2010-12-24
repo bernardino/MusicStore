@@ -17,6 +17,7 @@ configure do
 	$lf = Lastfm.new
 	$search = Search.new
 	$get = Get.new
+	
 	#$lf.update_artist(params[:id])
 	#$lf.create_artist(params[:id])
 	#$lf.get_artist_id THIS METHOD MIGHT HAVE A BUGGGGGGGG PLEASE BEWARE
@@ -78,12 +79,9 @@ get '/logout' do
 end
 
 get '/artist/:id' do
-	#res = $get.artist(params[:id])
-	
-	#res = $db.select("SELECT artist_name,artist_bio,artist_image from artist where artist_name like '#{params[:id]}'")
-	
-	$lf.update_artist(params[:id])
-	
+	res = $get.artist(params[:id])
+	#$lf.create_artist(params[:id])
+
 	res = $db.select("SELECT artist_name,artist_bio,artist_image from artist where artist_name like '#{params[:id]}'")
 	@artistID = res[0]
 	@bio = res[1]
@@ -99,9 +97,7 @@ get '/song/:id' do
 end
 
 get '/artist/:name/album/:id' do
-	#res = $get.album(params[:id])
-	#res = $lf.get_album(params[:name],params[:id])
-	#$lf.update_album(params[:name],params[:id])
+	res = $get.album(params[:id])
 	
 	@res = $get.album(params[:id])
 	
@@ -110,24 +106,29 @@ get '/artist/:name/album/:id' do
 							WHERE alb_product_id = #{params[:id]}
 							ORDER BY song_number
 						")
-	
-	
-	
 	erb :album
 end
 
 get '/search/:id' do
 	@res = $search.artist(params[:id])
-
+	
 	
   erb :search
 end
 
 post '/search' do
-  @cenas = params[:option] #artist / merch / song / album
-  @searchTerm = params[:term]
-  puts params[:term]
-  @res = $search.artist(params[:term])
+	@options = params[:option] #artist / merch / song / album
+	@searchTerm = params[:term]
+	if @options == 'artist'
+		@res = $search.artist(@searchTerm)
+	elsif @options == 'album'
+		@res = $search.album(@searchTerm)
+	elsif @options == 'song'
+		@res = $search.song(@searchTerm)
+	elsif @options == 'merch'
+		@res = $search.merchandise(@searchTerm)
+	end
+	
   
   erb :search
 end
