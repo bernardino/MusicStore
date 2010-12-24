@@ -20,14 +20,28 @@ configure do
 	enable :sessions
 end
 
+#template(:layout) { :index }
+
 before do
   if session[:id]
     @logged = true
   else
     @logged = false
   end
-	
 end
+
+=begin
+helpers do
+  #def partial template
+  #  erb template.to_sym, :layout => false
+  #end
+  
+  def partial(template, options={})
+     options.merge!(:layout => false)
+     erb template.to_sym, options
+   end
+end
+=end
 
 get '/' do
   erb :index
@@ -72,13 +86,10 @@ end
 
 get '/artist/:id' do
 	res = $get.artist(params[:id])
-	#res = $db.select("SELECT artist_name,artist_bio,artist_image from artist where artist_name like '#{params[:id]}'")
-	
-	@albums = $get.artist_albums(params[:id])
-	
 	@artistID = res[0]
 	@bio = res[1]
 	@image = res[2]
+	@albums = $get.artist_albums(params[:id])
 	
 	erb :artist
 end
@@ -90,10 +101,9 @@ get '/song/:id' do
 end
 
 get '/artist/:name/album/:id' do
-	res = $get.album(params[:id])
 	
+	#$lf.update_album(params[:name],params[:id])
 	@res = $get.album(params[:id])
-	
 	@songs = $db.select("SELECT song_number, song_name, song_length
 							FROM song
 							WHERE alb_product_id = #{params[:id]}

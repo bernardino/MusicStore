@@ -1,7 +1,7 @@
 @charset "UTF-8";
 /* CSS Document */
 body {
-  background-color:#000;
+  background:#000;
 }
 
 h1 {
@@ -10,11 +10,20 @@ h1 {
 	font-family:"Palatino Linotype", "Book Antiqua", Palatino, serif;
 }
 
-.content {
-	background-color:#FFF;
+.container {
 	width:80%;
 	margin-left:10%;
 	margin-right:10%;
+	background:#FFF;
+	margin: 0 auto;
+}
+
+.header {
+	background:#FFF;
+}
+
+.content {
+	background:#DED;
 }
 
 .link {
@@ -23,6 +32,7 @@ h1 {
 	background:#EEE;
 	color:#000;
 	padding:5px;
+	cursor:pointer;
 }
 
 .search {
@@ -30,4 +40,9 @@ h1 {
 	text-decoration:none;
 	color:#000;
 	
+}
+.footer {
+	clear:both;
+	background:#EEE;
+	padding:5px;
 }

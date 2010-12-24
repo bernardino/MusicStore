@@ -1,7 +1,4 @@
-# encoding = utf-8
-
 require 'hpricot'
-require 'cgi'
 
 class Lastfm
 	
@@ -23,7 +20,7 @@ class Lastfm
 		end
 		
 		#THIS IS JUST TEMPORARY NEED TO IMPROVE
-		arr[1] = (doc/"lfm/artist/bio/summary").inner_html.gsub(']]>','').gsub('<![CDATA[','')
+		arr[1] = (doc/"lfm/artist/bio/summary").inner_html.gsub(']]>',"").gsub('<![CDATA[',"")
 		
 		
 		arr
@@ -38,7 +35,7 @@ class Lastfm
 						VALUES(artist_number.nextval,
 						'#{name}',
 						'#{res[0]}',
-						'#{CGI.unescape(res[1])}'
+						'#{res[1]}'
 						)"
 					)
 			$db.execute("Commit")
@@ -87,7 +84,7 @@ class Lastfm
 			end
 		end
 		arr[1] = ' '
-		arr[1] = (doc/"lfm/album/wiki/summary").inner_html.gsub(']]>','').gsub('<![CDATA[','').gsub(/\\/, '\&\&').gsub(/'/, "''")
+		arr[1] = (doc/"lfm/album/wiki/summary").inner_html.gsub(']]>','').gsub('<![CDATA[','')
 			#arr[1] = r.text.gsub(/\\/, '\&\&').gsub(/'/, "''").gsub('&quot;','')#.gsub(/[^\' '-~]/,'')
 			
 		date = '0'
@@ -136,7 +133,7 @@ class Lastfm
 		
 		
 		$db.execute("UPDATE product
-					SET description = 'cenas',
+					SET description = '#{res[1]}',
 					image = '#{res[0]}',
 					release_date = #{res[2]}
 					WHERE product_id = #{info[i]}"
