@@ -17,14 +17,6 @@ configure do
 	$lf = Lastfm.new
 	$search = Search.new
 	$get = Get.new
-	
-	#$lf.update_artist(params[:id])
-	#$lf.create_artist(params[:id])
-	#$lf.get_artist_id THIS METHOD MIGHT HAVE A BUGGGGGGGG PLEASE BEWARE
-	#$lf.update_album(params[:name],params[:id])
-	#$lf.create_album(params[:name],params[:id])
-	
-	#$lf.update_album(params[:name],params[:id])
 	enable :sessions
 end
 
@@ -80,9 +72,10 @@ end
 
 get '/artist/:id' do
 	res = $get.artist(params[:id])
-	#$lf.create_artist(params[:id])
-
-	res = $db.select("SELECT artist_name,artist_bio,artist_image from artist where artist_name like '#{params[:id]}'")
+	#res = $db.select("SELECT artist_name,artist_bio,artist_image from artist where artist_name like '#{params[:id]}'")
+	
+	@albums = $get.artist_albums(params[:id])
+	
 	@artistID = res[0]
 	@bio = res[1]
 	@image = res[2]

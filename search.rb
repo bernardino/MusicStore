@@ -6,7 +6,7 @@ class Search
 	
 	
 	def artist(artist_name)
-		return $db.select("	SELECT artist_id, artist_name
+		return $db.select("	SELECT artist_id, artist_name , artist_image
 							FROM artist
 							WHERE upper(artist_name) like upper('%#{artist_name}%')
 							ORDER BY artist_name
@@ -15,7 +15,7 @@ class Search
 	
 	
 	def album(album_name)
-		return $db.select("	SELECT al.product_id, album_name, artist_name
+		return $db.select("	SELECT al.product_id, album_name, ar.artist_name, p.artist_id, p.image
 							FROM album al, artist ar, product p
 							WHERE ar.artist_id = p.artist_id
 							AND p.product_id = al.product_id
@@ -62,7 +62,7 @@ class Search
 	
 	
 	def client_by_name(name)
-		return $db.select("	SELECT name, client_id
+		return $db.select("	SELECT client_id, name
 							FROM client
 							WHERE upper(name) like upper('%#{name}%')
 							ORDER BY name, client_id
