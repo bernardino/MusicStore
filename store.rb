@@ -27,14 +27,28 @@ configure do
 	enable :sessions
 end
 
+#template(:layout) { :index }
+
 before do
   if session[:id]
     @logged = true
   else
     @logged = false
   end
-	
 end
+
+=begin
+helpers do
+  #def partial template
+  #  erb template.to_sym, :layout => false
+  #end
+  
+  def partial(template, options={})
+     options.merge!(:layout => false)
+     erb template.to_sym, options
+   end
+end
+=end
 
 get '/' do
   erb :index
