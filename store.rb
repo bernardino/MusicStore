@@ -17,6 +17,7 @@ configure do
 	$lf = Lastfm.new
 	$search = Search.new
 	$get = Get.new
+	
 	#$lf.update_artist(params[:id])
 	#$lf.create_artist(params[:id])
 	#$lf.get_artist_id THIS METHOD MIGHT HAVE A BUGGGGGGGG PLEASE BEWARE
@@ -79,15 +80,15 @@ end
 
 get '/artist/:id' do
 	#res = $get.artist(params[:id])
-	#$lf.create_artist(params[:id])	
+	$lf.create_artist(params[:id])	
 	#$lf.update_artist(params[:id])
 	#res = $db.select("SELECT artist_name,artist_bio,artist_image from artist where artist_name like '#{params[:id]}'")
 	res = $lf.get_artist(params[:id])
-	#@artistID = res[0]
+	@artistID = params[:id]
 	@bio = res[1]
 	@image = res[0]
 	
-	puts res[1]
+	#puts res[1]
 	
 	erb :artist
 end

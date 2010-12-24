@@ -1,4 +1,7 @@
+# encoding = utf-8
+
 require 'hpricot'
+require 'cgi'
 
 class Lastfm
 	
@@ -35,7 +38,7 @@ class Lastfm
 						VALUES(artist_number.nextval,
 						'#{name}',
 						'#{res[0]}',
-						'#{res[1]}'
+						'#{CGI.escape(res[1])}'
 						)"
 					)
 			$db.execute("Commit")
@@ -43,10 +46,12 @@ class Lastfm
 	end
 	
 	def get_artist_id(name)
-		res = Array.new $db.select("SELECT artist_id 
-							FROM artist 
-							WHERE upper(artist_name) LIKE upper('#{name}')
-						")
+		res = Array.new
+		
+		$db.select("SELECT artist_id 
+					FROM artist 
+					WHERE upper(artist_name) LIKE upper('#{name}')
+				")
 		if res.length > 0
 			puts 'Artist already exists on the database'
 		else
