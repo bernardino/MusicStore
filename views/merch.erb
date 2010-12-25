@@ -67,12 +67,23 @@
 			<% end %>
 			<!-- Cenas -->
 			<div style="background-color:#CCC; float:left;width:60%">
-		      <h1><%= @merchID %></h1>
-		      </div>
-			<!-- Shopping Cart -->
-			<div style="background:#DDD; float:left;width:20%;">
-				<h1>Shopping Cart</h1>
+				<embed src="http://dl.dropbox.com/u/4898423/Song%20of%20the%20week.mp3" controls="console" type="audio/mpeg autostart="FALSE" height="20" width="100">
+				<div style="float:left;margin:10px;">
+					<img src="<%=@image %>" />
+				</div>
+				<div align="left" style="margin: 10px;">
+					<p>Artist: <%= @artist %></p>
+					<p>Name: <%= @merchID %></p> 
+					<p>Description: <%= @desc %></p>
+					<p>Price: <%= @price %></p>
+					<p>Date: <%= @r_date %></p>
+					<p>Rating: <%= @rating %></p>
+				</div>
 			</div>
+		</div>
+		<!-- Shopping Cart -->
+		<div style="background:#DDD; float:left;width:20%;">
+			<h1>Shopping Cart</h1>
 		</div>
 		<div align="center" class="footer">
 			Copyright - Guilherme Simões, João Penetra, Ricardo Bernardino

@@ -138,8 +138,16 @@ post '/search' do
 end
 
 get '/merch/:id' do
-  @merchID = params[:id]
-  erb :merch
+	res = $get.merchandise(params[:id])
+	@artist = res[0]
+	@merchID = res[1]
+	@image = res[2]
+	@desc = res[3]
+	@date = res[4]
+	@rating = res[5]
+	@votes = res[6] 
+	@price = res[7]
+	erb :merch
 end
 
 get '/top' do
