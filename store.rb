@@ -81,6 +81,7 @@ end
 
 get '/logout' do
   session[:id] = nil
+  session["orders"] = nil
   redirect '/'
 end
 
@@ -143,6 +144,10 @@ end
 
 get '/top' do
   "<h1>Top Chart will soon be available</h1>"
+end
+
+get '/checkout' do
+  erb :cenas
 end
 
 get '/*' do
