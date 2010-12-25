@@ -1,7 +1,6 @@
 # encoding = utf-8
 
 require 'hpricot'
-require 'cgi'
 
 class Lastfm
 	
@@ -38,7 +37,7 @@ class Lastfm
 						VALUES(artist_number.nextval,
 						'#{name}',
 						'#{res[0]}',
-						'#{CGI.escape(res[1])}'
+						'#{res[1]}'
 						)"
 					)
 			$db.execute("Commit")
@@ -48,7 +47,7 @@ class Lastfm
 	def get_artist_id(name)
 		res = Array.new
 		
-		$db.select("SELECT artist_id 
+		res = $db.select("SELECT artist_id 
 					FROM artist 
 					WHERE upper(artist_name) LIKE upper('#{name}')
 				")
@@ -87,7 +86,7 @@ class Lastfm
 			end
 		end
 		arr[1] = ' '
-		arr[1] = (doc/"lfm/album/wiki/summary").inner_html.gsub(']]>','').gsub('<![CDATA[','').gsub(/\\/, '\&\&').gsub(/'/, "''")
+		arr[1] = (doc/"lfm/album/wiki/summary").inner_html.gsub(']]>','').gsub('<![CDATA[','')
 			#arr[1] = r.text.gsub(/\\/, '\&\&').gsub(/'/, "''").gsub('&quot;','')#.gsub(/[^\' '-~]/,'')
 			
 		date = '0'
@@ -134,13 +133,12 @@ class Lastfm
 			end
 		end
 		
-		puts res[1]
 		
 		$db.execute("UPDATE product
 					SET description = '#{res[1]}',
 					image = '#{res[0]}',
 					release_date = #{res[2]}
-					WHERE product_id = #{info[i]} "
+					WHERE product_id = #{info[i]}"
 					)	
 		$db.execute("commit")		
 	end

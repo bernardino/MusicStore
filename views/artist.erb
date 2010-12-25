@@ -70,17 +70,24 @@
 				<div style="float:left;margin:10px;">
 					<img src="<%=@image %>" />
 				</div>
-		      	<div align="left" style="margin: 10px;"><!-- Artist Info -->
-					<p>Artist Name: <%= @artistID %></p>
-					<p>Bio: <%= @bio %> </p>
-					<p>Albums Released:  </p>
-				</div>
-		      </div>
-			<!-- Shopping Cart -->
-			<div style="background:#DDD; float:left;width:20%;">
-				<h1>Shopping Cart</h1>
-			</div>
-		</div>
+			<div align="left" style="margin: 10px;"><!-- Artist Info -->
+				<p>Artist Name: <%= @artistID %></p>
+				<p>Bio: <%= @bio %> </p>
+				<p>Albums Released:  </p>
+				<table>
+					<% i=0
+						while i < @albums.length %>
+							<tr>
+								<td>
+									<img src="<%= @albums[i+2] %>" height="100" width="100" border="3" />
+								</td>
+								<td>
+									<%=@albums[i+1] %>
+								</td>
+							</tr>
+							<% i=i+3 %>
+						<% end %>
+				</table>
 		<div align="center" class="footer">
 			Copyright - Guilherme Simões, João Penetra, Ricardo Bernardino
 		</div>

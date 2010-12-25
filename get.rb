@@ -59,10 +59,19 @@ class Get
 	def artistAlbums(artist_id)
 		return $db.select("	SELECT p.product_id, album_name, image, release_date, album_length, rating, votes, current_price
 							FROM album a, product p
-							WHERE s.product_id = p.product_id
+							WHERE a.product_id = p.product_id
 							AND p.artist_id = #{artist_id}
-							ORDER BY release_date DESC;
+							ORDER BY release_date DESC
 						")
+	end
+	
+	def artist_albums(artist_id)
+		return $db.select(" SELECT p.product_id, al.album_name, p.image
+							FROM album al, product p
+							WHERE al.product_id = p.product_id
+							AND p.artist_id = #{artist_id}
+						")
+	
 	end
 	
 	

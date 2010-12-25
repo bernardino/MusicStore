@@ -64,20 +64,71 @@
 					<br />
 				</form>
 			</div>
-			<% end %>
-			<!-- Cenas -->
-			<div style="background-color:#CCC; float:left;width:60%">
-		      <h1>Search Results <%= @cenas %> <%= @searchTerm %></h1>
-				<% 	i=0
+		<% end %>
+      <!-- Cenas -->
+      <div style="background-color:#CCC;float:left;width:60%">
+      <h1>Search results for <%= @options %> <%= @searchTerm %></h1>
+		  <table align="left">
+			<% 	
+				i=0
+				#if @searchTerm.length < 2<p>Please narrow your search</p> %>
+					
+				<% if @options == 'artist'
 					while i < @res.length %>
-						<p> <%= @res[i+1] %></p> 
-						<% i=i+2 %>
+						<tr>
+							<td>
+								<img src="<%= @res[i+2] %>" height="60" width="60" border="2"/>
+							</td>
+							<td>
+								<a class="search" href="/artist/<%=@res[i] %>"><%= @res[i+1] %></a></p>
+							</td>
+						</tr>
+						<% i=i+3 %>
 					<% end %>
-		      </div>
-			<!-- Shopping Cart -->
-			<div style="background:#DDD; float:left;width:20%;">
-				<h1>Shopping Cart</h1>
-			</div>
+				<% elsif @options == 'album' 
+					while i <@res.length %>
+						<tr>
+							<td>
+								<img src="<%= @res[i+4] %>" height="60" width="60" border="2"/>
+							</td>
+							<td>
+								<a class="search" href="/artist/<%= @res[i+3]%>/album/<%=@res[i]%>"> <%= @res[i+1] %></p>
+							</td>
+						</tr>
+						<% i=i+5 %>
+					<% end %>
+				<% elsif @options =='song' 
+					while i<@res.length %>
+						<tr>
+							<td>
+							
+							</td>
+							<td>
+								<p align="left"><a href="/song/<%=@res[i] %>"><%= @res[i+1] %></a></p>
+							</td>
+						</tr>
+						<% i=i+4 %>
+					<% end %>
+				<% elsif @options =='merch'
+					while i< @res.length %>
+						<tr>
+							<td>
+							
+							</td>
+							<td>
+								<p align="left"><%= @res[i+1] %>
+						
+							</td>
+						</tr>
+						<% i=i+3 %>
+					<% end %>
+				<% end %>
+				
+			</table>
+      </div>
+		<!-- Shopping Cart -->
+		<div style="background:#DDD; float:left;width:20%;">
+			<h1>Shopping Cart</h1>
 		</div>
 		<div align="center" class="footer">
 			Copyright - Guilherme Simões, João Penetra, Ricardo Bernardino

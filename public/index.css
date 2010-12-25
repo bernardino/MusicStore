@@ -12,6 +12,8 @@ h1 {
 
 .container {
 	width:80%;
+	margin-left:10%;
+	margin-right:10%;
 	background:#FFF;
 	margin: 0 auto;
 }
@@ -33,6 +35,12 @@ h1 {
 	cursor:pointer;
 }
 
+.search {
+	font-family:Trebuchet MS, Arial, Helvetica, sans-serif;
+	text-decoration:none;
+	color:#000;
+	
+}
 .footer {
 	clear:both;
 	background:#EEE;
