@@ -155,6 +155,9 @@ get '/top' do
 end
 
 get '/checkout' do
+  unless session[:id]
+    redirect '/'
+  end
   erb :cenas
 end
 
