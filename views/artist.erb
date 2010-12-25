@@ -78,11 +78,12 @@
 						<% i=0
 						while i < @albums.length %>
 						<tr>
+
 							<td>
 								<img src="<%= @albums[i+2] %>" height="100" width="100" border="3" />
 							</td>
 							<td>
-								<%=@albums[i+1] %>
+								<a href="<%= request.path_info %>/album/<%= @albums[i] %>" ><%=@albums[i+1] %></a>
 							</td>
 						</tr>
 						<% i=i+3 %>
