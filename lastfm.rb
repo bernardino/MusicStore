@@ -1,3 +1,5 @@
+# encoding = utf-8
+
 require 'hpricot'
 
 class Lastfm
@@ -161,7 +163,7 @@ class Lastfm
 						VALUES(#{id_product[0]},
 							#{id[0]},
 							15,50,
-							'#{res[1]}',
+							'cenas',
 							'#{res[0]}',
 							0,
 							'#{res[2]}',0)
@@ -181,7 +183,7 @@ class Lastfm
 								1,-1,
 								'N/A',
 								0,
-								'#{res[2]}',0)
+								'#{res[2]}',0,0)
 							")
 				$db.execute("INSERT INTO song(product_id,alb_product_id,song_name,song_length,song_genre,song_number)
 							VALUES(#{song_id[0]},

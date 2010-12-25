@@ -15,6 +15,20 @@
 			window.location='/'+page;
 		}
 	}
+	
+	function addRow(id){
+	    var tbody = document.getElementById
+	(id).getElementsByTagName("TBODY")[0];
+	    var row = document.createElement("TR")
+	    var td1 = document.createElement("TD")
+	    td1.appendChild(document.createTextNode("column 1"))
+	    var td2 = document.createElement("TD")
+	    td2.appendChild (document.createTextNode("column 2"))
+	    row.appendChild(td1);
+	    row.appendChild(td2);
+	    tbody.appendChild(row);
+	  }
+	
 	</script>
 </head>
 
@@ -69,14 +83,20 @@
 			<div style="background:#CCC; float:left;width:60%;">
 				<h1>Recently Added Items</h1><br /><br /><br /><br /><br /><br /><br />
 				<h1>User Recommendations</h1>
+				<input type="button" value="Add Row" onClick="addRow('orders');" />
 			</div>
 			<!-- Shopping Cart -->
 			<div style="background:#DDD; float:left;width:20%;">
 				<h1>Shopping Cart</h1>
+				<table id="orders">
+					<tbody>
+						
+					</tbody>
+				</table>
 			</div>
 		</div>
 		<div align="center" class="footer">
-			Copyright - Guilherme Simões, João Penetra, Ricardo Bernardino
+			Copyright © 2010 - Guilherme Simões, João Penetra, Ricardo Bernardino
 		</div>
 	</div>
 </body>
