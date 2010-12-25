@@ -67,10 +67,8 @@
 			<% end %>
 			<!-- Cenas -->
 			<div style="background-color:#CCC; float:left;width:60%">
-				<div style="float:left;margin:10px;">
-					<img src="<%=@image %>" />
-				</div>
-			<div align="left" style="margin: 10px;"><!-- Artist Info -->
+				<div align="left" style="margin:10px">
+				<img align="center" src="<%=@image %>" />
 				<p>Artist Name: <%= @artistID %></p>
 				<p>Bio: <%= @bio %> </p>
 				<p>Albums Released:  </p>
@@ -88,8 +86,15 @@
 							<% i=i+3 %>
 						<% end %>
 				</table>
+				</div>
+			</div>
+			<!-- Shopping Cart -->
+			<div style="background:#DDD; float:left;width:20%;">
+				<h1>Shopping Cart</h1>
+			</div>
+		</div>
 		<div align="center" class="footer">
-			Copyright - Guilherme Simões, João Penetra, Ricardo Bernardino
+			Copyright © 2010 - Guilherme Simões, João Penetra, Ricardo Bernardino
 		</div>
 	</div>
 </body>

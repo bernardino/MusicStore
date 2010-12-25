@@ -43,6 +43,7 @@ h1 {
 }
 .footer {
 	clear:both;
+	font-family:"Palatino Linotype", "Book Antiqua", Palatino, serif;
 	background:#EEE;
 	padding:5px;
 }

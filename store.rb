@@ -102,7 +102,7 @@ end
 
 get '/artist/:name/album/:id' do
 	
-	#$lf.update_album(params[:name],params[:id])
+	#$lf.create_album(params[:name],params[:id])
 	@res = $get.album(params[:id])
 	@songs = $db.select("SELECT song_number, song_name, song_length
 							FROM song
