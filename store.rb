@@ -11,7 +11,6 @@ require './lastfm.rb'
 require './search.rb'
 require './get.rb'
 
-
 configure do
 	$db = Database.new
 	$lf = Lastfm.new
@@ -28,6 +27,11 @@ before do
   else
     @logged = false
   end
+  
+  unless session[:orders]
+    session[:orders] = {}
+  end
+  
 end
 
 =begin
@@ -81,7 +85,7 @@ end
 
 get '/logout' do
   session[:id] = nil
-  session["orders"] = nil
+  session[:orders] = {}
   redirect '/'
 end
 
@@ -152,6 +156,15 @@ end
 
 get '/top' do
   "<h1>Top Chart will soon be available</h1>"
+end
+
+get '/addorder' do
+  if session[:orders][params[:id]]
+    session[:orders][params[:id]] = session[:orders][params[:id]]+1
+  else
+    session[:orders][params[:id]]=1
+  end 
+  redirect params[:page]
 end
 
 get '/checkout' do

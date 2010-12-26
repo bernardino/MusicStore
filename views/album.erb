@@ -79,7 +79,8 @@
 					<p>Genre: <%= @res[6] %></p>
 					<p>Release Date: <%= @res[4] %></p>
 					<p>Rating: <%= @res[8] %></p> 
-					<p>Price: <%= @res[10] %> euros</p> 
+					<p>Price: <%= @res[10] %> euros</p>
+					<a href="/addorder?page=<%= request.fullpath %>&id=<%= params[:id] %>">BUY</a>
 					<br />
 					<p>Track Listing: </p>
 					<% 	tracks = @songs.length
@@ -95,6 +96,15 @@
 			<!-- Shopping Cart -->
 			<div style="background:#DDD; float:left;width:20%;">
 				<h1>Shopping Cart</h1>
+				<% if session[:orders]=={}%>
+					<p>No orders</p>
+				<% else %>
+					<p>You have some orders</p>
+					<% session[:orders].keys.each do |order| %>
+					<p><%= order%>:<%= session[:orders][order] %></p>
+					<% end %>
+					<input type="button" onClick="goTo('checkout')" value="Checkout">
+				<%end%>
 			</div>
 		</div>
 		<div align="center" class="footer">

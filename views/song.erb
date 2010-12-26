@@ -86,6 +86,15 @@
 			<!-- Shopping Cart -->
 			<div style="background:#DDD; float:left;width:20%;">
 				<h1>Shopping Cart</h1>
+				<% if session[:orders]=={}%>
+					<p>No orders</p>
+				<% else %>
+					<p>You have some orders</p>
+					<% session[:orders].keys.each do |order| %>
+					<p><%= order%>:<%= session[:orders][order] %></p>
+					<% end %>
+					<input type="button" onClick="goTo('checkout')" value="Checkout">
+				<%end%>
 			</div>
 		</div>
 		<div align="center" class="footer">
