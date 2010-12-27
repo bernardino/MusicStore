@@ -16,6 +16,7 @@ configure do
 	$lf = Lastfm.new
 	$search = Search.new
 	$get = Get.new
+	@admin = false
 	enable :sessions
 end
 

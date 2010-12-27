@@ -40,6 +40,12 @@ h1 {
 	text-decoration:none;
 	color:#000;
 }
+.search:hover{
+	color:#fff;
+	
+}
+
+
 .list{
 	font-family: Trebuchet MS, Arial, Helvetica, sans-serif;
 	text-decoration:none;
