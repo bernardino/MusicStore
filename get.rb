@@ -24,12 +24,20 @@ class Get
 	
 	
 	def song(song_id)
-		return $db.select("	SELECT artist_name, song_name, DECODE(alb_product_id, null, 'None', (	SELECT album_name
-																									FROM album a, song s
-																									WHERE a.product_id = s.alb_product_id
-																									AND s.product_id = #{song_id}
-																								)) album_name,
-									song_number, song_length, song_genre, release_date, rating, votes, current_price
+		return $db.select("	SELECT 	artist_name,
+									song_name,
+									DECODE(alb_product_id, null, 'None', (	SELECT album_name
+																			FROM album a, song s
+																			WHERE a.product_id = s.alb_product_id
+																			AND s.product_id = #{song_id}
+																		)) album_name,
+									DECODE(song_number, null, 0, song_number) song_n,
+									song_length,
+									song_genre,
+									release_date,
+									rating,
+									votes,
+									current_price
 							FROM song s, artist a, product p
 							WHERE a.artist_id = p.artist_id
 							AND p.product_id = s.product_id
@@ -71,7 +79,6 @@ class Get
 							WHERE al.product_id = p.product_id
 							AND p.artist_id = #{artist_id}
 						")
-	
 	end
 	
 	
