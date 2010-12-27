@@ -223,6 +223,46 @@ class Lastfm
 	
 	
 	end
+	
+	
+	def recommended_artists()
+	
+		url = "http://ws.audioscrobbler.com/2.0/?method=auth.gettoken&api_key=8ea76991c5d4936f71710eb66b2e63ac"
+		resp = Net::HTTP.get_response(URI.parse(url)).body
+		doc = Hpricot resp
+		token = (doc/"lfm/token").inner_html
+		
+		puts 'token'
+		puts token
+		
+		url = "http://www.last.fm/api/auth/?api_key=8ea76991c5d4936f71710eb66b2e63ac&token=#{token}"
+		resp = Net::HTTP.get_response(URI.parse(url)).body
+		doc = Hpricot resp
+		
+		
+		puts doc
+		
+		api_sig = Digest::MD5.hexdigest("api_key8ea76991c5d4936f71710eb66b2e63acmethodauth.getSessiontoken#{token}ec28bf8d372e5c1f1531603ba606a561")
+		
+		url = "http://ws.audioscrobbler.com/2.0/?method=auth.getSession&api_key=8ea76991c5d4936f71710eb66b2e63ac&api_sig=#{api_sig}&token=#{token}"
+		resp = Net::HTTP.get_response(URI.parse(url)).body
+		doc = Hpricot resp
+		
+		key = (doc/"lfm/sessin/key").inner_html
+		
+		puts 'key'
+		puts key
+		
+		url = "http://ws.audioscrobbler.com/2.0/?method=user.getRecommendedArtists&api_key=8ea76991c5d4936f71710eb66b2e63ac&api_sig=#{api_sig}&sk=#{key}"
+		
+		resp = Net::HTTP.get_response(URI.parse(url)).body
+		doc = Hpricot resp
+		
+		puts (doc/"lfm/error").inner_html
+		
+	
+	end
+	
 
 
 end

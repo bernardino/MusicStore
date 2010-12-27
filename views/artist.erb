@@ -80,10 +80,10 @@
 						<tr>
 
 							<td>
-								<img src="<%= @albums[i+2] %>" height="100" width="100" border="3" />
+								<a class="search" href ="<%= request.path_info %>/album/<%= @albums[i] %>"><img src="<%= @albums[i+2] %>" height="100" width="100" border="3" /></a>
 							</td>
 							<td>
-								<a href="<%= request.path_info %>/album/<%= @albums[i] %>" ><%=@albums[i+1] %></a>
+								<a class="search" href="<%= request.path_info %>/album/<%= @albums[i] %>" ><%=@albums[i+1] %></a>
 							</td>
 						</tr>
 						<% i=i+3 %>

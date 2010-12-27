@@ -114,6 +114,7 @@ get '/artist/:name/album/:id' do
 							WHERE alb_product_id = #{params[:id]}
 							ORDER BY song_number
 						")
+	@albums = $get.artist_albums(params[:name])
 	erb :album
 end
 

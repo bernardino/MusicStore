@@ -30,7 +30,7 @@ class Search
 																												FROM album al, song s2
 																												WHERE al.product_id = s2.alb_product_id
 																												AND s2.song_name = s.song_name
-																											)) album_name
+																											)) album_name, image
 							FROM song s, artist ar, product p
 							WHERE ar.artist_id = p.artist_id
 							AND p.product_id = s.product_id
@@ -41,13 +41,19 @@ class Search
 	
 	
 	def merchandise(merchandise_name)
-		return $db.select("	SELECT m.product_id, merchandise_name, artist_name
+		return $db.select("	SELECT m.product_id, merchandise_name, artist_name, image
 							FROM merchandise m, artist a, product p
 							WHERE a.artist_id = p.artist_id
 							AND p.product_id = m.product_id
 							AND upper(merchandise_name) like upper('%#{merchandise_name}%')
 							ORDER BY merchandise_name, artist_name
 						")
+	end
+	
+	def recentlyAdded()
+		return $db.select(" SELECT p.product_id,p.release_date
+							FROM product p
+							ORDER by p.release_date DESC")
 	end
 	
 	

@@ -83,14 +83,43 @@
 					<a href="/addorder?page=<%= request.fullpath %>&id=<%= params[:id] %>">BUY</a>
 					<br />
 					<p>Track Listing: </p>
+					<table>
 					<% 	tracks = @songs.length
 						i=0
 						while i < tracks %>
-							<p> <%= @songs[i] %>- &nbsp;<%= @songs[i+1] %> &nbsp; <%= @songs[i+2] %></p>
+							<tr>
+								<td>
+									<%= @songs[i] %>-
+								</td>
+								<td>
+									<%= @songs[i+1] %>
+								</td>
+								<td>
+									&nbsp&nbsp<%= @songs[i+2] %>
+								</td>
+							</tr>
 						<% i=i+3 %>
 						<% end  %>
-
+					</table>
 					<p>More Albuns From this Artist: </p>
+					<table>
+						<% album = @albums.length
+						i=0
+						
+						while i < album
+							if params[:id] != @albums[i].to_s %>
+								<tr>
+									<td>
+										<a class="search" href="/artist/<%=params[:name]%>/album/<%= @albums[i] %>"><img src="<%=@albums[i+2] %>"/></a>
+									</td>
+									<td>
+										<a class="search" href="/artist/<%=params[:name]%>/album/<%= @albums[i] %>" ><%=@albums[i+1] %></a>
+									</td>
+								</tr>
+							<% end %>
+							<% i=i+3 %>
+						<% end %>
+					</table>
 				</div>
 		      </div>
 			<!-- Shopping Cart -->
