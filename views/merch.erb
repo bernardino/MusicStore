@@ -24,20 +24,20 @@
 			<h1>Music Store</h1>
 			<div align="left" style="background:#F93; padding:8px">
 				<div>
-					<span width="100" class="link" onClick="goTo('index')">HOME</span>
-					<span width="100" class="link" onClick="goTo('top')">TOP</span>
-					<span width="100" class="link" onClick="goTo('song')">SONGS</span>
-					<span width="100" class="link" onClick="goTo('album')">ALBUNS</span>
-					<span width="100" class="link" onClick="goTo('merch')">MERCHANDISE</span>
+					<span width="100" class="link" onClick="goTo('index')">Home</span>
+					<span width="100" class="link" onClick="goTo('top')">Top</span>
+					<span width="100" class="link" onClick="goTo('artists')">Artists</span>
+					<span width="100" class="link" onClick="goTo('albums')">Albums</span>
+					<span width="100" class="link" onClick="goTo('merchandising')">Merchandising</span>
 
 					<div style="float:right">
 						<form name="searchForm" action="/search" method="post">
-							<span> SEARCH </span><input type="text" name="term" style="border-style:double" />
+							<span> Search </span><input type="text" name="term" style="border-style:double" />
 							<select name="option">
-								<option value="album">Albums</option>
 								<option value="artist">Artists</option>
-								<option value="merch">Merchandise</option>
+								<option value="album">Albums</option>
 								<option value="song">Songs</option>
+								<option value="merch">Merchandising</option>
 							</select>
 							<input type="submit" value="Go">
 						</form>

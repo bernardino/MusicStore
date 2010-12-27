@@ -96,7 +96,9 @@ class Lastfm
 		while i < date.length
 			if date[i] == ','
 				arr[2] = date[i-4,4]
+				break
 			end
+			puts i
 			i=i+1
 		end
 		

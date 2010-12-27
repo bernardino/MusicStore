@@ -4,7 +4,7 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-	<link rel="stylesheet" type="text/css" href="../index.css" />
+	<link rel="stylesheet" type="text/css" href="/index.css" />
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<title>Welcome to Music Store</title>
 	<script type="text/javascript">
@@ -56,37 +56,84 @@
 			<div style="background:#EEE; float:left;width:20%;">
 				<form action="/login" method="post" accept-charset="utf-8">
 					<h1>Login</h1>
-					<h3>Username</h3><input type="text" name="username" />
-					<h3>Password</h3><input type="password" name="password"/><br />
+					<h3>Username</h3><input type="text" name="username" /><br />
+					<h3>Password</h3><input type="password" name="password"/><br /><br />
 					<input type="submit" value="Login">
-					<br />
+					<br /><br />
 					<a href="/register">Not Registered?</a>
 					<br />
 				</form>
 			</div>
 			<% end %>
 			<!-- Cenas -->
-			<div style="background-color:#CCC; float:left;width:60%">
-				<div style="float:left;margin:10px;">
-					<img src="<%=@image %>" />
+			<div align="left" style="background:#CCC; float:left;width:60%;">
+				<div style="background:#CCC; float:left;width:50%;">
+					<p class="search"> Top Albums</p>
+					<table >
+						<% 
+						i=0
+						while i < @albums.length
+							if i == 50
+								break
+							else %>
+							<tr>
+								<td>
+									<a class="list" href="/artist/<%= @albums[i+3] %>/album/<%= @albums[i] %>"><img src="<%= @albums[i+4] %>" height="40" width="40" border="2"/></a>
+								</td>
+								<td>
+									<a class="list" href="/artist/<%= @albums[i+3] %>/album/<%= @albums[i] %>"><%= @albums[i+2] %> - <%= @albums[i+1] %></a>
+								</td>
+							</tr>
+							<% end %>
+							<% i=i+5 %>
+						<% end %>
+					</table>
 				</div>
-				<div align="left" style="margin: 10px;"><!-- Artist Info -->
-					<p>Artist Name: <%= @artistID %></p>
-					<p>Bio: <%= @bio %> </p>
-					<p>Albums Released:  </p>
+				
+				<div style="background:#CCC; float:right;width:50%;">
+					<p class="search"> Top Songs</p>
 					<table>
-						<% i=0
-						while i < @albums.length %>
-						<tr>
-
-							<td>
-								<a class="search" href ="<%= request.path_info %>/album/<%= @albums[i] %>"><img src="<%= @albums[i+2] %>" height="100" width="100" border="3" /></a>
-							</td>
-							<td>
-								<a class="search" href="<%= request.path_info %>/album/<%= @albums[i] %>" ><%=@albums[i+1] %></a>
-							</td>
-						</tr>
-						<% i=i+3 %>
+						<%
+						i=0
+						while i< @songs.length
+							if i==40
+								break
+							else %>
+								<tr>
+									<td>
+										<a class="list" href="/song/<%= @songs[i] %>"><img src="<%= @songs[i+3] %>" height="40" width="40" border="2"/></a>
+									</td>
+									<td>
+										<a class="list" href="/song/<%= @songs[i] %>"><%= @songs[i+2] %> - <%= @songs[i+1] %></a>
+									</td>
+								</tr>
+							<% end %>
+							<% i=i+4 %>
+						<% end %>
+					
+					</table>
+				</div>
+				
+				<div style="background:#CCC; float:left;width:50%;">
+					<p class="search"> Top Merchandising</p>
+					<table>
+						<%
+						i=0
+						while i< @merch.length
+							if i==40
+								break
+							else %>
+								<tr>
+									<td>
+										<a class="list" href="/merch/<%= @merch[i] %>"><img src="<%= @merch[i+3] %>" height="40" width="40" border="2"/></a>
+									</td>
+									<td>
+										<a class="list" href="/merch/<%= @merch[i] %>"><%= @merch[i+2] %> - <%= @merch[i+1] %></a>
+									</td>
+									
+								</tr>
+							<% end %>
+							<% i=i+4 %>
 						<% end %>
 					</table>
 				</div>
@@ -106,7 +153,7 @@
 			</div>
 		</div>
 		<div align="center" class="footer">
-			Copyright Â© 2010 - Guilherme SimÃµes, JoÃ£o Penetra, Ricardo Bernardino
+			Copyright © 2010 - Guilherme Simões, João Penetra, Ricardo Bernardino
 		</div>
 	</div>
 </body>

@@ -48,34 +48,7 @@ class Search
 							AND upper(merchandise_name) like upper('%#{merchandise_name}%')
 							ORDER BY merchandise_name, artist_name
 						")
-	end
-	
-	def recentlyAddedAlbums()
-		return $db.select(" SELECT p.product_id, al.album_name, ar.artist_name,ar.artist_id, p.image
-							FROM product p, album al, artist ar
-							WHERE p.product_id = al.product_id
-							AND p.artist_id = ar.artist_id
-							ORDER by p.added_date DESC")
-	end
-	
-	def recentlyAddedSongs()
-		return $db.select(" SELECT p.product_id, s.song_name, ar.artist_name, p.image
-							FROM product p, song s, artist ar
-							WHERE p.product_id = s.product_id
-							AND p.artist_id = ar.artist_id
-							ORDER by p.added_date DESC")
-	
-	end
-	
-	def recentlyAddedMerch()
-		return $db.select(" SELECT p.product_id, m.merchandise_name, ar.artist_name, p.image
-							FROM product p, merchandise m, artist ar
-							WHERE p.product_id = m.product_id
-							AND p.artist_id = ar.artist_id
-							ORDER by p.added_date DESC")
-	
-	end
-	
+	end	
 	
 	def client_by_username(username)
 		return $db.select("	SELECT client_id, name

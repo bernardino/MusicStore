@@ -19,6 +19,8 @@
 /*  PRODUCT'S DESCRIPTION field resized to varchar2(1000)       */
 /*	CLIENT_ID's type changed from INTEGER to VARCHAR2(20)		*/
 /*	CURRENT_PRICE is now a FLOAT								*/
+/* 	ADDED_DATE to PRODUCT										*/
+/*  NUM_SELLS added to PRODUCT 									*/
 /*==============================================================*/
 
 
@@ -196,6 +198,7 @@ create table PRODUCT
    RATING               FLOAT                not null,
    VOTES                INTEGER              not null,
    ADDED_DATE           DATE                 not null,
+   NUM_SELLS            INTEGER              not null,
    constraint PK_PRODUCT primary key (PRODUCT_ID)
 );
 
