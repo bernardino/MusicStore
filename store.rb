@@ -175,7 +175,8 @@ get '/checkout' do
 end
 
 get '/addvote' do
-  #$db.execute("execute voting(#{params[:id]},#{params[:v]})")
+  $db.execute("begin voting(#{params[:id]},#{params[:v]}); end;")
+  $db.execute("commit")
   redirect params[:page]
 end
 

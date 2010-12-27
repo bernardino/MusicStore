@@ -10,14 +10,14 @@
 	<script type="text/javascript">
 	function goTo(page){
 		if (page=='index')
-		window.location='/';
+			window.location='/';
 		else {
 			window.location='/'+page;
 		}
 	}
 	
 	function rating(){
-		var rating= parseInt(<%= @res[8] %>);
+		var rating= Math.ceil(<%= @res[8] %>);
 		var i=0;
 		var img;
 		
@@ -43,7 +43,6 @@
 	}
 	
 	function vote(id){
-		alert(id);
 		window.location="/addvote?page=<%= request.fullpath %>&v="+id+"&id=<%= params[:id] %>";
 	}
 	
