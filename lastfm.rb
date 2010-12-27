@@ -88,19 +88,20 @@ class Lastfm
 		arr[1] = ' '
 		arr[1] = (doc/"lfm/album/wiki/summary").inner_html.gsub(']]>','').gsub('<![CDATA[','')
 			#arr[1] = r.text.gsub(/\\/, '\&\&').gsub(/'/, "''").gsub('&quot;','')#.gsub(/[^\' '-~]/,'')
-			
-		date = '0'
-		date = (doc/"lfm/album/releasedate").inner_html 
+
+
+		date = (doc/"lfm/album/releasedate").inner_html
 		
 		i=0
 		while i < date.length
-			if date[i] == ','
-				arr[2] = date[i-4,4]
+			if date[i].chr == ','
+				arr[2] = date[i-4, 4]
 				break
 			end
 			puts i
 			i=i+1
 		end
+		
 		
 		i=3
 		(doc/"lfm/album/tracks/track/name").each do |r|
@@ -119,7 +120,7 @@ class Lastfm
 						 )
 		i=0
 		if info.length == 0
-			puts 'Album with that name does not exist'
+			puts 'There is no Album with that name'
 		elsif info.length > 1
 			while i < info.length
 				name = $db.select("SELECT artist_name 
@@ -146,13 +147,13 @@ class Lastfm
 	end
 	
 	
-	def create_album(artist_name,album_name)
-		res = get_album(artist_name,album_name)
+	def create_album(artist_name, album_name)
+		res = get_album(artist_name, album_name)
 		
-		id = $db.select("SELECT artist_id
-					FROM artist
-					WHERE upper(artist_name) LIKE upper('#{artist_name}')
-					")
+		id = $db.select("	SELECT artist_id
+							FROM artist
+							WHERE upper(artist_name) LIKE upper('#{artist_name}')
+						")
 					
 		exist = get_album_id(artist_name,album_name)
 		
@@ -161,33 +162,42 @@ class Lastfm
 			id_product = $db.select("SELECT product_number.nextval FROM dual")
 			
 			#THE DESCRIPTION MAY CREATE A CONFLICT DUE TO STRANGE CHARACTERS
-			$db.execute("INSERT INTO product(product_id,artist_id,current_price,stock,description,image,rating,release_date,votes)
+			$db.execute("INSERT INTO product(product_id, artist_id, description, image, release_date, rating, votes, added_date, current_price, stock, num_sells)
 						VALUES(#{id_product[0]},
 							#{id[0]},
-							15,50,
-							'cenas',
+							'description',
 							'#{res[0]}',
+							'#{res[2]}',
 							0,
-							'#{res[2]}',0)
+							0,
+							sysdate,
+							15,
+							50,
+							0)
 						")
 			
-			$db.execute("INSERT INTO album(product_id,album_name,album_length,album_label,album_genre)
-						VALUES(#{id_product[0]},'#{album_name}','60m','Merge','Rock')
+			$db.execute("INSERT INTO album(product_id, album_name, album_length, album_label, album_genre)
+						VALUES(#{id_product[0]}, '#{album_name}', '60m', 'Merge', 'Rock')
 						")
 						
 			i = 3		
 			while i < res.length
 				song_id = $db.select("SELECT product_number.nextval FROM DUAL")
 				
-				$db.execute("INSERT INTO product(product_id,artist_id,current_price,stock,description,image,rating,release_date,votes)
+				$db.execute("INSERT INTO product(product_id, artist_id, description, image, release_date, rating, votes, added_date, current_price, stock, num_sells)
 							VALUES(#{song_id[0]}, 
 								#{id[0]},
-								1,-1,
-								'N/A',
+								'description',
+								'#{res[0]}',
+								'#{res[2]}',
 								0,
-								'#{res[2]}',0,0)
+								0,
+								sysdate,
+								0.99,
+								-1,
+								0)
 							")
-				$db.execute("INSERT INTO song(product_id,alb_product_id,song_name,song_length,song_genre,song_number)
+				$db.execute("INSERT INTO song(product_id, alb_product_id, song_name, song_length, song_genre, song_number)
 							VALUES(#{song_id[0]},
 									#{id_product[0]},
 									'#{res[i]}',

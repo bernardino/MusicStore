@@ -5,10 +5,10 @@
 
 
 /*==============================================================*/
-/*                      Patch Notes 2.6							*/
+/*                      Patch Notes 2.78						*/
 /*   										                    */
 /*	SONG's ALB_PRODUCT_ID can now be null						*/
-/*	SONG's SONG NUMBER can now be null							*/
+/*	SONG's SONG_NUMBER can now be null							*/
 /*	PRODUCT no longer has field PRODUCT_NAME					*/
 /*	MERCHANDISE now has field MERCHANDISE_NAME					*/
 /*	ALBUM now has field ALBUM_NAME								*/
@@ -190,14 +190,14 @@ create table PRODUCT
 (
    PRODUCT_ID           INTEGER              not null,
    ARTIST_ID            INTEGER              not null,
-   CURRENT_PRICE        FLOAT	             not null,
-   STOCK                INTEGER              not null,
    DESCRIPTION          VARCHAR2(1000)       not null,
    IMAGE		        VARCHAR2(80)         not null,
    RELEASE_DATE         INTEGER              not null,
    RATING               FLOAT                not null,
    VOTES                INTEGER              not null,
    ADDED_DATE           DATE                 not null,
+   CURRENT_PRICE        FLOAT	             not null,
+   STOCK                INTEGER              not null,
    NUM_SELLS            INTEGER              not null,
    constraint PK_PRODUCT primary key (PRODUCT_ID)
 );
