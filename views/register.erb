@@ -55,27 +55,27 @@
 <table cellspacing="5" onkeyup="emailField();allFields();">
 	<tr >
     	<td width="160">Username</td>
-        <td><input type="text" name="username" /></td>
+        <td><input type="text" maxlength="20" name="username" /></td>
     </tr>
     <tr>
     	<td>Password</td>
-        <td onkeyup="passMatch()" id="firstPass"><input type="password" name="passcode"/></td>
+        <td onkeyup="passMatch()" id="firstPass"><input type="password" maxlength="15" name="passcode"/></td>
     </tr>
     <tr>
     	<td>Confirm Password</td>
-        <td id="secondPass" onkeyup="passMatch()"><input type="password" name="passcode1"/></td>
+        <td id="secondPass" onkeyup="passMatch()"><input type="password" maxlength="15" name="passcode1"/></td>
     </tr>
     <tr>
     	<td>Email</td>
-        <td id="email"><input type="text" name="email" /></td>
+        <td id="email"><input type="text" maxlength="50" name="email" /></td>
     </tr>
 	<tr >
     	<td width="160">Name</td>
-        <td><input type="text" name="name" /></td>
+        <td><input type="text" maxlength="50" name="name" /></td>
     </tr>
 	<tr>
     	<td>Address</td>
-        <td id="address"><input type="text" name="address" /></td>
+        <td id="address"><input type="text" maxlength="100" name="address" /></td>
     </tr>
 	<tr>
     	<td>Telephone Number</td>

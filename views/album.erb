@@ -10,15 +10,46 @@
 	<script type="text/javascript">
 	function goTo(page){
 		if (page=='index')
-		window.location='/';
+			window.location='/';
 		else {
 			window.location='/'+page;
 		}
 	}
+	
+	function rating(){
+		var rating= Math.ceil(<%= @res[8] %>);
+		var i=0;
+		var img;
+		
+		for(i=0; i<rating ;i++){
+			img=document.getElementById("star"+i);
+			img.src="/img/star.png";
+		}
+		for(i; i<5 ;i++){
+			img=document.getElementById("star"+i);
+			img.src="/img/blank.png";
+		}
+	}
+	
+	function imgOver(id){
+		for(i=0; i<id+1 ;i++){
+			img=document.getElementById("star"+i);
+			img.src="/img/star.png";
+		}
+		for(i; i<5 ;i++){
+			img=document.getElementById("star"+i);
+			img.src="/img/blank.png";
+		}
+	}
+	
+	function vote(id){
+		window.location="/addvote?page=<%= request.fullpath %>&v="+id+"&id=<%= params[:id] %>";
+	}
+	
 	</script>
 </head>
 
-<body>
+<body onload="rating();">
 	<div class="container">
 		<div align="center" class="header">
 			<h1>Music Store</h1>
@@ -77,8 +108,8 @@
 					<p>Length: <%= @res[5] %></p>
 					<p>Label: <%= @res[7] %></p>
 					<p>Genre: <%= @res[6] %></p>
-					<p>Release Date: <%= @res[4] %></p>
-					<p>Rating: <%= @res[8] %></p> 
+					<p>Release Date: <%= @res[4] %></p> 
+					<p>Rating: <img id="star0" onmouseover="imgOver(0)" onmouseout="rating()" onmouseup="vote(1)" src="/img/blank.png"><img id="star1" onmouseover="imgOver(1)" onmouseout="rating()" onmouseup="vote(2)" src="/img/blank.png"><img id="star2" onmouseover="imgOver(2)" onmouseout="rating()" onmouseup="vote(3)" src="/img/blank.png"><img id="star3" onmouseover="imgOver(3)" onmouseout="rating()" onmouseup="vote(4)" src="/img/blank.png"><img id="star4" onmouseup="vote(5)" onmouseover="imgOver(4)" onmouseout="rating()" src="/img/blank.png"></p>
 					<p>Price: <%= @res[10] %> euros</p>
 					<a href="/addorder?page=<%= request.fullpath %>&id=<%= params[:id] %>">BUY</a>
 					<br />

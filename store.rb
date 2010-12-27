@@ -175,6 +175,12 @@ get '/checkout' do
   erb :cenas
 end
 
+get '/addvote' do
+  $db.execute("begin voting(#{params[:id]},#{params[:v]}); end;")
+  $db.execute("commit")
+  redirect params[:page]
+end
+
 get '/*' do
   status 400
   "<h1>Page Not Found!</h1>"
