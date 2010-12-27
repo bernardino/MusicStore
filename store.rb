@@ -48,6 +48,9 @@ end
 =end
 
 get '/' do
+	@albums = $search.recentlyAddedAlbums()
+	@songs = $search.recentlyAddedSongs()
+	@merch = $search.recentlyAddedMerch()
   erb :index
 end
 

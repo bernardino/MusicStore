@@ -195,6 +195,7 @@ create table PRODUCT
    RELEASE_DATE         INTEGER              not null,
    RATING               FLOAT                not null,
    VOTES                INTEGER              not null,
+   ADDED_DATE           DATE                 not null,
    constraint PK_PRODUCT primary key (PRODUCT_ID)
 );
 

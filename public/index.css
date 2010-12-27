@@ -39,7 +39,12 @@ h1 {
 	font-family:Trebuchet MS, Arial, Helvetica, sans-serif;
 	text-decoration:none;
 	color:#000;
-	
+}
+.list{
+	font-family: Trebuchet MS, Arial, Helvetica, sans-serif;
+	text-decoration:none;
+	color:#000;
+	font-size:13px;
 }
 .footer {
 	clear:both;

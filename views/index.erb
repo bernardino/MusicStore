@@ -66,8 +66,78 @@
 			</div>
 			<% end %>
 			<!-- Cenas -->
-			<div style="background:#CCC; float:left;width:60%;">
-				<h1>Recently Added Items</h1><br /><br /><br /><br /><br /><br /><br />
+			<div align="left" style="background:#CCC; float:left;width:60%;">
+				<h1>Recently Added Items</h1>
+				<div style="background:#CCC; float:left;width:50%;">
+					<p class="search"> Albums</p>
+					<table >
+						<% 
+						i=0
+						while i < @albums.length
+							if i == 15
+								break
+							else %>
+							<tr>
+								<td>
+									<a class="list" href="/artist/<%= @albums[i+3] %>/album/<%= @albums[i] %>"><img src="<%= @albums[i+4] %>" height="40" width="40" border="2"/></a>
+								</td>
+								<td>
+									<a class="list" href="/artist/<%= @albums[i+3] %>/album/<%= @albums[i] %>"><%= @albums[i+2] %> - <%= @albums[i+1] %></a>
+								</td>
+							</tr>
+							<% end %>
+							<% i=i+5 %>
+						<% end %>
+					</table>
+				</div>
+				
+				<div style="background:#CCC; float:right;width:50%;">
+					<p class="search"> Songs</p>
+					<table>
+						<%
+						i=0
+						while i< @songs.length
+							if i==12
+								break
+							else %>
+								<tr>
+									<td>
+										<a class="list" href="/song/<%= @songs[i] %>"><img src="<%= @songs[i+3] %>" height="40" width="40" border="2"/></a>
+									</td>
+									<td>
+										<a class="list" href="/song/<%= @songs[i] %>"><%= @songs[i+2] %> - <%= @songs[i+1] %></a>
+									</td>
+								</tr>
+							<% end %>
+							<% i=i+4 %>
+						<% end %>
+					
+					</table>
+				</div>
+				
+				<div style="background:#CCC; float:left;width:50%;">
+					<p class="search"> Merchandising</p>
+					<table>
+						<%
+						i=0
+						while i< @merch.length
+							if i==12
+								break
+							else %>
+								<tr>
+									<td>
+										<a class="list" href="/merch/<%= @merch[i] %>"><img src="<%= @merch[i+3] %>" height="40" width="40" border="2"/></a>
+									</td>
+									<td>
+										<a class="list" href="/merch/<%= @merch[i] %>"><%= @merch[i+2] %> - <%= @merch[i+1] %></a>
+									</td>
+									
+								</tr>
+							<% end %>
+							<% i=i+4 %>
+						<% end %>
+					</table>
+				</div>
 				<h1>User Recommendations</h1>
 			</div>
 			<!-- Shopping Cart -->
