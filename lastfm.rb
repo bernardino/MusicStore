@@ -164,7 +164,7 @@ class Lastfm
 			$db.execute("INSERT INTO product(product_id, artist_id, description, image, release_date, rating, votes, added_date, current_price, stock, num_sells)
 						VALUES(#{id_product[0]},
 							#{id[0]},
-							'cenas',
+							'description',
 							'#{res[0]}',
 							'#{res[2]}',
 							0,
