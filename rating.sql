@@ -9,7 +9,7 @@ BEGIN
 	select rating into old_rating from product
 	where product_id=id;
 	
-	new_rating := (old_rating + vote) / (allvotes+1);
+	new_rating := (old_rating*allvotes + vote) / (allvotes+1);
 	allvotes:=allvotes+1;
 	
 	update product set rating = new_rating where product_id=id;
