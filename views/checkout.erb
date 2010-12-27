@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>MusicStore - Checkout</title>
+	<link rel="stylesheet" type="text/css" href="checkout.css" />
+	<script type="text/javascript">
+		function remove(id){
+			alert(id);
+			window.location="/removeorder?id="+id+"&page=<%= request.fullpath %>";
+		}
+	</script>
+</head>
+<body>
+	<br />
+	<div id="cont" align="center" style="margin-left:10%; margin-right:10%; background:#eee">
+		<br /><h1>Checkout</h1><br />
+		<div align="center">
+			<table class="checkout" cellpadding="10" cellspacing="2">
+				<tr align="center" style="background:#f93;color:#eee">
+					<td width="30%">Name</td>
+					<td width="10%">Quantity</td>
+					<td width="30%">Type</td>
+					<td width="10%">Remove</td>
+				</tr>
+				<% session[:orders].keys.each do |order| %>
+				<tr align="center">
+						<td><%=session[:orders][order][1]%></td>
+						<td><%=session[:orders][order][0]%></td>
+						<% if session[:orders][order][2] == 'a'%>
+						<td>Album</td>
+						<% elsif session[:orders][order][2] == 'm'%>
+						<td>Merchandise</td>
+						<% elsif session[:orders][order][2] == 's'%>
+						<td>Song</td>
+						<% end %>
+						<td><img style="cursor:pointer" onmouseup="remove(<%= order %>)" src="/img/cross.png"></td>
+				</tr>
+				<% end%>
+				<% if session[:orders] == {} %>
+				<tr>
+					<td colspan="4"> No Items </td>
+				</tr>
+				<% end %>
+			</table>
+			<br />
+		</div>
+		<div align="left" style="margin-left:10%;margin-right:10%;">
+			<p>Your Address:</p>
+			<p><% res = $db.select("select address from client where client_id='#{session[:id]}'") %> <%= res[0]%> </p>
+		</div>
+		<% if session[:orders] == {} %>
+		<p><input id="order_btn" type="button" value="Add Order" disabled="true"></p>
+		<% else %>
+		<p><input id="order_btn" type="button" value="Add Order"></p>
+		<% end %>
+		<div align="center" class="footer">
+			Copyright © 2010 - Guilherme Simões, João Penetra, Ricardo Bernardino
+		</div>
+	</div>
+</body>
+</html>
