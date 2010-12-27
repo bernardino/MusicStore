@@ -135,7 +135,7 @@
 			<% else %>
 				<p>You have some orders</p>
 				<% session[:orders].keys.each do |order| %>
-				<p><%= order%>:<%= session[:orders][order] %></p>
+				<p><%= session[:orders][order][1] %>:<%= session[:orders][order][0] %></p>
 				<% end %>
 				<input type="button" onClick="goTo('checkout')" value="Checkout">
 			<%end%>

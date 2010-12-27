@@ -111,7 +111,7 @@
 					<p>Release Date: <%= @res[4] %></p> 
 					<p>Rating: <img id="star0" onmouseover="imgOver(0)" onmouseout="rating()" onmouseup="vote(1)" src="/img/blank.png"><img id="star1" onmouseover="imgOver(1)" onmouseout="rating()" onmouseup="vote(2)" src="/img/blank.png"><img id="star2" onmouseover="imgOver(2)" onmouseout="rating()" onmouseup="vote(3)" src="/img/blank.png"><img id="star3" onmouseover="imgOver(3)" onmouseout="rating()" onmouseup="vote(4)" src="/img/blank.png"><img id="star4" onmouseup="vote(5)" onmouseover="imgOver(4)" onmouseout="rating()" src="/img/blank.png"></p>
 					<p>Price: <%= @res[10] %> euros</p>
-					<a href="/addorder?page=<%= request.fullpath %>&id=<%= params[:id] %>">BUY</a>
+					<a href="/addorder?page=<%= request.fullpath %>&id=<%= params[:id] %>&type=a">BUY</a>
 					<br />
 					<p>Track Listing: </p>
 					<table>
@@ -161,7 +161,7 @@
 				<% else %>
 					<p>You have some orders</p>
 					<% session[:orders].keys.each do |order| %>
-					<p><%= order%>:<%= session[:orders][order] %></p>
+					<p><%= session[:orders][order][1] %>:<%= session[:orders][order][0] %></p>
 					<% end %>
 					<input type="button" onClick="goTo('checkout')" value="Checkout">
 				<%end%>

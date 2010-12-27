@@ -1,0 +1,26 @@
+@charset "UTF-8";
+/* CSS Document */
+
+body {
+  background:#000;
+}
+
+h1 {
+	color:#000;
+	font-weight:bold;
+	font-family:"Palatino Linotype", "Book Antiqua", Palatino, serif;
+}
+
+.checkout{
+	background-color:#ddd;
+	color:#000;
+	font-weight:bold;
+	font-family:"Palatino Linotype", "Book Antiqua", Palatino, serif;
+}
+
+.footer {
+	clear:both;
+	font-family:"Palatino Linotype", "Book Antiqua", Palatino, serif;
+	background:#ddd;
+	padding:5px;
+}
