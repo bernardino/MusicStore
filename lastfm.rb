@@ -98,6 +98,7 @@ class Lastfm
 				arr[2] = date[i-4, 4]
 				break
 			end
+			puts i
 			i=i+1
 		end
 		
@@ -186,8 +187,8 @@ class Lastfm
 				$db.execute("INSERT INTO product(product_id, artist_id, description, image, release_date, rating, votes, added_date, current_price, stock, num_sells)
 							VALUES(#{song_id[0]}, 
 								#{id[0]},
-								'N/A',
-								'0',
+								'description',
+								'#{res[0]}',
 								'#{res[2]}',
 								0,
 								0,

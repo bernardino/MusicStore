@@ -29,10 +29,7 @@
 					<span width="100" class="link" onClick="goTo('artists')">Artists</span>
 					<span width="100" class="link" onClick="goTo('albums')">Albums</span>
 					<span width="100" class="link" onClick="goTo('merchandising')">Merchandising</span>
-					<% if @admin %>
-					<span width="100" class="link" onClick="goTo('merchandising')">Add Items</span>
-					<% end %>
-					
+
 					<div style="float:right">
 						<form name="searchForm" action="/search" method="post">
 							<span> Search </span><input type="text" name="term" style="border-style:double" />
@@ -70,14 +67,13 @@
 			<% end %>
 			<!-- Cenas -->
 			<div align="left" style="background:#CCC; float:left;width:60%;">
-				<h1 align="center">Recently Added Items</h1>
 				<div style="background:#CCC; float:left;width:50%;">
-					<p class="search"> Albums</p>
+					<p class="search"> Top Albums</p>
 					<table >
 						<% 
 						i=0
 						while i < @albums.length
-							if i == 15
+							if i == 50
 								break
 							else %>
 							<tr>
@@ -95,12 +91,12 @@
 				</div>
 				
 				<div style="background:#CCC; float:right;width:50%;">
-					<p class="search"> Songs</p>
+					<p class="search"> Top Songs</p>
 					<table>
 						<%
 						i=0
 						while i< @songs.length
-							if i==12
+							if i==40
 								break
 							else %>
 								<tr>
@@ -119,12 +115,12 @@
 				</div>
 				
 				<div style="background:#CCC; float:left;width:50%;">
-					<p class="search"> Merchandising</p>
+					<p class="search"> Top Merchandising</p>
 					<table>
 						<%
 						i=0
 						while i< @merch.length
-							if i==12
+							if i==40
 								break
 							else %>
 								<tr>
@@ -141,7 +137,6 @@
 						<% end %>
 					</table>
 				</div>
-				<h1>User Recommendations</h1>
 			</div>
 			<!-- Shopping Cart -->
 			<div style="background:#DDD; float:left;width:20%;">
@@ -151,7 +146,7 @@
 				<% else %>
 					<p>You have some orders</p>
 					<% session[:orders].keys.each do |order| %>
-					<p><%= session[:orders][order][1] %>:<%= session[:orders][order][0] %></p>
+					<p><%= order%>:<%= session[:orders][order] %></p>
 					<% end %>
 					<input type="button" onClick="goTo('checkout')" value="Checkout">
 				<%end%>

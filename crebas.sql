@@ -19,7 +19,8 @@
 /*  PRODUCT'S DESCRIPTION field resized to varchar2(1000)       */
 /*	CLIENT_ID's type changed from INTEGER to VARCHAR2(20)		*/
 /*	CURRENT_PRICE is now a FLOAT								*/
-/*	PRODUCT now has field ADDED_DATE
+/* 	ADDED_DATE to PRODUCT										*/
+/*  NUM_SELLS added to PRODUCT 									*/
 /*==============================================================*/
 
 

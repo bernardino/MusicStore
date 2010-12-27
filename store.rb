@@ -22,11 +22,16 @@ end
 #template(:layout) { :index }
 
 before do
-  if session[:id]
-    @logged = true
-  else
-    @logged = false
-  end
+	if session[:id]
+		@logged = true
+		if session[:id].downcase == 'admin'
+			@admin = true
+		else
+			@admin = false
+		end
+	else
+		@logged = false
+	end
   
   unless session[:orders]
     session[:orders] = {}
@@ -48,9 +53,9 @@ end
 =end
 
 get '/' do
-	@albums = $search.recentlyAddedAlbums()
-	@songs = $search.recentlyAddedSongs()
-	@merch = $search.recentlyAddedMerch()
+	@albums = $get.recentlyAddedAlbums()
+	@songs = $get.recentlyAddedSongs()
+	@merch = $get.recentlyAddedMerch()
   erb :index
 end
 
@@ -133,8 +138,6 @@ get '/song/:id' do
 end
 
 get '/artist/:name/album/:id' do
-	
-	#$lf.create_album(params[:name], params[:id])
 	@res = $get.album(params[:id])
 	@songs = $db.select("	SELECT song_number, song_name, song_length
 							FROM song
@@ -157,6 +160,22 @@ get '/search/:id' do
 	
 	
   erb :search
+end
+
+get '/artists' do
+
+
+end
+
+get '/albums' do
+
+
+end
+
+
+get '/merchandising' do
+
+
 end
 
 post '/search' do
@@ -190,7 +209,11 @@ get '/merch/:id' do
 end
 
 get '/top' do
-  "<h1>Top Chart will soon be available</h1>"
+  @albums = $get.topAlbums()
+  @songs = $get.topSongs()
+  @merch = $get.topMerch()
+  
+  erb :charts
 end
 
 get '/addorder' do
