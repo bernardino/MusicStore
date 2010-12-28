@@ -15,10 +15,41 @@
 			window.location='/'+page;
 		}
 	}
+	
+	function passMatch(){
+		var firstPass=document.registerForm.passcode.value;
+		var secondPass=document.registerForm.passcode1.value;
+		
+		if(firstPass==secondPass && firstPass){
+			if(document.registerForm.email.value!=""){
+				document.registerForm.submit_btn.disabled=false;
+			} else {
+				document.registerForm.submit_btn.disabled=true;
+			}
+		}
+		else{
+			document.registerForm.submit_btn.disabled=true;
+		}
+	}
+	
+	function emailField(){
+		var email = document.registerForm.email.value;
+		if(email==""){
+			document.registerForm.submit_btn.disabled=true;
+		} else {
+			if(document.registerForm.passcode.value==document.registerForm.passcode1.value){
+				document.registerForm.submit_btn.disabled=false;
+			} else {
+				document.registerForm.submit_btn.disabled=true;
+			}
+		}
+	}
+	
+	
 	</script>
 </head>
 
-<body>
+<body onload="emailField();">
 	<div class="container">
 		<div align="center" class="header">
 			<h1>Music Store</h1>
@@ -65,7 +96,7 @@
 					<h1>Login</h1>
 					<h3>Username</h3><input type="text" name="username" /><br />
 					<h3>Password</h3><input type="password" name="password"/><br /><br />
-					<input type="submit" value="Login">					
+					<input type="submit" value="Login">
 					<br /><br />
 					<a href="/register">Not Registered?</a>
 					<br />
@@ -74,78 +105,39 @@
 			<% end %>
 			<!-- Cenas -->
 			<div align="left" style="background:#CCC; float:left;width:60%;">
-				<h1 align="center">Recently Added Items</h1>
-				<div style="background:#CCC; float:left;width:50%;">
-					<p class="search"> Albums</p>
-					<table >
-						<% 
-						i=0
-						while i < @albums.length
-							if i == 15
-								break
-							else %>
-							<tr>
-								<td>
-									<a class="list" href="/artist/<%= @albums[i+3] %>/album/<%= @albums[i] %>"><img src="<%= @albums[i+4] %>" height="40" width="40" border="2"/></a>
-								</td>
-								<td>
-									<a class="list" href="/artist/<%= @albums[i+3] %>/album/<%= @albums[i] %>"><%= @albums[i+2] %> - <%= @albums[i+1] %></a>
-								</td>
-							</tr>
-							<% end %>
-							<% i=i+5 %>
-						<% end %>
-					</table>
-				</div>
-				
-				<div style="background:#CCC; float:right;width:50%;">
-					<p class="search"> Songs</p>
-					<table>
-						<%
-						i=0
-						while i< @songs.length
-							if i==12
-								break
-							else %>
-								<tr>
-									<td>
-										<a class="list" href="/song/<%= @songs[i] %>"><img src="<%= @songs[i+3] %>" height="40" width="40" border="2"/></a>
-									</td>
-									<td>
-										<a class="list" href="/song/<%= @songs[i] %>"><%= @songs[i+2] %> - <%= @songs[i+1] %></a>
-									</td>
-								</tr>
-							<% end %>
-							<% i=i+4 %>
-						<% end %>
-					
-					</table>
-				</div>
-				
-				<div style="background:#CCC; float:left;width:50%;">
-					<p class="search"> Merchandising</p>
-					<table>
-						<%
-						i=0
-						while i< @merch.length
-							if i==12
-								break
-							else %>
-								<tr>
-									<td>
-										<a class="list" href="/merch/<%= @merch[i] %>"><img src="<%= @merch[i+3] %>" height="40" width="40" border="2"/></a>
-									</td>
-									<td>
-										<a class="list" href="/merch/<%= @merch[i] %>"><%= @merch[i+2] %> - <%= @merch[i+1] %></a>
-									</td>
-									
-								</tr>
-							<% end %>
-							<% i=i+4 %>
-						<% end %>
-					</table>
-				</div>
-				<h1>User Recommendations</h1>
+				<h1> Client </h1>
+				<form name="registerForm" class="registerForm" action="/edit" method="post">
+				<table onkeyup="emailField();allFields();">
+					<tr>
+						<td class="search">Name:</td>
+						<td><input type="text" maxlength="20" size="30" name="name" value="<%= @info[0] %>" /></td>
+					</tr>
+					<tr>
+						<td class="search">Telephone Number:</td>
+						<td id="phone"><input type="text" maxlength="20" size="30" name="phone" value="<%= @info[2] %>" /></td>
+					</tr>
+					<tr>
+						<td class="search">Address:</td>
+						<td id="address"><input type="text" maxlength="100" size="30" name="address" value="<%= @info[1] %>" /></td>
+					</tr>
+					<tr>
+						<td class="search">Email:</td>
+						<td id="email"><input type="text" maxlength="50" size="30" name="email" value="<%= @info[3] %>" /></td>
+					</tr>
+					<tr>
+						<td class="search">Current Password:</td>
+						<td><input type="password" maxlength="15" size="30" name="currentPasscode" /></td>
+					</tr>
+					<tr>
+						<td class="search">Password:</td>
+						<td id ="firstPass" onkeyup="passMatch()" ><input type="password" maxlength="15" size="30" name="passcode" /></td>
+					</tr>
+					<tr>
+						<td class="search">Confirm Password:</td>
+						<td id="secondPass" onkeyup="passMatch()" ><input type="password" maxlength="15" size="30" name="passcode1" /></td>
+					</tr>
+				</table>
+				<input type="submit" value="Confirm changes" name="submit_btn"/>
 			</div>
 			<!-- Shopping Cart -->
 			<div style="background:#DDD; float:left;width:20%;">
@@ -162,7 +154,7 @@
 			</div>
 		</div>
 		<div align="center" class="footer">
-			Copyright © 2010 - Guilherme Simões, João Penetra, Ricardo Bernardino
+			 Copyright © 2010 - Guilherme Simões, João Penetra, Ricardo Bernardino
 		</div>
 	</div>
 </body>

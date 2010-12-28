@@ -60,7 +60,7 @@ class Get
 	def client(client_id)
 		return $db.select("	SELECT name, address, telephone, email
 							FROM client c
-							WHERE c.client_id = #{client_id}
+							WHERE upper(c.client_id) = upper('#{client_id}')
 						")
 	end
 	
@@ -171,5 +171,6 @@ class Get
 							AND s.alb_product_id = #{album_id}
 							ORDER BY song_number
 						")
-	end
+	end	
+	
 end

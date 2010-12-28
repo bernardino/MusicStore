@@ -5,6 +5,7 @@ require 'erb'
 require 'oci8'
 require 'net/http'
 require 'uri'
+require 'digest/sha1'
 
 require './database.rb'
 require './lastfm.rb'
@@ -16,7 +17,6 @@ configure do
 	$lf = Lastfm.new
 	$search = Search.new
 	$get = Get.new
-	@admin = false
 	enable :sessions
 end
 
@@ -72,24 +72,25 @@ get '/register' do
 end
 
 post '/register' do
-  res = $db.select("select client_id from client where upper(client_id) like upper('#{params[:username]}')")
-  unless res[0]
-    $db.execute("insert into client values('#{params[:username]}','#{params[:address]}',#{params[:phone]}, '#{params[:name]}', '#{params[:passcode]}', '#{params[:email]}')")
-    $db.execute("commit")
-    session[:id] = params[:username]
-    redirect '/'
-  else
-    redirect '/register?message=error'
-  end
+	res = $db.select("select client_id from client where upper(client_id) like upper('#{params[:username]}')")
+	unless res[0]
+		$db.execute("insert into client values('#{params[:username]}','#{params[:address]}',#{params[:phone]}, '#{params[:name]}', '#{params[:passcode]}', '#{params[:email]}')")
+		$db.execute("commit")
+		session[:id] = params[:username]
+		redirect '/'
+	else
+		redirect '/register?message=error'
+	end
 end
 
 post '/login' do
-  res = $db.select("select client_id from client where upper(client_id) like upper('#{params[:username]}') and password like '#{params[:password]}'")
-  if res[0]
-    session[:id] = params[:username]
-  end
+	passcode = Digest::SHA1.hexdigest(params[:password])
+	res = $db.select("SELECT client_id FROM client WHERE upper(client_id) LIKE upper('#{params[:username]}') and password LIKE '#{passcode}'")
+	if res[0]
+		session[:id] = params[:username]
+	end
   
-  redirect '/'
+	redirect '/'
 end
 
 get '/logout' do
@@ -107,18 +108,6 @@ get '/artist/:id' do
 	
 	erb :artist
 end
-
-
-get '/artist/:id' do
-	res = $get.artist(params[:id])
-	@artistID = res[0]
-	@bio = res[1]
-	@image = res[2]
-	@albums = $get.artist_albums(params[:id])
-	
-	erb :artist
-end
-
 
 get '/insertArtist/:id' do
 	$lf.create_artist(params[:id])
@@ -139,6 +128,7 @@ get '/song/:id' do
 end
 
 get '/artist/:name/album/:id' do
+
 	@res = $get.album(params[:id])
 	@songs = $db.select("	SELECT song_number, song_name, song_length
 							FROM song
@@ -248,6 +238,45 @@ get '/checkout' do
   end
   
   erb :checkout
+end
+
+get '/client' do
+	@info = $get.client(session[:id])
+	erb :client
+	
+end
+
+post '/edit' do
+	
+	
+	if params[:passcode] != ''
+		currentPass = Digest::SHA1.hexdigest("#{params[:currentPasscode]}")
+		passcode = Digest::SHA1.hexdigest("#{params[:passcode]}")
+		
+		$db.execute("   UPDATE client c
+						SET c.name = '#{params[:name]}',
+						c.telephone = #{params[:phone]},
+						c.address = '#{params[:address]}',
+						c.password = '#{passcode}'
+						WHERE upper(c.client_id) = upper('#{session[:id]}')
+						AND c.password = '#{currentPass}'
+					")
+		$db.execute("Commit")
+		
+	else
+		currentPass = Digest::SHA1.hexdigest("#{params[:currentPasscode]}")
+		$db.execute("   UPDATE client c
+						SET c.name = '#{params[:name]}',
+						c.telephone = #{params[:phone]},
+						c.address = '#{params[:address]}'
+						WHERE upper(c.client_id) = upper('#{session[:id]}')
+						AND c.password = '#{currentPass}'
+					")
+		$db.execute("Commit")
+	end
+					
+	redirect '/client'
+	
 end
 
 get '/removeorder' do
