@@ -19,6 +19,17 @@
 	function remove(id){
 		window.location="/removeorder?id="+id+"&page=<%= request.fullpath %>";
 	}
+	
+	function add(id){
+		window.location="/addorder?id="+id+"&page=<%= request.fullpath %>";
+	}
+	
+	function del(id,currQ){
+		if(currQ-1!=0)
+			window.location="/del?id="+id+"&page=<%= request.fullpath %>";
+		else
+			window.location="/removeorder?id="+id+"&page=<%= request.fullpath %>";
+	}
 	</script>
 </head>
 
@@ -147,7 +158,7 @@
 				<% else %>
 					<p>You have some orders</p>
 					<% session[:orders].keys.each do |order| %>
-					<p align="left" style="margin:10%">Product: <%= session[:orders][order][1] %> (<%= session[:orders][order][2] %>)<br />Quantity: <%= session[:orders][order][0] %><br /><img style="cursor:pointer" onmouseup="remove(<%= order %>)" src="/img/cross.png"></p>
+					<p align="left" style="margin:10%">Product: <%= session[:orders][order][1] %> (<%= session[:orders][order][2] %>)<br />Quantity: <%= session[:orders][order][0] %> <img style="cursor:pointer" onmouseup="add(<%= order %>)" src="/img/plus.png">  <img style="cursor:pointer" onmouseup="del(<%= order %>,<%= session[:orders][order][0] %>)" src="/img/minus.png"><br /><img style="cursor:pointer" onmouseup="remove(<%= order %>)" src="/img/cross.png"></p>
 					<% end %>
 					<% if @logged %>
 						<input type="button" onClick="goTo('checkout')" value="Checkout">

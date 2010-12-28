@@ -77,7 +77,8 @@ end
 post '/register' do
 	res = $db.select("select client_id from client where upper(client_id) like upper('#{params[:username]}')")
 	unless res[0]
-		$db.execute("insert into client values('#{params[:username]}','#{params[:address]}',#{params[:phone]}, '#{params[:name]}', '#{params[:passcode]}', '#{params[:email]}')")
+	  passcode = Digest::SHA1.hexdigest("#{params[:passcode]}")
+		$db.execute("insert into client values('#{params[:username]}','#{params[:address]}',#{params[:phone]}, '#{params[:name]}', '#{passcode}', '#{params[:email]}')")
 		$db.execute("commit")
 		session[:id] = params[:username]
 		redirect '/'
@@ -261,6 +262,14 @@ get '/addorder' do
   else
     session[:total] = price[0]
   end
+  redirect params[:page]
+end
+
+get '/del' do
+  price = $db.select("select current_price from product where product_id = '#{params[:id]}'")
+  session[:orders][params[:id]][0]-=1
+  session[:total]-=price[0]
+  
   redirect params[:page]
 end
 
