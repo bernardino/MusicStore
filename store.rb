@@ -22,11 +22,16 @@ end
 #template(:layout) { :index }
 
 before do
-  if session[:id]
-    @logged = true
-  else
-    @logged = false
-  end
+	if session[:id]
+		@logged = true
+		if session[:id].downcase == 'admin'
+			@admin = true
+		else
+			@admin = false
+		end
+	else
+		@logged = false
+	end
   
   unless session[:orders]
     session[:orders] = {}
@@ -49,9 +54,9 @@ end
 =end
 
 get '/' do
-	@albums = $search.recentlyAddedAlbums()
-	@songs = $search.recentlyAddedSongs()
-	@merch = $search.recentlyAddedMerch()
+	@albums = $get.recentlyAddedAlbums()
+	@songs = $get.recentlyAddedSongs()
+	@merch = $get.recentlyAddedMerch()
   erb :index
 end
 
@@ -61,7 +66,7 @@ get '/register' do
   end
   @message=params[:message]
   if @message
-    @message="Username already in use!"
+    @message = "Username already in use!"
   end
   erb :register
 end
@@ -104,6 +109,30 @@ get '/artist/:id' do
 	erb :artist
 end
 
+
+get '/artist/:id' do
+	res = $get.artist(params[:id])
+	@artistID = res[0]
+	@bio = res[1]
+	@image = res[2]
+	@albums = $get.artist_albums(params[:id])
+	
+	erb :artist
+end
+
+
+get '/insertArtist/:id' do
+	$lf.create_artist(params[:id])
+	i = $lf.get_artist_id(params[:id])
+	res = $get.artist(i)
+	@artistID = res[0]
+	@bio = res[1]
+	@image = res[2]
+	@albums = $get.artist_albums(i)
+	
+	erb :artist
+end
+
 get '/song/:id' do
 	@res = $get.song(params[:id])
 	
@@ -111,23 +140,44 @@ get '/song/:id' do
 end
 
 get '/artist/:name/album/:id' do
-	
-	#$lf.create_album(params[:name],params[:id])
 	@res = $get.album(params[:id])
-	@songs = $db.select("SELECT song_number, song_name, song_length
+	@songs = $db.select("	SELECT song_number, song_name, song_length
 							FROM song
 							WHERE alb_product_id = #{params[:id]}
 							ORDER BY song_number
 						")
 	@albums = $get.artist_albums(params[:name])
+	
 	erb :album
 end
+
+
+get '/artist/:artist_name/insertAlbum/:album_name' do
+	$lf.create_album(params[:artist_name], params[:album_name])
+end
+
 
 get '/search/:id' do
 	@res = $search.artist(params[:id])
 	
 	
   erb :search
+end
+
+get '/artists' do
+
+
+end
+
+get '/albums' do
+
+
+end
+
+
+get '/merchandising' do
+
+
 end
 
 post '/search' do
@@ -161,7 +211,11 @@ get '/merch/:id' do
 end
 
 get '/top' do
-  "<h1>Top Chart will soon be available</h1>"
+  @albums = $get.topAlbums()
+  @songs = $get.topSongs()
+  @merch = $get.topMerch()
+  
+  erb :charts
 end
 
 get '/addorder' do

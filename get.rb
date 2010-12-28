@@ -24,12 +24,21 @@ class Get
 	
 	
 	def song(song_id)
-		return $db.select("	SELECT artist_name, song_name, DECODE(alb_product_id, null, 'None', (	SELECT album_name
-																									FROM album a, song s
-																									WHERE a.product_id = s.alb_product_id
-																									AND s.product_id = #{song_id}
-																								)) album_name,
-									song_number, song_length, song_genre, release_date, rating, votes, current_price
+		return $db.select("	SELECT 	artist_name,
+									song_name,
+									DECODE(alb_product_id, null, 'None', (	SELECT album_name
+																			FROM album a, song s
+																			WHERE a.product_id = s.alb_product_id
+																			AND s.product_id = #{song_id}
+																		)) album_name,
+									DECODE(song_number, null, 0, song_number) song_n,
+									song_length,
+									song_genre,
+									release_date,
+									rating,
+									votes,
+									current_price,
+									image
 							FROM song s, artist a, product p
 							WHERE a.artist_id = p.artist_id
 							AND p.product_id = s.product_id
@@ -71,6 +80,61 @@ class Get
 							WHERE al.product_id = p.product_id
 							AND p.artist_id = #{artist_id}
 						")
+	end
+	
+	# WE NEED TO CHANGE THIS IN ORDER TO AVOID SELECTING EVERYTHING, DOING THIS JUST TO TEST
+	
+	# ANSWER: WHERE rownum < 11;
+	def recentlyAddedAlbums()
+		return $db.select(" SELECT p.product_id, al.album_name, ar.artist_name,ar.artist_id, p.image
+							FROM product p, album al, artist ar
+							WHERE p.product_id = al.product_id
+							AND p.artist_id = ar.artist_id
+							ORDER by p.added_date DESC")
+	end
+	
+	def recentlyAddedSongs()
+		return $db.select(" SELECT p.product_id, s.song_name, ar.artist_name, p.image
+							FROM product p, song s, artist ar
+							WHERE p.product_id = s.product_id
+							AND p.artist_id = ar.artist_id
+							ORDER by p.added_date DESC")
+	
+	end	
+	
+	def recentlyAddedMerch()
+		return $db.select(" SELECT p.product_id, m.merchandise_name, ar.artist_name, p.image
+							FROM product p, merchandise m, artist ar
+							WHERE p.product_id = m.product_id
+							AND p.artist_id = ar.artist_id
+							ORDER by p.added_date DESC")
+	
+	end
+	
+	def topAlbums()
+		return $db.select(" SELECT p.product_id, al.album_name, ar.artist_name,ar.artist_id, p.image
+							FROM product p, album al, artist ar
+							WHERE p.product_id = al.product_id
+							AND p.artist_id = ar.artist_id
+							ORDER by p.num_sells DESC")
+	
+	end
+	
+	def topSongs()
+		return $db.select(" SELECT p.product_id, s.song_name, ar.artist_name, p.image
+							FROM product p, song s, artist ar
+							WHERE p.product_id = s.product_id
+							AND p.artist_id = ar.artist_id
+							ORDER by p.num_sells DESC")
+	
+	end
+	
+	def topMerch()
+		return $db.select(" SELECT p.product_id, m.merchandise_name, ar.artist_name, p.image
+							FROM product p, merchandise m, artist ar
+							WHERE p.product_id = m.product_id
+							AND p.artist_id = ar.artist_id
+							ORDER by p.num_sells DESC")
 	
 	end
 	

@@ -50,6 +50,7 @@ class Search
 						")
 	end
 	
+	
 	def recentlyAddedAlbums()
 		return $db.select(" SELECT p.product_id, al.album_name, ar.artist_name,ar.artist_id, p.image
 							FROM product p, album al, artist ar
@@ -58,14 +59,15 @@ class Search
 							ORDER by p.added_date DESC")
 	end
 	
+	
 	def recentlyAddedSongs()
 		return $db.select(" SELECT p.product_id, s.song_name, ar.artist_name, p.image
 							FROM product p, song s, artist ar
 							WHERE p.product_id = s.product_id
 							AND p.artist_id = ar.artist_id
 							ORDER by p.added_date DESC")
-	
 	end
+	
 	
 	def recentlyAddedMerch()
 		return $db.select(" SELECT p.product_id, m.merchandise_name, ar.artist_name, p.image
@@ -73,7 +75,6 @@ class Search
 							WHERE p.product_id = m.product_id
 							AND p.artist_id = ar.artist_id
 							ORDER by p.added_date DESC")
-	
 	end
 	
 	
@@ -83,7 +84,6 @@ class Search
 							WHERE upper(client_id) like upper('%#{username}%')
 							ORDER BY client_id, name
 						")
-	
 	end
 	
 	
