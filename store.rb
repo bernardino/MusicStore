@@ -89,7 +89,7 @@ post '/login' do
     session[:id] = params[:username]
   end
   
-  redirect '/'
+  redirect params[:p]
 end
 
 get '/logout' do
