@@ -30,6 +30,7 @@ before do
   
   unless session[:orders]
     session[:orders] = {}
+    session[:total] = 0
   end
   
 end
@@ -89,6 +90,7 @@ end
 get '/logout' do
   session[:id] = nil
   session[:orders] = {}
+  session[:total] = 0
   redirect '/'
 end
 
@@ -163,27 +165,37 @@ get '/top' do
 end
 
 get '/addorder' do
+  price = $db.select("select current_price from product where product_id = '#{params[:id]}'")
   if session[:orders][params[:id]]
     session[:orders][params[:id]][0] += 1
+    session[:orders][params[:id]][3]+= price[0]
   else
-    session[:orders][params[:id]] = [] #[0]->quantity, [1]->name, [2]->type
+    session[:orders][params[:id]] = [] #[0]->quantity, [1]->name, [2]->type, [3]->price
     if params[:type]=='a' #album
       res = $db.select("select album_name from album where product_id = '#{params[:id]}'")
       session[:orders][params[:id]] << 1
       session[:orders][params[:id]] << res[0]
       session[:orders][params[:id]] << params[:type]
+      session[:orders][params[:id]] << price[0]
     elsif params[:type]=='m' #merchandise
       res = $db.select("select merchandise_name from album where product_id = '#{params[:id]}'")
       session[:orders][params[:id]] << 1
       session[:orders][params[:id]] << res[0]
       session[:orders][params[:id]] << params[:type]
+      session[:orders][params[:id]] << price[0]
     elsif params[:type]=='s' #song
       res = $db.select("select song_name from album where product_id = '#{params[:id]}'")
       session[:orders][params[:id]] << 1
       session[:orders][params[:id]] << res[0]
       session[:orders][params[:id]] << params[:type]
+      session[:orders][params[:id]] << price[0]
     end
-  end 
+  end
+  if session[:total]
+    session[:total]+=price[0]
+  else
+    session[:total] = price[0]
+  end
   redirect params[:page]
 end
 
@@ -196,11 +208,12 @@ get '/checkout' do
 end
 
 get '/removeorder' do
+  session[:total]-=session[:orders][params[:id]][3]
   session[:orders].delete(params[:id])
   redirect params[:page]
 end
 
-get 'final' do
+get 'final' do #client adds an order to the database
   redirect '/'
 end
 
