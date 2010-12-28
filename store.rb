@@ -93,7 +93,7 @@ post '/login' do
 		session[:id] = params[:username]
 	end
   
-  redirect params[:p]
+	redirect params[:p]
 end
 
 get '/logout' do
@@ -280,7 +280,7 @@ end
 
 post '/edit' do
 	
-	
+	################################################### VERIFY IF IT WAS SUCCESSFULLY UPDATED ##########################################
 	if params[:passcode] != ''
 		currentPass = Digest::SHA1.hexdigest("#{params[:currentPasscode]}")
 		passcode = Digest::SHA1.hexdigest("#{params[:passcode]}")
