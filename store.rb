@@ -268,6 +268,7 @@ end
 get '/del' do
   price = $db.select("select current_price from product where product_id = '#{params[:id]}'")
   session[:orders][params[:id]][0]-=1
+  session[:orders][params[:id]][3]-=price[0]
   session[:total]-=price[0]
   
   redirect params[:page]
@@ -323,6 +324,7 @@ end
 get '/removeorder' do
   session[:total]-=session[:orders][params[:id]][3]
   session[:orders].delete(params[:id])
+
   redirect params[:page]
 end
 
