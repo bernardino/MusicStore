@@ -6,7 +6,6 @@
 	<link rel="stylesheet" type="text/css" href="checkout.css" />
 	<script type="text/javascript">
 		function remove(id){
-			alert(id);
 			window.location="/removeorder?id="+id+"&page=<%= request.fullpath %>";
 		}
 	</script>
@@ -44,15 +43,23 @@
 				<% end %>
 			</table>
 			<br />
+			<table class="checkout">
+				<tr align="center" style="background:#f93;color:#eee;">
+					<td>TOTAL</td>
+				</tr>
+				<tr align="center">
+					<td><%= session[:total]? session[:total] : 0 %> credits</td>
+				</tr>
+			</table>
 		</div>
 		<div align="left" style="margin-left:10%;margin-right:10%;">
 			<p>Your Address:</p>
 			<p><% res = $db.select("select address from client where client_id='#{session[:id]}'") %> <%= res[0]%> </p>
 		</div>
 		<% if session[:orders] == {} %>
-		<p><input id="order_btn" type="button" value="Add Order" disabled="true"></p>
+		<p><input id="order_btn" type="button" value="Add Order" disabled="true"><input type="button" value="Home" onmouseup="window.location='/'"></p></p>
 		<% else %>
-		<p><input id="order_btn" type="button" value="Add Order"></p>
+		<p><input id="order_btn" type="button" value="Add Order"><input type="button" value="Home" onmouseup="window.location='/'"></p>
 		<% end %>
 		<div align="center" class="footer">
 			Copyright © 2010 - Guilherme Simões, João Penetra, Ricardo Bernardino
