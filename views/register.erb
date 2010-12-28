@@ -8,8 +8,8 @@
 	function passMatch(){
 		var firstPass=document.registerForm.passcode.value;
 		var secondPass=document.registerForm.passcode1.value;
-		
-		if(firstPass==secondPass && firstPass){
+
+		if(firstPass==secondPass && firstPass!=""){
 			document.getElementById("error").style.display='none';
 			if(document.registerForm.email.value!=""){
 				document.registerForm.submit_btn.disabled=false;
@@ -22,7 +22,7 @@
 			document.registerForm.submit_btn.disabled=true;
 		}
 	}
-	
+
 	function emailField(){
 		var email = document.registerForm.email.value;
 		if(email==""){
@@ -37,9 +37,10 @@
 			}
 		}
 	}
-	
+
 	function allFields(){
-		if(document.registerForm.email.username && document.registerForm.email.value && document.registerForm.address.value && document.registerForm.phone.value && !isNaN(parseInt(document.registerForm.phone.value)) ){
+		if(document.registerForm.email.username!="" && document.registerForm.email.value!="" && document.registerForm.address.value != "" && document.registerForm.phone.value!="" && !isNaN(parseInt(document.registerForm.phone.value)) ){
+			document.registerForm.phone.value=parseInt(document.registerForm.phone.value);
 			document.registerForm.submit_btn.disabled=false;
 		} else {
 			document.registerForm.submit_btn.disabled=true;
@@ -52,7 +53,7 @@
 <div align="center">
 <form name="registerForm" class="registerForm" action="/register" method="post">
 	<p><%= @message %></p>
-<table cellspacing="5" onkeyup="emailField();allFields();passMatch();">
+<table cellspacing="5" onkeyup="emailField();allFields();">
 	<tr >
     	<td width="160">Username</td>
         <td><input type="text" maxlength="20" name="username" /></td>
