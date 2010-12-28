@@ -8,6 +8,17 @@
 		function remove(id){
 			window.location="/removeorder?id="+id+"&page=<%= request.fullpath %>";
 		}
+		
+		function add(id){
+			window.location="/addorder?id="+id+"&page=<%= request.fullpath %>";
+		}
+
+		function del(id,currQ){
+			if(currQ-1!=0)
+				window.location="/del?id="+id+"&page=<%= request.fullpath %>";
+			else
+				window.location="/removeorder?id="+id+"&page=<%= request.fullpath %>";
+		}
 	</script>
 </head>
 <body>
@@ -25,7 +36,7 @@
 				<% session[:orders].keys.each do |order| %>
 				<tr align="center">
 						<td><%=session[:orders][order][1]%></td>
-						<td><%=session[:orders][order][0]%></td>
+						<td><%=session[:orders][order][0]%> <img style="cursor:pointer" onmouseup="add(<%= order %>)" src="/img/plus.png">  <img style="cursor:pointer" onmouseup="del(<%= order %>,<%= session[:orders][order][0] %>)" src="/img/minus.png"></td>
 						<% if session[:orders][order][2] == 'a'%>
 						<td>Album</td>
 						<% elsif session[:orders][order][2] == 'm'%>
