@@ -5,8 +5,8 @@ require 'hpricot'
 class Lastfm
 	
 	def initialize()
-	
 	end
+	
 	
 	def get_artist(name)
 		url = "http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=#{name.gsub(' ','+')}&api_key=b25b959554ed76058ac220b7b2e0a026" #LAST.FM REST API
@@ -24,25 +24,19 @@ class Lastfm
 		#THIS IS JUST TEMPORARY NEED TO IMPROVE
 		arr[1] = (doc/"lfm/artist/bio/summary").inner_html.gsub(']]>',"").gsub('<![CDATA[',"")
 		
-		
-		arr
+		$add.artist(name, arr[0], arr[1])
 	end
+	
 	
 	def create_artist(name)
 		exist = get_artist_id(name)
 		
 		if exist.length == 0
 			res = get_artist(name)
-			$db.execute("INSERT INTO artist(artist_id,artist_name,artist_image,artist_bio)
-						VALUES(artist_number.nextval,
-						'#{name}',
-						'#{res[0]}',
-						'#{res[1]}'
-						)"
-					)
-			$db.execute("Commit")
+			$add.artist(name, res[0], res[1])
 		end	
 	end
+	
 	
 	def get_artist_id(name)
 		res = Array.new
@@ -62,10 +56,10 @@ class Lastfm
 	
 	def update_artist(name)
 		res = get_artist(name)
-		$db.execute("UPDATE artist 
-					SET artist_image = '#{res[0]}' ,
-					artist_bio = '#{res[1]}'
-					WHERE upper(artist_name) LIKE upper('#{name}')
+		$db.execute("	UPDATE artist 
+						SET artist_image = '#{res[0]}' ,
+						artist_bio = '#{res[1]}'
+						WHERE upper(artist_name) LIKE upper('#{name}')
 					")
 					
 		$db.execute("Commit")
@@ -111,6 +105,7 @@ class Lastfm
 		arr	
 	end
 	
+	
 	def update_album(artist_name,album_name)
 		res = get_album(artist_name,album_name)
 		
@@ -155,56 +150,25 @@ class Lastfm
 							WHERE upper(artist_name) LIKE upper('#{artist_name}')
 						")
 					
-		exist = get_album_id(artist_name,album_name)
+		exist = get_album_id(artist_name, album_name)
 		
 		if exist == 1
 		
-			id_product = $db.select("SELECT product_number.nextval FROM dual")
-			
+			product_id = $db.select("SELECT product_number.nextval FROM dual")
 			#THE DESCRIPTION MAY CREATE A CONFLICT DUE TO STRANGE CHARACTERS
-			$db.execute("INSERT INTO product(product_id, artist_id, description, image, release_date, rating, votes, added_date, current_price, stock, num_sells)
-						VALUES(#{id_product[0]},
-							#{id[0]},
-							'description',
-							'#{res[0]}',
-							'#{res[2]}',
-							0,
-							0,
-							sysdate,
-							15,
-							50,
-							0)
-						")
+			$add.product(product_id[0], id[0], 'description', res[0], res[2], '15', '50')
 			
-			$db.execute("INSERT INTO album(product_id, album_name, album_length, album_label, album_genre)
-						VALUES(#{id_product[0]}, '#{album_name}', '60m', 'Merge', 'Rock')
-						")
-						
+			$add.album(product_id[0], album_name, '60m', 'Merge', 'Rock')
+
+			
 			i = 3		
 			while i < res.length
 				song_id = $db.select("SELECT product_number.nextval FROM DUAL")
 				
-				$db.execute("INSERT INTO product(product_id, artist_id, description, image, release_date, rating, votes, added_date, current_price, stock, num_sells)
-							VALUES(#{song_id[0]}, 
-								#{id[0]},
-								'description',
-								'#{res[0]}',
-								'#{res[2]}',
-								0,
-								0,
-								sysdate,
-								0.99,
-								-1,
-								0)
-							")
-				$db.execute("INSERT INTO song(product_id, alb_product_id, song_name, song_length, song_genre, song_number)
-							VALUES(#{song_id[0]},
-									#{id_product[0]},
-									'#{res[i]}',
-									'3m',
-									'Indie',
-									#{(i-2)})
-							")
+				$add.product(song_id[0], id[0], 'description', res[0], res[2], '0.99', '-1')
+				
+				$add.song(song_id[0], product_id[0], res[i], '3m', 'Indie', (i-2))
+				
 				i=i+1
 			end				
 					
@@ -214,6 +178,7 @@ class Lastfm
 		end
 	
 	end
+	
 	
 	def get_album_id(artist_name,album_name)
 		res = $search.album(album_name)
@@ -230,7 +195,7 @@ class Lastfm
 	end
 	
 	
-	def get_song(artist_name,song_name)
+	def get_song(artist_name, song_name)
 		
 	
 	
@@ -271,10 +236,5 @@ class Lastfm
 		doc = Hpricot resp
 		
 		puts (doc/"lfm/error").inner_html
-		
-	
 	end
-	
-
-
 end

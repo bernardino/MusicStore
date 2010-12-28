@@ -10,10 +10,14 @@
 	<script type="text/javascript">
 	function goTo(page){
 		if (page=='index')
-		window.location='/';
+			window.location='/';
 		else {
 			window.location='/'+page;
 		}
+	}
+	
+	function remove(id){
+		window.location="/removeorder?id="+id+"&page=<%= request.fullpath %>";
 	}
 	</script>
 </head>
@@ -30,7 +34,7 @@
 					<span width="100" class="link" onClick="goTo('albums')">Albums</span>
 					<span width="100" class="link" onClick="goTo('merchandising')">Merchandising</span>
 					<% if @admin %>
-					<span width="100" class="link" onClick="goTo('merchandising')">Add Items</span>
+					<span width="100" class="link" onClick="goTo('admin')">Add Items</span>
 					<% end %>
 					
 					<div style="float:right">
@@ -61,7 +65,7 @@
 			</div>
 			<% else %>
 			<div style="background:#EEE; float:left;width:20%;">
-				<form action="/login" method="post" accept-charset="utf-8">
+				<form action="/login?p=<%= request.fullpath %>" method="post" accept-charset="utf-8">
 					<h1>Login</h1>
 					<h3>Username</h3><input type="text" name="username" /><br />
 					<h3>Password</h3><input type="password" name="password"/><br /><br />
@@ -80,10 +84,7 @@
 					<table >
 						<% 
 						i=0
-						while i < @albums.length
-							if i == 15
-								break
-							else %>
+						while i < @albums.length %>
 							<tr>
 								<td>
 									<a class="list" href="/artist/<%= @albums[i+3] %>/album/<%= @albums[i] %>"><img src="<%= @albums[i+4] %>" height="40" width="40" border="2"/></a>
@@ -92,7 +93,6 @@
 									<a class="list" href="/artist/<%= @albums[i+3] %>/album/<%= @albums[i] %>"><%= @albums[i+2] %> - <%= @albums[i+1] %></a>
 								</td>
 							</tr>
-							<% end %>
 							<% i=i+5 %>
 						<% end %>
 					</table>
@@ -103,10 +103,7 @@
 					<table>
 						<%
 						i=0
-						while i< @songs.length
-							if i==12
-								break
-							else %>
+						while i< @songs.length %>
 								<tr>
 									<td>
 										<a class="list" href="/song/<%= @songs[i] %>"><img src="<%= @songs[i+3] %>" height="40" width="40" border="2"/></a>
@@ -115,7 +112,6 @@
 										<a class="list" href="/song/<%= @songs[i] %>"><%= @songs[i+2] %> - <%= @songs[i+1] %></a>
 									</td>
 								</tr>
-							<% end %>
 							<% i=i+4 %>
 						<% end %>
 					
@@ -127,10 +123,7 @@
 					<table>
 						<%
 						i=0
-						while i< @merch.length
-							if i==12
-								break
-							else %>
+						while i< @merch.length %>
 								<tr>
 									<td>
 										<a class="list" href="/merch/<%= @merch[i] %>"><img src="<%= @merch[i+3] %>" height="40" width="40" border="2"/></a>
@@ -140,7 +133,6 @@
 									</td>
 									
 								</tr>
-							<% end %>
 							<% i=i+4 %>
 						<% end %>
 					</table>
@@ -155,9 +147,15 @@
 				<% else %>
 					<p>You have some orders</p>
 					<% session[:orders].keys.each do |order| %>
-					<p><%= session[:orders][order][1] %>:<%= session[:orders][order][0] %></p>
+					<p align="left" style="margin:10%">Product: <%= session[:orders][order][1] %> (<%= session[:orders][order][2] %>)<br />Quantity: <%= session[:orders][order][0] %><br /><img style="cursor:pointer" onmouseup="remove(<%= order %>)" src="/img/cross.png"></p>
 					<% end %>
-					<input type="button" onClick="goTo('checkout')" value="Checkout">
+					<% if @logged %>
+						<input type="button" onClick="goTo('checkout')" value="Checkout">
+					<% else %>
+						<input type="button" onClick="goTo('checkout')" value="Checkout" disabled="true">
+						<br />You need to be logged in to proceed to checkout! 
+					<%end%>
+					<p>(a) - album / (s) - song / (m) - merchandise</p>
 				<%end%>
 			</div>
 		</div>

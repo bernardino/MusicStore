@@ -9,14 +9,16 @@ require 'digest/sha1'
 
 require './database.rb'
 require './lastfm.rb'
-require './search.rb'
+require './add.rb'
 require './get.rb'
+require './search.rb'
 
 configure do
 	$db = Database.new
 	$lf = Lastfm.new
-	$search = Search.new
+	$add = Add.new
 	$get = Get.new
+	$search = Search.new
 	enable :sessions
 end
 
@@ -36,6 +38,7 @@ before do
   
   unless session[:orders]
     session[:orders] = {}
+    session[:total] = 0
   end
   
 end
@@ -90,12 +93,13 @@ post '/login' do
 		session[:id] = params[:username]
 	end
   
-	redirect '/'
+  redirect params[:p]
 end
 
 get '/logout' do
   session[:id] = nil
   session[:orders] = {}
+  session[:total] = 0
   redirect '/'
 end
 
@@ -110,7 +114,7 @@ get '/artist/:id' do
 end
 
 get '/insertArtist/:id' do
-	$lf.create_artist(params[:id])
+	$lf.get_artist(params[:id])
 	i = $lf.get_artist_id(params[:id])
 	res = $get.artist(i)
 	@artistID = res[0]
@@ -169,19 +173,37 @@ get '/merchandising' do
 
 end
 
-post '/search' do
-	@options = params[:option] #artist / merch / song / album
-	@searchTerm = params[:term]
-	if @options == 'artist'
-		@res = $search.artist(@searchTerm)
-	elsif @options == 'album'
-		@res = $search.album(@searchTerm)
-	elsif @options == 'song'
-		@res = $search.song(@searchTerm)
-	elsif @options == 'merch'
-		@res = $search.merchandise(@searchTerm)
+
+get '/admin' do
+	if (session[:id]==nil || session[:id].downcase != 'admin')
+		redirect '/notadmin'
 	end
 	
+	erb :admin
+end
+
+
+post '/search' do
+	@options = params[:option] #artist / merch / song / album
+	
+	@searchTerm = params[:term]
+	if @searchTerm.length>2
+		if @options == 'artist'
+			@res = $search.artist(@searchTerm)
+		elsif @options == 'album'
+			@res = $search.album(@searchTerm)
+		elsif @options == 'song'
+			@res = $search.song(@searchTerm)
+		elsif @options == 'merch'
+			@res = $search.merchandise(@searchTerm)
+		end
+		
+		if @res.length == 0
+			@error = 'Your search wielded no results'
+		end
+	else
+		@error = 'Please narrow your search'
+	end
   
   erb :search
 end
@@ -208,27 +230,37 @@ get '/top' do
 end
 
 get '/addorder' do
+  price = $db.select("select current_price from product where product_id = '#{params[:id]}'")
   if session[:orders][params[:id]]
     session[:orders][params[:id]][0] += 1
+    session[:orders][params[:id]][3]+= price[0]
   else
-    session[:orders][params[:id]] = [] #[0]->quantity, [1]->name, [2]->type
+    session[:orders][params[:id]] = [] #[0]->quantity, [1]->name, [2]->type, [3]->price
     if params[:type]=='a' #album
       res = $db.select("select album_name from album where product_id = '#{params[:id]}'")
       session[:orders][params[:id]] << 1
       session[:orders][params[:id]] << res[0]
       session[:orders][params[:id]] << params[:type]
+      session[:orders][params[:id]] << price[0]
     elsif params[:type]=='m' #merchandise
       res = $db.select("select merchandise_name from album where product_id = '#{params[:id]}'")
       session[:orders][params[:id]] << 1
       session[:orders][params[:id]] << res[0]
       session[:orders][params[:id]] << params[:type]
+      session[:orders][params[:id]] << price[0]
     elsif params[:type]=='s' #song
       res = $db.select("select song_name from album where product_id = '#{params[:id]}'")
       session[:orders][params[:id]] << 1
       session[:orders][params[:id]] << res[0]
       session[:orders][params[:id]] << params[:type]
+      session[:orders][params[:id]] << price[0]
     end
-  end 
+  end
+  if session[:total]
+    session[:total]+=price[0]
+  else
+    session[:total] = price[0]
+  end
   redirect params[:page]
 end
 
@@ -280,11 +312,12 @@ post '/edit' do
 end
 
 get '/removeorder' do
+  session[:total]-=session[:orders][params[:id]][3]
   session[:orders].delete(params[:id])
   redirect params[:page]
 end
 
-get 'final' do
+get 'final' do #client adds an order to the database
   redirect '/'
 end
 
@@ -292,6 +325,10 @@ get '/addvote' do
   $db.execute("begin voting(#{params[:id]},#{params[:v]}); end;")
   $db.execute("commit")
   redirect params[:page]
+end
+
+get '/notadmin' do
+  "<h1>You don't have enough privileges to access this page!</h1>"
 end
 
 get '/*' do

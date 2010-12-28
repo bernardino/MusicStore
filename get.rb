@@ -82,14 +82,13 @@ class Get
 						")
 	end
 	
-	# WE NEED TO CHANGE THIS IN ORDER TO AVOID SELECTING EVERYTHING, DOING THIS JUST TO TEST
-	
-	# ANSWER: WHERE rownum < 11;
+
 	def recentlyAddedAlbums()
 		return $db.select(" SELECT p.product_id, al.album_name, ar.artist_name,ar.artist_id, p.image
 							FROM product p, album al, artist ar
 							WHERE p.product_id = al.product_id
 							AND p.artist_id = ar.artist_id
+							AND rownum < 4
 							ORDER by p.added_date DESC")
 	end
 	
@@ -98,6 +97,7 @@ class Get
 							FROM product p, song s, artist ar
 							WHERE p.product_id = s.product_id
 							AND p.artist_id = ar.artist_id
+							AND rownum < 4
 							ORDER by p.added_date DESC")
 	
 	end	
@@ -107,6 +107,7 @@ class Get
 							FROM product p, merchandise m, artist ar
 							WHERE p.product_id = m.product_id
 							AND p.artist_id = ar.artist_id
+							AND rownum < 4
 							ORDER by p.added_date DESC")
 	
 	end
@@ -116,6 +117,7 @@ class Get
 							FROM product p, album al, artist ar
 							WHERE p.product_id = al.product_id
 							AND p.artist_id = ar.artist_id
+							AND rownum < 11
 							ORDER by p.num_sells DESC")
 	
 	end
@@ -125,6 +127,7 @@ class Get
 							FROM product p, song s, artist ar
 							WHERE p.product_id = s.product_id
 							AND p.artist_id = ar.artist_id
+							AND rownum < 11
 							ORDER by p.num_sells DESC")
 	
 	end
@@ -134,6 +137,7 @@ class Get
 							FROM product p, merchandise m, artist ar
 							WHERE p.product_id = m.product_id
 							AND p.artist_id = ar.artist_id
+							AND rownum < 11
 							ORDER by p.num_sells DESC")
 	
 	end
