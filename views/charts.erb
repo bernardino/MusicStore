@@ -10,7 +10,7 @@
 	<script type="text/javascript">
 	function goTo(page){
 		if (page=='index')
-		window.location='/';
+			window.location='/';
 		else {
 			window.location='/'+page;
 		}
@@ -72,10 +72,7 @@
 					<table >
 						<% 
 						i=0
-						while i < @albums.length
-							if i == 50
-								break
-							else %>
+						while i < @albums.length %>
 							<tr>
 								<td>
 									<a class="list" href="/artist/<%= @albums[i+3] %>/album/<%= @albums[i] %>"><img src="<%= @albums[i+4] %>" height="40" width="40" border="2"/></a>
@@ -84,7 +81,6 @@
 									<a class="list" href="/artist/<%= @albums[i+3] %>/album/<%= @albums[i] %>"><%= @albums[i+2] %> - <%= @albums[i+1] %></a>
 								</td>
 							</tr>
-							<% end %>
 							<% i=i+5 %>
 						<% end %>
 					</table>
@@ -95,10 +91,7 @@
 					<table>
 						<%
 						i=0
-						while i< @songs.length
-							if i==40
-								break
-							else %>
+						while i< @songs.length %>
 								<tr>
 									<td>
 										<a class="list" href="/song/<%= @songs[i] %>"><img src="<%= @songs[i+3] %>" height="40" width="40" border="2"/></a>
@@ -107,7 +100,6 @@
 										<a class="list" href="/song/<%= @songs[i] %>"><%= @songs[i+2] %> - <%= @songs[i+1] %></a>
 									</td>
 								</tr>
-							<% end %>
 							<% i=i+4 %>
 						<% end %>
 					
@@ -119,10 +111,7 @@
 					<table>
 						<%
 						i=0
-						while i< @merch.length
-							if i==40
-								break
-							else %>
+						while i< @merch.length %>
 								<tr>
 									<td>
 										<a class="list" href="/merch/<%= @merch[i] %>"><img src="<%= @merch[i+3] %>" height="40" width="40" border="2"/></a>
@@ -132,7 +121,6 @@
 									</td>
 									
 								</tr>
-							<% end %>
 							<% i=i+4 %>
 						<% end %>
 					</table>

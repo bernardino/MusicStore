@@ -8,14 +8,16 @@ require 'uri'
 
 require './database.rb'
 require './lastfm.rb'
-require './search.rb'
+require './add.rb'
 require './get.rb'
+require './search.rb'
 
 configure do
 	$db = Database.new
 	$lf = Lastfm.new
-	$search = Search.new
+	$add = Add.new
 	$get = Get.new
+	$search = Search.new
 	enable :sessions
 end
 
@@ -71,30 +73,30 @@ get '/register' do
 end
 
 post '/register' do
-  res = $db.select("select client_id from client where upper(client_id) like upper('#{params[:username]}')")
-  unless res[0]
-    $db.execute("insert into client values('#{params[:username]}','#{params[:address]}',#{params[:phone]}, '#{params[:name]}', '#{params[:passcode]}', '#{params[:email]}')")
-    $db.execute("commit")
-    session[:id] = params[:username]
-    redirect '/'
-  else
-    redirect '/register?message=error'
-  end
+	res = $db.select("select client_id from client where upper(client_id) like upper('#{params[:username]}')")
+	unless res[0]
+		$db.execute("insert into client values('#{params[:username]}','#{params[:address]}',#{params[:phone]}, '#{params[:name]}', '#{params[:passcode]}', '#{params[:email]}')")
+		$db.execute("commit")
+		session[:id] = params[:username]
+		redirect '/'
+	else
+		redirect '/register?message=error'
+	end
 end
 
 post '/login' do
-  res = $db.select("select client_id from client where upper(client_id) like upper('#{params[:username]}') and password like '#{params[:password]}'")
-  if res[0]
-    session[:id] = params[:username]
-  end
-  
-  redirect '/'
+	res = $db.select("select client_id from client where upper(client_id) like upper('#{params[:username]}') and password like '#{params[:password]}'")
+	if res[0]
+		session[:id] = params[:username]
+	end
+
+	redirect '/'
 end
 
 get '/logout' do
-  session[:id] = nil
-  session[:orders] = {}
-  redirect '/'
+	session[:id] = nil
+	session[:orders] = {}
+	redirect '/'
 end
 
 get '/artist/:id' do
@@ -106,21 +108,9 @@ get '/artist/:id' do
 	
 	erb :artist
 end
-
-
-get '/artist/:id' do
-	res = $get.artist(params[:id])
-	@artistID = res[0]
-	@bio = res[1]
-	@image = res[2]
-	@albums = $get.artist_albums(params[:id])
-	
-	erb :artist
-end
-
 
 get '/insertArtist/:id' do
-	$lf.create_artist(params[:id])
+	$lf.get_artist(params[:id])
 	i = $lf.get_artist_id(params[:id])
 	res = $get.artist(i)
 	@artistID = res[0]
@@ -178,19 +168,37 @@ get '/merchandising' do
 
 end
 
-post '/search' do
-	@options = params[:option] #artist / merch / song / album
-	@searchTerm = params[:term]
-	if @options == 'artist'
-		@res = $search.artist(@searchTerm)
-	elsif @options == 'album'
-		@res = $search.album(@searchTerm)
-	elsif @options == 'song'
-		@res = $search.song(@searchTerm)
-	elsif @options == 'merch'
-		@res = $search.merchandise(@searchTerm)
+
+get '/admin' do
+	if (session[:id]==nil || session[:id].downcase != 'admin')
+		redirect '/notadmin'
 	end
 	
+	erb :admin
+end
+
+
+post '/search' do
+	@options = params[:option] #artist / merch / song / album
+	
+	@searchTerm = params[:term]
+	if @searchTerm.length>2
+		if @options == 'artist'
+			@res = $search.artist(@searchTerm)
+		elsif @options == 'album'
+			@res = $search.album(@searchTerm)
+		elsif @options == 'song'
+			@res = $search.song(@searchTerm)
+		elsif @options == 'merch'
+			@res = $search.merchandise(@searchTerm)
+		end
+		
+		if @res.length == 0
+			@error = 'Your search wielded no results'
+		end
+	else
+		@error = 'Please narrow your search'
+	end
   
   erb :search
 end
@@ -262,6 +270,10 @@ get '/addvote' do
   $db.execute("begin voting(#{params[:id]},#{params[:v]}); end;")
   $db.execute("commit")
   redirect params[:page]
+end
+
+get '/notadmin' do
+  "<h1>You don't have enough privileges to access this page!</h1>"
 end
 
 get '/*' do

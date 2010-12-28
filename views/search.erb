@@ -71,8 +71,8 @@
 		  <table>
 			<% 	
 				i=0
-				if @searchTerm.length < 2
-					%><p>Please narrow your search</p> <%
+				if @res == nil || @res.length == 0%>
+					<%= @error %><%
 			
 				elsif @options == 'artist'
 					while i < @res.length %>
@@ -124,7 +124,6 @@
 						<% i=i+4 %>
 					<% end %>
 				<% end %>
-				
 			</table>
       </div>
 		<!-- Shopping Cart -->

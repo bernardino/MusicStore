@@ -29,9 +29,7 @@
 					<span width="100" class="link" onClick="goTo('artists')">Artists</span>
 					<span width="100" class="link" onClick="goTo('albums')">Albums</span>
 					<span width="100" class="link" onClick="goTo('merchandising')">Merchandising</span>
-					<% if @admin %>
 					<span width="100" class="link" onClick="goTo('admin')">Add Items</span>
-					<% end %>
 					
 					<div style="float:right">
 						<form name="searchForm" action="/search" method="post">
@@ -68,69 +66,20 @@
 				</form>
 			</div>
 			<% end %>
-			<!-- Cenas -->
+			
+			
+			
+			
+			
+			
+			
+			
 			<div align="left" style="background:#CCC; float:left;width:60%;">
-				<h1 align="center">Recently Added Items</h1>
-				<div style="background:#CCC; float:left;width:50%;">
-					<p class="search"> Albums</p>
-					<table >
-						<% 
-						i=0
-						while i < @albums.length %>
-							<tr>
-								<td>
-									<a class="list" href="/artist/<%= @albums[i+3] %>/album/<%= @albums[i] %>"><img src="<%= @albums[i+4] %>" height="40" width="40" border="2"/></a>
-								</td>
-								<td>
-									<a class="list" href="/artist/<%= @albums[i+3] %>/album/<%= @albums[i] %>"><%= @albums[i+2] %> - <%= @albums[i+1] %></a>
-								</td>
-							</tr>
-							<% i=i+5 %>
-						<% end %>
-					</table>
-				</div>
-				
-				<div style="background:#CCC; float:right;width:50%;">
-					<p class="search"> Songs</p>
-					<table>
-						<%
-						i=0
-						while i< @songs.length %>
-								<tr>
-									<td>
-										<a class="list" href="/song/<%= @songs[i] %>"><img src="<%= @songs[i+3] %>" height="40" width="40" border="2"/></a>
-									</td>
-									<td>
-										<a class="list" href="/song/<%= @songs[i] %>"><%= @songs[i+2] %> - <%= @songs[i+1] %></a>
-									</td>
-								</tr>
-							<% i=i+4 %>
-						<% end %>
-					
-					</table>
-				</div>
-				
-				<div style="background:#CCC; float:left;width:50%;">
-					<p class="search"> Merchandising</p>
-					<table>
-						<%
-						i=0
-						while i< @merch.length %>
-								<tr>
-									<td>
-										<a class="list" href="/merch/<%= @merch[i] %>"><img src="<%= @merch[i+3] %>" height="40" width="40" border="2"/></a>
-									</td>
-									<td>
-										<a class="list" href="/merch/<%= @merch[i] %>"><%= @merch[i+2] %> - <%= @merch[i+1] %></a>
-									</td>
-									
-								</tr>
-							<% i=i+4 %>
-						<% end %>
-					</table>
-				</div>
-				<h1>User Recommendations</h1>
+				<h1 align="center">coiso e tal admin</h1>
 			</div>
+			
+			
+			
 			<!-- Shopping Cart -->
 			<div style="background:#DDD; float:left;width:20%;">
 				<h1>Shopping Cart</h1>
