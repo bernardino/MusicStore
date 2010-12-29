@@ -289,6 +289,7 @@ get '/client' do
 end
 
 post '/edit' do
+			
 	
 	################################################### VERIFY IF IT WAS SUCCESSFULLY UPDATED ##########################################
 	if params[:passcode] != ''
@@ -297,27 +298,44 @@ post '/edit' do
 		
 		$db.execute("   UPDATE client c
 						SET c.name = '#{params[:name]}',
-						c.telephone = #{params[:phone]},
+						c.telephone = '#{params[:phone]}',
 						c.address = '#{params[:address]}',
+						c.email = '#{params[:email]}',
 						c.password = '#{passcode}'
 						WHERE upper(c.client_id) = upper('#{session[:id]}')
 						AND c.password = '#{currentPass}'
 					")
-		$db.execute("Commit")
-		
+		$db.execute("Commit")		
 	else
 		currentPass = Digest::SHA1.hexdigest("#{params[:currentPasscode]}")
 		$db.execute("   UPDATE client c
 						SET c.name = '#{params[:name]}',
-						c.telephone = #{params[:phone]},
+						c.telephone = '#{params[:phone]}',
+						c.email = '#{params[:email]}',
 						c.address = '#{params[:address]}'
 						WHERE upper(c.client_id) = upper('#{session[:id]}')
 						AND c.password = '#{currentPass}'
 					")
 		$db.execute("Commit")
 	end
-					
-	redirect '/client'
+	
+	res = $get.client(session[:id])
+
+	
+	if (res[0] == params[:name] && res[1] == params[:address] && res[2] == params[:phone] && res[3] == params[:email])
+		if (params[:passcode] != '')
+			info = $db.select("SELECT client_id FROM client WHERE client_id = '#{session[:id]}' AND password = '#{currentPass}'")
+			if info[0]
+				redirect '/client?erro=f'
+			else
+				redirect '/client?erro=t'
+			end
+		else
+			redirect '/client?erro=f'
+		end
+	else
+		redirect '/client?erro=t'
+	end
 	
 end
 

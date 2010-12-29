@@ -153,6 +153,14 @@
 					</tr>
 				</table>
 				<input type="submit" value="Confirm changes" name="submit_btn"/>
+				
+				<a><% 
+						if params[:erro] == "f"  
+							%>Edit Done! 
+						<%  elsif params[:erro] == "t" %>  
+							Edit Failed!</a>
+						<% end 
+					%>
 			</div>
 			<!-- Shopping Cart -->
 			<div style="background:#DDD; float:left;width:20%;">
