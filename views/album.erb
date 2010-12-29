@@ -61,6 +61,29 @@
 			window.location="/removeorder?id="+id+"&page=<%= request.fullpath %>";
 	}
 	
+	function credits() {
+		var txt = document.getElementById('credits_txt');
+		var btn = document.getElementById('credits_btn');
+		if(txt.style.display=='none'){
+			txt.style.display='';
+			btn.disabled=true;
+		} else {
+			window.location='/addcredits?c='+txt.value+'&page=<%= request.fullpath %>';
+			txt.style.display='none';
+		}
+	}
+	
+	function justInt() {
+		var txt = document.getElementById('credits_txt');
+		var btn = document.getElementById('credits_btn');
+		if( !isNaN(parseInt(txt.value))){
+			txt.value=parseInt(txt.value);
+			btn.disabled=false;
+		} else {
+			btn.disabled=true;
+		}
+	}
+	
 	</script>
 </head>
 
@@ -95,7 +118,13 @@
 			<!-- !LOGGED_IN -->
 			<% if @logged %>
 			<div style="background:#EEE; float:left;width:15%">
-				<h3>Welcome <%= session[:id] %>!!</h3><br />
+				<h3>Welcome <%= session[:id] %>!!</h3>
+				<br />
+				<a class="search" href="/client"> Edit your personal information</a>
+				<br /><br />
+				<input id="credits_txt" type="text" size="5" style="display:none;" onkeyup="justInt()" /><br />
+				<input id="credits_btn" type="button" value="Buy Credits" onmouseup="credits()">	
+				<br /><br />
 				<a href="/logout">Logout</a>
 			</div>
 			<% else %>
