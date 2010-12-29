@@ -161,9 +161,33 @@
 			
 			<div id="menu" align="left" style="background:#CCC; float:left;width:60%; display:inline">
 				<br/>
-				<span id="artistsButton" width="100" class="link" onClick="showContent(displayed, 'artists'); displayed2.value = ''">Artists</span>
-				<span id="albumsButton" width="100" class="link" onClick="showContent(displayed, 'albums'); displayed2.value = ''">Albums</span>
-				<span id="songsButton" width="100" class="link" onClick="showContent(displayed, 'songs'); displayed2.value = ''">Songs</span>
+				<span id="artistsButton" width="100" class="link" onClick="	showContent(displayed, 'artists');
+																			displayed2.value = ''
+																			addArtistButton.className='link';
+																			addArtist.style.display='none';
+																			editArtistButton.className='link';
+																			editArtist.style.display='none';
+																			deleteArtistButton.className='link';
+																			deleteArtist.style.display='none'
+																		">Artists</span>
+				<span id="albumsButton" width="100" class="link" onClick="	showContent(displayed, 'albums');
+																			displayed2.value = ''
+																			addAlbumButton.className='link';
+																			addAlbum.style.display='none';
+																			editAlbumButton.className='link';
+																			editAlbum.style.display='none';
+																			deleteAlbumButton.className='link';
+																			deleteAlbum.style.display='none'
+																		">Albums</span>
+				<span id="songsButton" width="100" class="link" onClick="	showContent(displayed, 'songs');
+																			displayed2.value = ''
+																			addSongButton.className='link';
+																			addSong.style.display='none';
+																			editSongButton.className='link';
+																			editSong.style.display='none';
+																			deleteSongButton.className='link';
+																			deleteSong.style.display='none'
+																			">Songs</span>
 				<span id="merchButton" width="100" class="link" onClick="	showContent(displayed, 'merch');
 																			displayed2.value = '';
 																			addMerchButton.className='link';
@@ -184,11 +208,39 @@
 			
 			
 				<div id="artists" align="left" style="background:#CCC; float:left;width:60%; display:none">
-					<h1 align="center">artists</h1>
+					<br/>
+					<span id="addArtistButton" width="100" class="link" onClick="showContent(displayed2, 'addArtist')">Add</span>
+					<span id="editArtistButton" width="100" class="link" onClick="showContent(displayed2, 'editArtist')">Edit</span>
+					<span id="deleteArtistButton" width="100" class="link" onClick="showContent(displayed2, 'deleteArtist')">Delete</span>
+					<br/>
+					<br/>	
+					<div id="addArtist" align="left" style="background:#CCC; float:left;width:60%; display:none">
+						<h3>Artist1</h3>
+					</div>
+					<div id="editArtist" align="left" style="background:#CCC; float:left;width:60%; display:none">
+						<h3>Artist2</h3>
+					</div>
+					<div id="deleteArtist" align="left" style="background:#CCC; float:left;width:60%; display:none">
+						<h3>Artist3</h3>
+					</div>
 				</div>
 				
 				<div id="albums" align="left" style="background:#CCC; float:left;width:60%; display:none">
-					<h1 align="center">albums</h1>
+					<br/>
+					<span id="addAlbumButton" width="100" class="link" onClick="showContent(displayed2, 'addAlbum')">Add</span>
+					<span id="editAlbumButton" width="100" class="link" onClick="showContent(displayed2, 'editAlbum')">Edit</span>
+					<span id="deleteAlbumButton" width="100" class="link" onClick="showContent(displayed2, 'deleteAlbum')">Delete</span>
+					<br/>
+					<br/>
+					<div id="addAlbum" align="left" style="background:#CCC; float:left;width:60%; display:none">
+						<h3>Album1</h3>
+					</div>
+					<div id="editAlbum" align="left" style="background:#CCC; float:left;width:60%; display:none">
+						<h3>Album2</h3>
+					</div>
+					<div id="deleteAlbum" align="left" style="background:#CCC; float:left;width:60%; display:none">
+						<h3>Album3</h3>
+					</div>
 				</div>
 				
 				<div id="songs" align="left" style="background:#CCC; float:left;width:60%; display:none">
@@ -246,11 +298,11 @@
 						<input type="submit" value="Add" name="addSongButton" disabled="true"/>
 						</form>
 					</div>
-					<div id="editMerch" align="left" style="background:#CCC; float:left;width:60%; display:none">
-						<h3>Username2</h3>
+					<div id="editSong" align="left" style="background:#CCC; float:left;width:60%; display:none">
+						<h3>Song2</h3>
 					</div>
-					<div id="deleteMerch" align="left" style="background:#CCC; float:left;width:60%; display:none">
-						<h3>Username3</h3>
+					<div id="deleteSong" align="left" style="background:#CCC; float:left;width:60%; display:none">
+						<h3>Song3</h3>
 					</div>
 				</div>
 				
@@ -297,10 +349,10 @@
 						</form>
 					</div>
 					<div id="editMerch" align="left" style="background:#CCC; float:left;width:60%; display:none">
-						<h3>Username2</h3>
+						<h3>Merchandising2</h3>
 					</div>
 					<div id="deleteMerch" align="left" style="background:#CCC; float:left;width:60%; display:none">
-						<h3>Username3</h3>
+						<h3>Merchandising3</h3>
 					</div>
 				</div>
 				
