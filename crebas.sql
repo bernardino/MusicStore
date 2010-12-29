@@ -5,7 +5,7 @@
 
 
 /*==============================================================*/
-/*                      Patch Notes 2.82						*/
+/*                      Patch Notes 2.83						*/
 /*   										                    */
 /*	SONG's ALB_PRODUCT_ID can now be null						*/
 /*	SONG's SONG_NUMBER can now be null							*/
@@ -22,6 +22,7 @@
 /*	CLIENT's field TELEPHONE's type changed from INTEGER to		*/
 /*	VARCHAR (20)												*/
 /*	CLIENT's field PASSWORD size increased from 20 to 50		*/
+/*  ADDED DELETE TRIGGERS										*/
 /*==============================================================*/
 
 
@@ -281,4 +282,75 @@ alter table SONG
 alter table SONG
    add constraint FK_SONG_INHERITAN_PRODUCT foreign key (PRODUCT_ID)
       references PRODUCT (PRODUCT_ID);
+	  
+	  
+CREATE OR REPLACE TRIGGER deleteSong
+AFTER
+DELETE ON song
+FOR EACH ROW
+DECLARE
 
+BEGIN
+		DELETE FROM product p
+		WHERE product_id = :OLD.product_id;
+	
+END;
+
+
+CREATE OR REPLACE TRIGGER deleteMerch
+AFTER
+DELETE ON merchandise
+FOR EACH ROW
+DECLARE
+
+BEGIN
+		DELETE FROM product p
+		WHERE p.product_id = :OLD.product_id;
+	
+END;
+
+
+CREATE OR REPLACE TRIGGER deleteAlbumSongs
+BEFORE
+DELETE ON album
+FOR EACH ROW
+DECLARE
+
+BEGIN 
+	DELETE FROM song s
+	WHERE s.alb_product_id = :OLD.product_id;
+END;
+
+CREATE OR REPLACE TRIGGER deleteAlbumProduct
+AFTER
+DELETE ON album
+FOR EACH ROW
+DECLARE
+
+BEGIN
+	DELETE FROM product p
+	WHERE p.product_id = :OLD.product_id;
+END;
+
+
+CREATE OR REPLACE TRIGGER deleteArtist
+AFTER
+DELETE ON artist
+FOR EACH ROW
+DECLARE
+
+BEGIN
+	DELETE FROM song s
+		WHERE s.product_id IN ( SELECT product_id 
+									FROM product
+									WHERE artist_id = :OLD.artist_id );
+	DELETE FROM album al
+		WHERE al.product_id IN (SELECT product_id
+								FROM product
+								WHERE artist_id = :OLD.artist_id);
+	DELETE FROM merchandise m
+		WHERE m.product_id IN (SELECT product_id
+								FROM product
+								WHERE artist_id = :OLD.artist_id);
+END;
+/

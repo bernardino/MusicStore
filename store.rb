@@ -77,11 +77,10 @@ end
 
 
 post '/register' do
-	passcode = Digest::SHA1.hexdigest(params[:passcode])
 	res = $db.select("select client_id from client where upper(client_id) like upper('#{params[:username]}')")
 	unless res[0]
+		passcode = Digest::SHA1.hexdigest(params[:passcode])
 		$manage.addClient(params[:username], passcode, params[:name], params[:address], params[:phone], params[:email])
-		
 		session[:id] = params[:username]
 		redirect '/'
 	else
@@ -284,6 +283,16 @@ get '/removeorder' do
 end
 
 
+get '/del' do
+  price = $db.select("select current_price from product where product_id = '#{params[:id]}'")
+  session[:orders][params[:id]][0]-=1
+  session[:orders][params[:id]][3]-=price[0]
+  session[:total]-=price[0]
+  
+  redirect params[:page]
+end
+
+
 get '/checkout' do
   unless session[:id]
     redirect '/'
@@ -324,8 +333,7 @@ post '/addMerch' do
 end
 
 
-post '/editClient' do
-	
+post '/editClient' do	
 	################################################### VERIFY IF IT WAS SUCCESSFULLY UPDATED ##########################################
 	if params[:passcode] != ''
 		currentPass = Digest::SHA1.hexdigest("#{params[:currentPasscode]}")
@@ -333,26 +341,45 @@ post '/editClient' do
 		
 		$db.execute("   UPDATE client c
 						SET c.name = '#{params[:name]}',
-						c.telephone = #{params[:phone]},
+						c.telephone = '#{params[:phone]}',
 						c.address = '#{params[:address]}',
+						c.email = '#{params[:email]}',
 						c.password = '#{passcode}'
 						WHERE upper(c.client_id) = upper('#{session[:id]}')
 						AND c.password = '#{currentPass}'
 					")
-		$db.execute("Commit")
-		
+		$db.execute("Commit")		
 	else
 		currentPass = Digest::SHA1.hexdigest("#{params[:currentPasscode]}")
 		$db.execute("   UPDATE client c
 						SET c.name = '#{params[:name]}',
-						c.telephone = #{params[:phone]},
+						c.telephone = '#{params[:phone]}',
+						c.email = '#{params[:email]}',
 						c.address = '#{params[:address]}'
 						WHERE upper(c.client_id) = upper('#{session[:id]}')
 						AND c.password = '#{currentPass}'
 					")
 		$db.execute("Commit")
 	end
-					
+
+	
+	res = $get.client(session[:id])
+
+	
+	if (res[0] == params[:name] && res[1] == params[:address] && res[2] == params[:phone] && res[3] == params[:email])
+		if (params[:passcode] != '')
+			info = $db.select("SELECT client_id FROM client WHERE client_id = '#{session[:id]}' AND password = '#{currentPass}'")
+			if info[0]
+				redirect '/client?erro=f'
+			else
+				redirect '/client?erro=t'
+			end
+		else
+			redirect '/client?erro=f'
+		end
+	else
+		redirect '/client?erro=t'
+	end
 	redirect '/client'
 end
 
