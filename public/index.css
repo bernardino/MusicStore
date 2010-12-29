@@ -69,8 +69,11 @@ h1 {
 	font-size:13px;
 }
 .footer {
+	width:100%;
 	clear:both;
 	font-family:"Palatino Linotype", "Book Antiqua", Palatino, serif;
 	background:#EEE;
 	padding:5px;
+	position:fixed;
+	bottom:0px;
 }
