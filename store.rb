@@ -9,14 +9,14 @@ require 'digest/sha1'
 
 require './database.rb'
 require './lastfm.rb'
-require './add.rb'
+require './manage.rb'
 require './get.rb'
 require './search.rb'
 
 configure do
 	$db = Database.new
 	$lf = Lastfm.new
-	$add = Add.new
+	$manage = Manage.new
 	$get = Get.new
 	$search = Search.new
 	enable :sessions
@@ -63,28 +63,32 @@ get '/' do
   erb :index
 end
 
+
 get '/register' do
-  if session[:id]
-    redirect '/'
-  end
-  @message=params[:message]
-  if @message
-    @message = "Username already in use!"
-  end
-  erb :register
+	if session[:id]
+		redirect '/'
+	end
+		@message=params[:message]
+	if @message
+		@message = "Username already in use!"
+	end
+	erb :register
 end
 
+
 post '/register' do
+	passcode = Digest::SHA1.hexdigest(params[:passcode])
 	res = $db.select("select client_id from client where upper(client_id) like upper('#{params[:username]}')")
 	unless res[0]
-		$db.execute("insert into client values('#{params[:username]}','#{params[:address]}',#{params[:phone]}, '#{params[:name]}', '#{params[:passcode]}', '#{params[:email]}')")
-		$db.execute("commit")
+		$manage.addClient(params[:username], passcode, params[:name], params[:address], params[:phone], params[:email])
+		
 		session[:id] = params[:username]
 		redirect '/'
 	else
 		redirect '/register?message=error'
 	end
 end
+
 
 post '/login' do
 	passcode = Digest::SHA1.hexdigest(params[:password])
@@ -96,12 +100,14 @@ post '/login' do
 	redirect params[:p]
 end
 
+
 get '/logout' do
-  session[:id] = nil
-  session[:orders] = {}
-  session[:total] = 0
-  redirect '/'
+	session[:id] = nil
+	session[:orders] = {}
+	session[:total] = 0
+	redirect '/'
 end
+
 
 get '/artist/:id' do
 	res = $get.artist(params[:id])
@@ -113,23 +119,13 @@ get '/artist/:id' do
 	erb :artist
 end
 
-get '/insertArtist/:id' do
-	$lf.get_artist(params[:id])
-	i = $lf.get_artist_id(params[:id])
-	res = $get.artist(i)
-	@artistID = res[0]
-	@bio = res[1]
-	@image = res[2]
-	@albums = $get.artist_albums(i)
-	
-	erb :artist
-end
-
+#should be '/artist/:name/song/:id'
 get '/song/:id' do
 	@res = $get.song(params[:id])
 	
 	erb :song
 end
+
 
 get '/artist/:name/album/:id' do
 
@@ -145,6 +141,18 @@ get '/artist/:name/album/:id' do
 end
 
 
+get '/insertArtist/:id' do
+	$lf.get_artist(params[:id])
+	i = $lf.get_artist_id(params[:id])
+	res = $get.artist(i)
+	@artistID = res[0]
+	@bio = res[1]
+	@image = res[2]
+	@albums = $get.artist_albums(i)
+	
+	erb :artist
+end
+
 get '/artist/:artist_name/insertAlbum/:album_name' do
 	$lf.create_album(params[:artist_name], params[:album_name])
 end
@@ -153,14 +161,15 @@ end
 get '/search/:id' do
 	@res = $search.artist(params[:id])
 	
-	
-  erb :search
+	erb :search
 end
+
 
 get '/artists' do
 
 
 end
+
 
 get '/albums' do
 
@@ -208,6 +217,7 @@ post '/search' do
   erb :search
 end
 
+
 get '/merch/:id' do
 	res = $get.merchandise(params[:id])
 	@artist = res[0]
@@ -221,6 +231,7 @@ get '/merch/:id' do
 	erb :merch
 end
 
+
 get '/top' do
   @albums = $get.topAlbums()
   @songs = $get.topSongs()
@@ -228,6 +239,7 @@ get '/top' do
   
   erb :charts
 end
+
 
 get '/addorder' do
   price = $db.select("select current_price from product where product_id = '#{params[:id]}'")
@@ -264,6 +276,14 @@ get '/addorder' do
   redirect params[:page]
 end
 
+
+get '/removeorder' do
+  session[:total]-=session[:orders][params[:id]][3]
+  session[:orders].delete(params[:id])
+  redirect params[:page]
+end
+
+
 get '/checkout' do
   unless session[:id]
     redirect '/'
@@ -272,13 +292,39 @@ get '/checkout' do
   erb :checkout
 end
 
+
 get '/client' do
 	@info = $get.client(session[:id])
 	erb :client
 	
 end
 
-post '/edit' do
+
+post '/addSong' do
+	song_id = $db.select("SELECT product_number.nextval FROM DUAL")
+	
+	$manage.addProduct(song_id[0], params[:addSongArtist], params[:addSongDescription], params[:addSongImage], params[:addSongDate], params[:addSongPrice], '-1')
+	if (params[:addSongAlbum] != '')
+		$manage.addSong(song_id[0], params[:addSongAlbum], params[:addSongName], params[:addSongLength], params[:addSongGenre], params[:addSongNumber])
+	else
+		$manage.addSong(song_id[0], 'null', params[:addSongName], params[:addSongLength], params[:addSongGenre], 'null')
+	end
+
+	redirect '/admin'
+end
+
+
+post '/addMerch' do
+	merch_id = $db.select("SELECT product_number.nextval FROM DUAL")
+
+	$manage.addProduct(merch_id[0], params[:addMerchArtist], params[:addMerchDescription], params[:addMerchImage], params[:addMerchDate], params[:addMerchPrice], params[:addMerchStock])
+	$manage.addMerch(merch_id[0], params[:addMerchName])
+
+	redirect '/admin'
+end
+
+
+post '/editClient' do
 	
 	################################################### VERIFY IF IT WAS SUCCESSFULLY UPDATED ##########################################
 	if params[:passcode] != ''
@@ -308,14 +354,16 @@ post '/edit' do
 	end
 					
 	redirect '/client'
-	
 end
 
-get '/removeorder' do
-  session[:total]-=session[:orders][params[:id]][3]
-  session[:orders].delete(params[:id])
-  redirect params[:page]
+
+post '/deleteClient' do
+	$manage.deleteClient(params[:deleteClientUsername])
+	
+	redirect '/admin'
 end
+
+
 
 get 'final' do #client adds an order to the database
   redirect '/'

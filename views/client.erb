@@ -60,9 +60,6 @@
 					<span width="100" class="link" onClick="goTo('artists')">Artists</span>
 					<span width="100" class="link" onClick="goTo('albums')">Albums</span>
 					<span width="100" class="link" onClick="goTo('merchandising')">Merchandising</span>
-					<% if @admin %>
-					<span width="100" class="link" onClick="goTo('merchandising')">Add Items</span>
-					<% end %>
 					
 					<div style="float:right">
 						<form name="searchForm" action="/search" method="post">
@@ -106,38 +103,39 @@
 			<!-- Cenas -->
 			<div align="left" style="background:#CCC; float:left;width:60%;">
 				<h1> Client </h1>
-				<form name="registerForm" class="registerForm" action="/edit" method="post">
-				<table onkeyup="emailField();allFields();">
-					<tr>
-						<td class="search">Name:</td>
-						<td><input type="text" maxlength="20" size="30" name="name" value="<%= @info[0] %>" /></td>
-					</tr>
-					<tr>
-						<td class="search">Telephone Number:</td>
-						<td id="phone"><input type="text" maxlength="20" size="30" name="phone" value="<%= @info[2] %>" /></td>
-					</tr>
-					<tr>
-						<td class="search">Address:</td>
-						<td id="address"><input type="text" maxlength="100" size="30" name="address" value="<%= @info[1] %>" /></td>
-					</tr>
-					<tr>
-						<td class="search">Email:</td>
-						<td id="email"><input type="text" maxlength="50" size="30" name="email" value="<%= @info[3] %>" /></td>
-					</tr>
-					<tr>
-						<td class="search">Current Password:</td>
-						<td><input type="password" maxlength="15" size="30" name="currentPasscode" /></td>
-					</tr>
-					<tr>
-						<td class="search">Password:</td>
-						<td id ="firstPass" onkeyup="passMatch()" ><input type="password" maxlength="15" size="30" name="passcode" /></td>
-					</tr>
-					<tr>
-						<td class="search">Confirm Password:</td>
-						<td id="secondPass" onkeyup="passMatch()" ><input type="password" maxlength="15" size="30" name="passcode1" /></td>
-					</tr>
-				</table>
-				<input type="submit" value="Confirm changes" name="submit_btn"/>
+				<form name="registerForm" class="registerForm" action="/editClient" method="post">
+					<table onkeyup="emailField()">
+						<tr>
+							<td class="label">Name:</td>
+							<td><input type="text" maxlength="20" size="30" name="name" value="<%= @info[0] %>" /></td>
+						</tr>
+						<tr>
+							<td class="label">Telephone Number:</td>
+							<td id="phone"><input type="text" maxlength="20" size="30" name="phone" value="<%= @info[2] %>" /></td>
+						</tr>
+						<tr>
+							<td class="label">Address:</td>
+							<td id="address"><input type="text" maxlength="100" size="30" name="address" value="<%= @info[1] %>" /></td>
+						</tr>
+						<tr>
+							<td class="label">Email:</td>
+							<td id="email"><input type="text" maxlength="50" size="30" name="email" value="<%= @info[3] %>" /></td>
+						</tr>
+						<tr>
+							<td class="label">Current Password:</td>
+							<td><input type="password" maxlength="15" size="30" name="currentPasscode" /></td>
+						</tr>
+						<tr>
+							<td class="label">Password:</td>
+							<td id ="firstPass" onkeyup="passMatch()" ><input type="password" maxlength="15" size="30" name="passcode" /></td>
+						</tr>
+						<tr>
+							<td class="label">Confirm Password:</td>
+							<td id="secondPass" onkeyup="passMatch()" ><input type="password" maxlength="15" size="30" name="passcode1" /></td>
+						</tr>
+					</table>
+					<input type="submit" value="Confirm changes" name="submit_btn"/>
+				</form>
 			</div>
 			<!-- Shopping Cart -->
 			<div style="background:#DDD; float:left;width:20%;">

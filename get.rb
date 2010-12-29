@@ -31,7 +31,7 @@ class Get
 																			WHERE a.product_id = s.alb_product_id
 																			AND s.product_id = #{song_id}
 																		)) album_name,
-									DECODE(song_number, null, 0, song_number) song_n,
+									DECODE(song_number, null, 'None', song_number) song_n,
 									song_length,
 									song_genre,
 									release_date,
@@ -177,4 +177,10 @@ class Get
 						")
 	end	
 	
+	
+	def clients()
+		return $db.select("	SELECT client_id name, address, telephone, email
+							FROM client c
+						")
+	end
 end

@@ -8,7 +8,7 @@ class Lastfm
 	end
 	
 	
-	def get_artist(name)
+	def add_artist(name)
 		url = "http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=#{name.gsub(' ','+')}&api_key=b25b959554ed76058ac220b7b2e0a026" #LAST.FM REST API
 		resp = Net::HTTP.get_response(URI.parse(url))
 		arr = Array.new
@@ -24,17 +24,44 @@ class Lastfm
 		#THIS IS JUST TEMPORARY NEED TO IMPROVE
 		arr[1] = (doc/"lfm/artist/bio/summary").inner_html.gsub(']]>',"").gsub('<![CDATA[',"")
 		
-		$add.artist(name, arr[0], arr[1])
-	end
+		$manage.addArtist(name, arr[0], arr[1])
+	end	
+
 	
-	
-	def create_artist(name)
-		exist = get_artist_id(name)
+	def add_album(artist_name, album_name)
+		res = get_album(artist_name, album_name)
 		
-		if exist.length == 0
-			res = get_artist(name)
-			$add.artist(name, res[0], res[1])
-		end	
+		id = $db.select("	SELECT artist_id
+							FROM artist
+							WHERE upper(artist_name) LIKE upper('#{artist_name}')
+						")
+					
+		exist = get_album_id(artist_name, album_name)
+		
+		if exist == 1
+		
+			product_id = $db.select("SELECT product_number.nextval FROM dual")
+			#THE DESCRIPTION MAY CREATE A CONFLICT DUE TO STRANGE CHARACTERS
+			$manage.addProduct(product_id[0], id[0], 'description', res[0], res[2], '15', '50')
+			
+			$manage.addAlbum(product_id[0], album_name, '60m', 'Merge', 'Rock')
+
+			
+			i = 3		
+			while i < res.length
+				song_id = $db.select("SELECT product_number.nextval FROM DUAL")
+				
+				$manage.addProduct(song_id[0], id[0], 'description', res[0], res[2], '0.99', '-1')
+				
+				$manage.addSong(song_id[0], product_id[0], res[i], '3m', 'Indie', (i-2))
+				
+				i=i+1
+			end				
+					
+			$db.execute("Commit")
+		else
+			puts 'That album already exists'
+		end
 	end
 	
 	
@@ -92,7 +119,6 @@ class Lastfm
 				arr[2] = date[i-4, 4]
 				break
 			end
-			puts i
 			i=i+1
 		end
 		
@@ -142,44 +168,6 @@ class Lastfm
 	end
 	
 	
-	def create_album(artist_name, album_name)
-		res = get_album(artist_name, album_name)
-		
-		id = $db.select("	SELECT artist_id
-							FROM artist
-							WHERE upper(artist_name) LIKE upper('#{artist_name}')
-						")
-					
-		exist = get_album_id(artist_name, album_name)
-		
-		if exist == 1
-		
-			product_id = $db.select("SELECT product_number.nextval FROM dual")
-			#THE DESCRIPTION MAY CREATE A CONFLICT DUE TO STRANGE CHARACTERS
-			$add.product(product_id[0], id[0], 'description', res[0], res[2], '15', '50')
-			
-			$add.album(product_id[0], album_name, '60m', 'Merge', 'Rock')
-
-			
-			i = 3		
-			while i < res.length
-				song_id = $db.select("SELECT product_number.nextval FROM DUAL")
-				
-				$add.product(song_id[0], id[0], 'description', res[0], res[2], '0.99', '-1')
-				
-				$add.song(song_id[0], product_id[0], res[i], '3m', 'Indie', (i-2))
-				
-				i=i+1
-			end				
-					
-			$db.execute("Commit")
-		else
-			puts 'That album already exists'
-		end
-	
-	end
-	
-	
 	def get_album_id(artist_name,album_name)
 		res = $search.album(album_name)
 		i=0
@@ -192,13 +180,6 @@ class Lastfm
 			i=i+2
 		end
 		return 1;
-	end
-	
-	
-	def get_song(artist_name, song_name)
-		
-	
-	
 	end
 	
 	

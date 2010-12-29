@@ -5,7 +5,7 @@
 
 
 /*==============================================================*/
-/*                      Patch Notes 2.78						*/
+/*                      Patch Notes 2.82						*/
 /*   										                    */
 /*	SONG's ALB_PRODUCT_ID can now be null						*/
 /*	SONG's SONG_NUMBER can now be null							*/
@@ -14,13 +14,14 @@
 /*	ALBUM now has field ALBUM_NAME								*/
 /*	ALBUM no longer has field ALBUM_YEAR						*/
 /*	Changed PRODUCT's PRODUCT_IMAGE to just IMAGE				*/
-/*	Switched PRODUCT'S field order. Switched RELEASE_DATE with	*/
-/*	RATING														*/
 /*  PRODUCT'S DESCRIPTION field resized to varchar2(1000)       */
 /*	CLIENT_ID's type changed from INTEGER to VARCHAR2(20)		*/
 /*	CURRENT_PRICE is now a FLOAT								*/
 /* 	ADDED_DATE to PRODUCT										*/
 /*  NUM_SELLS added to PRODUCT 									*/
+/*	CLIENT's field TELEPHONE's type changed from INTEGER to		*/
+/*	VARCHAR (20)												*/
+/*	CLIENT's field PASSWORD size increased from 20 to 50		*/
 /*==============================================================*/
 
 
@@ -138,10 +139,10 @@ create table ARTIST
 create table CLIENT 
 (
    CLIENT_ID            VARCHAR2(20)         not null,
-   ADDRESS              VARCHAR2(100)        not null,
-   TELEPHONE            INTEGER              not null,
+   PASSWORD             VARCHAR2(50)         not null,
    NAME                 VARCHAR2(50)         not null,
-   PASSWORD             VARCHAR2(15)         not null,
+   ADDRESS              VARCHAR2(100)		 not null,
+   TELEPHONE            VARCHAR2(20)		 not null,
    EMAIL                VARCHAR2(50)         not null,
    constraint PK_CLIENT primary key (CLIENT_ID)
 );

@@ -7,12 +7,85 @@
 	<link rel="stylesheet" type="text/css" href="/index.css" />
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<title>Welcome to Music Store</title>
-	<script type="text/javascript">
+	<script type="text/javascript">	
+	function refString(s){
+		this.value = s;
+	}
+	
+	var displayed = new refString("");
+	var displayed2 = new refString("");
+	
+	
 	function goTo(page){
 		if (page=='index')
 			window.location='/';
 		else {
 			window.location='/'+page;
+		}
+	}
+	
+	
+	function showContent(display, id){
+	
+		if (display.value!=""){
+			document.getElementById(display.value+"Button").className='link';
+			document.getElementById(display.value).style.display='none';
+		}
+		if (display.value==id){
+			display.value = "";
+		}
+		else {
+			document.getElementById(id+"Button").className='link2';
+			document.getElementById(id).style.display='inline';
+			display.value = id;
+		}
+	}
+	
+	
+	function disableAddSongButton(){
+		if (document.addSongForm.addSongName.value=="" ||
+			document.addSongForm.addSongLength.value=="" ||
+			document.addSongForm.addSongGenre.value=="" ||
+			document.addSongForm.addSongArtist.value=="" ||
+			document.addSongForm.addSongDescription.value=="" ||
+			document.addSongForm.addSongImage.value=="" ||
+			document.addSongForm.addSongDate.value=="" ||
+			document.addSongForm.addSongPrice.value==""){
+			document.addSongForm.addSongButton.disabled=true;
+		}
+		else {
+			if (document.addSongForm.addSongAlbum.value!="" && document.addSongForm.addSongNumber.value==""){
+				document.addSongForm.addSongButton.disabled=true;
+			}
+			else{
+				document.addSongForm.addSongButton.disabled=false;
+			}
+		}
+	}
+	
+	
+	function disableAddMerchButton(){
+		if (document.addMerchForm.addMerchName.value=="" ||
+			document.addMerchForm.addMerchArtist.value=="" ||
+			document.addMerchForm.addMerchDescription.value=="" ||
+			document.addMerchForm.addMerchImage.value=="" ||
+			document.addMerchForm.addMerchDate.value=="" ||
+			document.addMerchForm.addMerchPrice.value=="" ||
+			document.addMerchForm.addMerchStock.value==""){
+			document.addMerchForm.addMerchButton.disabled=true;
+		}
+		else {
+			document.addMerchForm.addMerchButton.disabled=false;
+		}
+	}
+	
+	
+	function disableDeleteClientButton(){
+		if(document.deleteClientForm.deleteClientUsername.value==""){
+			document.deleteClientForm.deleteClientButton.disabled=true;
+		}
+		else {
+			document.deleteClientForm.deleteClientButton.disabled=false;
 		}
 	}
 	</script>
@@ -29,7 +102,7 @@
 					<span width="100" class="link" onClick="goTo('artists')">Artists</span>
 					<span width="100" class="link" onClick="goTo('albums')">Albums</span>
 					<span width="100" class="link" onClick="goTo('merchandising')">Merchandising</span>
-					<span width="100" class="link" onClick="goTo('admin')">Add Items</span>
+					<span width="100" class="link" onClick="goTo('admin')">Manage Store</span>
 					
 					<div style="float:right">
 						<form name="searchForm" action="/search" method="post">
@@ -68,17 +141,169 @@
 			<% end %>
 			
 			
+			<div id="menu" align="left" style="background:#CCC; float:left;width:60%; display:inline">
+				<br/>
+				<span id="artistsButton" width="100" class="link" onClick="showContent(displayed, 'artists'); displayed2.value = ''">Artists</span>
+				<span id="albumsButton" width="100" class="link" onClick="showContent(displayed, 'albums'); displayed2.value = ''">Albums</span>
+				<span id="songsButton" width="100" class="link" onClick="showContent(displayed, 'songs'); displayed2.value = ''">Songs</span>
+				<span id="merchButton" width="100" class="link" onClick="	showContent(displayed, 'merch');
+																			displayed2.value = '';
+																			addMerchButton.className='link';
+																			addMerch.style.display='none';
+																			editMerchButton.className='link';
+																			editMerch.style.display='none';
+																			deleteMerchButton.className='link';
+																			deleteMerch.style.display='none'
+																		">Merchandising</span>
+				<span id="clientsButton" width="100" class="link" onClick="	showContent(displayed, 'clients');
+																			displayed2.value = 'deleteClient';
+																			deleteClientButton.className='link2';
+																			deleteClient.style.display='inline'
+																		">Clients</span>
 			
 			
+				<!--<button type="button" onclick="showContent('artists')" align="left"><img src="/img/artists.jpg" alt="Artists" title="Artists"/></button>-->
 			
 			
-			
-			
-			<div align="left" style="background:#CCC; float:left;width:60%;">
-				<h1 align="center">coiso e tal admin</h1>
+				<div id="artists" align="left" style="background:#CCC; float:left;width:60%; display:none">
+					<h1 align="center">artists</h1>
+				</div>
+				
+				<div id="albums" align="left" style="background:#CCC; float:left;width:60%; display:none">
+					<h1 align="center">albums</h1>
+				</div>
+				
+				<div id="songs" align="left" style="background:#CCC; float:left;width:60%; display:none">
+					<br/>
+					<span id="addSongButton" width="100" class="link" onClick="showContent(displayed2, 'addSong')">Add</span>
+					<span id="editSongButton" width="100" class="link" onClick="showContent(displayed2, 'editSong')">Edit</span>
+					<span id="deleteSongButton" width="100" class="link" onClick="showContent(displayed2, 'deleteSong')">Delete</span>
+					<br/>
+					<br/>					
+					<div id="addSong" align="left" style="background:#CCC; float:left;width:60%; display:none">
+						<form name="addSongForm" action="/addSong" method="post">
+							<table onkeyup="disableAddSongButton()">
+								<tr>
+									<td class="label">Name:</td>
+									<td><input type="text" name="addSongName"/></td>
+								</tr>
+								<tr>
+									<td class="label">Length:</td>
+									<td><input type="text" name="addSongLength"/></td>
+								</tr>
+								<tr>
+									<td class="label">Genre:</td>
+									<td><input type="text" name="addSongGenre"/></td>
+								</tr>
+								<tr>
+									<td class="label">Number:</td>
+									<td><input type="text" name="addSongNumber"/></td>
+								</tr>
+								<tr>
+									<td class="label">Album ID:</td>
+									<td><input type="text" name="addSongAlbum"/></td>
+								</tr>
+								<tr>
+									<td class="label">Artist ID:</td>
+									<td><input type="text" name="addSongArtist"/></td>
+								</tr>
+								<tr>
+									<td class="label">Description:</td>
+									<td><input type="text" name="addSongDescription"/></td>
+								</tr>
+								<tr>
+									<td class="label">Image:</td>
+									<td><input type="text" name="addSongImage"/></td>
+								</tr>
+								<tr>
+									<td class="label">Release Date:</td>
+									<td><input type="text" name="addSongDate"/></td>
+								</tr>
+								<tr>
+									<td class="label">Current Price:</td>
+									<td><input type="text" name="addSongPrice"/></td>
+								</tr>
+								<tr>
+							</table>
+						<input type="submit" value="Add" name="addSongButton" disabled="true"/>
+						</form>
+					</div>
+					<div id="editMerch" align="left" style="background:#CCC; float:left;width:60%; display:none">
+						<h3>Username2</h3>
+					</div>
+					<div id="deleteMerch" align="left" style="background:#CCC; float:left;width:60%; display:none">
+						<h3>Username3</h3>
+					</div>
+				</div>
+				
+				<div id="merch" align="left" style="background:#CCC; float:left;width:60%; display:none">
+					<br/>
+					<span id="addMerchButton" width="100" class="link" onClick="showContent(displayed2, 'addMerch')">Add</span>
+					<span id="editMerchButton" width="100" class="link" onClick="showContent(displayed2, 'editMerch')">Edit</span>
+					<span id="deleteMerchButton" width="100" class="link" onClick="showContent(displayed2, 'deleteMerch')">Delete</span>
+					<br/>
+					<br/>					
+					<div id="addMerch" align="left" style="background:#CCC; float:left;width:60%; display:none">
+						<form name="addMerchForm" action="/addMerch" method="post">
+							<table onkeyup="disableAddMerchButton()">
+								<tr>
+									<td class="label">Name:</td>
+									<td><input type="text" name="addMerchName"/></td>
+								</tr>
+								<tr>
+									<td class="label">Artist ID:</td>
+									<td><input type="text" name="addMerchArtist"/></td>
+								</tr>
+								<tr>
+									<td class="label">Description:</td>
+									<td><input type="text" name="addMerchDescription"/></td>
+								</tr>
+								<tr>
+									<td class="label">Image:</td>
+									<td><input type="text" name="addMerchImage"/></td>
+								</tr>
+								<tr>
+									<td class="label">Release Date:</td>
+									<td><input type="text" name="addMerchDate"/></td>
+								</tr>
+								<tr>
+									<td class="label">Current Price:</td>
+									<td><input type="text" name="addMerchPrice"/></td>
+								</tr>
+								<tr>
+									<td class="label">Stock:</td>
+									<td><input type="text" name="addMerchStock"/></td>
+								</tr>
+							</table>
+						<input type="submit" value="Add" name="addMerchButton" disabled="true"/>
+						</form>
+					</div>
+					<div id="editMerch" align="left" style="background:#CCC; float:left;width:60%; display:none">
+						<h3>Username2</h3>
+					</div>
+					<div id="deleteMerch" align="left" style="background:#CCC; float:left;width:60%; display:none">
+						<h3>Username3</h3>
+					</div>
+				</div>
+				
+				<div id="clients" align="left" style="background:#CCC; float:left;width:60%; display:none">
+					<br/>
+					<span id="deleteClientButton" width="100" class="link2" onClick="showContent(displayed2, 'deleteClient')">Delete</span>
+					<br/>
+					<br/>
+					<div id="deleteClient" align="left" style="background:#CCC; float:left;width:60%; display:inline">
+						<form name="deleteClientForm" action="/deleteClient" method="post">
+							<table>
+								<tr>
+									<td class="label">Username:</td>
+									<td><input type="text" name="deleteClientUsername" onkeyup="disableDeleteClientButton()"/></td>
+								</tr>
+							</table>
+						<input type="submit" value="Delete" name="deleteClientButton" disabled="true"/>
+						</form>
+					</div>
+				</div>
 			</div>
-			
-			
 			
 			<!-- Shopping Cart -->
 			<div style="background:#DDD; float:left;width:20%;">
