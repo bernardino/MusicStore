@@ -107,6 +107,12 @@ get '/logout' do
 	redirect '/'
 end
 
+get '/addcredits' do
+  #$db.execute("update client set credits=#{params[:c]} where client_id='#{session[:id]}'")
+  
+  redirect params[:page]
+end
+
 
 get '/artist/:id' do
 	res = $get.artist(params[:id])

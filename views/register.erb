@@ -39,8 +39,7 @@
 	}
 
 	function allFields(){
-		if(document.registerForm.email.username!="" && document.registerForm.email.value!="" && document.registerForm.address.value != "" && document.registerForm.phone.value!="" && !isNaN(parseInt(document.registerForm.phone.value)) ){
-			document.registerForm.phone.value=parseInt(document.registerForm.phone.value);
+		if(document.registerForm.email.username!="" && document.registerForm.email.value!="" && document.registerForm.address.value != "" && document.registerForm.phone.value!="" && document.registerForm.phone.value!="" ){
 			document.registerForm.submit_btn.disabled=false;
 		} else {
 			document.registerForm.submit_btn.disabled=true;
@@ -80,7 +79,7 @@
     </tr>
 	<tr>
     	<td>Telephone Number</td>
-        <td id="phone"><input type="text" name="phone" /></td>
+        <td id="phone"><input type="text" maxlength="20" name="phone" /></td>
     </tr>
 </table>
 <br />
