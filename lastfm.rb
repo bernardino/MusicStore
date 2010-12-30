@@ -56,13 +56,17 @@ class Lastfm
 			#THE DESCRIPTION MAY CREATE A CONFLICT DUE TO STRANGE CHARACTERS
 			date = (doc/"lfm/album/releasedate").inner_html
 			
-			i=0
-			while i < date.length
-				if date[i].chr == ','
-					arr[2] = date[i-4, 4]
-					break
+			if (date.length<5)
+				arr[2] = -1
+			else
+				i=0
+				while i < date.length
+					if date[i].chr == ','
+						arr[2] = date[i-4, 4]
+						break
+					end
+					i=i+1
 				end
-				i=i+1
 			end
 			
 			i=3
@@ -72,6 +76,12 @@ class Lastfm
 			end
 			
 			product_id = $db.select("SELECT product_number.nextval FROM dual")
+			
+			puts 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+			puts 'x'+date+'x'
+			puts 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+			puts arr[2]
+			puts 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
 			
 			#we should avoid this by verifying first if last.fm's content isn't null..................
 			begin
