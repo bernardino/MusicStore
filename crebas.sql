@@ -88,6 +88,11 @@ START with 1
 INCREMENT by 1
 NOCYCLE;
 
+CREATE sequence order_number
+START with 1
+INCREMENT by 1
+NOCYCLE;
+
 CREATE sequence product_number
 START with 1
 INCREMENT by 1
