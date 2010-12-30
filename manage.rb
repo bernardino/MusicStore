@@ -45,8 +45,8 @@ class Manage
 	
 	
 	def addClient(username, password, name, address, telephone, email)
-		$db.execute("	INSERT INTO client(client_id, password, name, address, telephone, email)
-						VALUES('#{username}', '#{password}', '#{name}', '#{address}', '#{telephone}', '#{email}')
+		$db.execute("	INSERT INTO client(client_id, password, name, address, telephone, email, credits)
+						VALUES('#{username}', '#{password}', '#{name}', '#{address}', '#{telephone}', '#{email}', 0)
 					")
 		$db.execute("Commit")
 	end
