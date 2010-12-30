@@ -52,7 +52,27 @@ class Manage
 	end
 	
 	
-	
+	def addOrder(client_id,orders,total_price)
+		
+		res = $db.select("SELECT order_number.nextval FROM DUAL")
+		
+		$db.execute("	INSERT INTO main_order(registry_id, client_id, total_price, order_date)
+						VALUES(#{res[0]},'#{client_id}', #{total_price}, sysdate)
+					")
+					
+		orders.keys.each do |i|
+			quantity = orders[i][0]
+			item_price = orders[i][3]/ quantity
+			product_id = i
+			
+			$db.execute("	INSERT INTO order_details(registry_id, product_id, quantity, discount, price)
+							VALUES(#{res[0]}, #{product_id}, #{quantity}, 0, #{item_price})
+						")
+		
+		end
+		
+		$db.execute("Commit")
+	end
 	
 	
 	

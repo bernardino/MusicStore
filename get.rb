@@ -56,12 +56,58 @@ class Get
 						")
 	end
 	
+	def productPrice(product_id)
+		return $db.select(" SELECT current_price 
+							FROM product 
+							WHERE product_id = '#{product_id}'
+						")
+	
+	end
+	
+	def productStock(product_id)
+		return $db.select(" SELECT stock 
+							FROM product
+							WHERE product_id = '#{product_id}'
+						")
+	end
+	
+	def cartStock(orders)
+		noStock = Array.new
+		
+		orders.keys.each do |i|
+			if orders[i][2] != 's'
+				res = productStock(i)
+				if res[0] < orders[i][0]
+					noStock << i
+				end
+			end
+		end
+		
+		return noStock
+	end
+	
 
 	def client(client_id)
 		return $db.select("	SELECT name, address, telephone, email
 							FROM client c
 							WHERE upper(c.client_id) = upper('#{client_id}')
 						")
+	end
+	
+	def checkClient(client_id)
+		return $db.select(" SELECT client_id 
+							FROM client
+							WHERE upper(client_id) like upper('#{client_id}')
+							")
+	end
+	
+	def checkClientPassword(client_id,passcode)
+		return $db.select(" SELECT client_id 
+							FROM client
+							WHERE upper(client_id) like upper('#{client_id}')
+							AND password = '#{passcode}'
+							")
+		
 	end
 	
 	

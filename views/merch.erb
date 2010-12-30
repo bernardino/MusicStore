@@ -92,6 +92,8 @@
 					<p>Name: <%= @merchID %></p> 
 					<p>Description: <%= @desc %></p>
 					<p>Price: <%= @price %> euros</p>
+					<br/>
+					<a href="/addorder?page=<%= request.fullpath %>&id=<%= params[:id] %>&type=m"><input type="button" value="Buy"></a>
 					<p>Date: <%= @r_date %></p>
 					<p>Rating: <%= @rating %></p>
 				</div>
