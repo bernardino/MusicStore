@@ -43,6 +43,27 @@
 	}
 	
 	
+	function displayError(){
+		var error = new RegExp("[\\?&]error=([^&#]*)").exec(window.location.href );
+		if( error != null ){
+			if (error[1] == "artistnotfound")
+				alert("The artist you entered does not exist in last.fm\nTry adding it manually");
+			if (error[1] == "albumnotfound")
+				alert("The album you entered does not exist in last.fm\nTry adding it manually");
+			else if (error[1] == "badartistid")
+				alert("The Artist ID you entered is incorrect");
+			else if (error[1] == "badalbumid")
+				alert("The Album ID you entered is incorrect");
+			else if (error[1] == "badsongid")
+				alert("The Song ID you entered is incorrect");
+			else if (error[1] == "badmerchid")
+				alert("The Merchandise ID you entered is incorrect");
+			else if (error[1] == "badclientid")
+				alert("The Username you entered is incorrect");
+		}
+	}
+	
+	
 	function disableAddArtistManualButton(){
 		if (addArtistManualForm.artistName.value=="" ||
 			addArtistManualForm.artistBio.value=="" ||
@@ -84,6 +105,25 @@
 		}
 		else {
 			addAlbumManualForm.submitButton.disabled=false;
+		}
+	}
+	
+	
+	function disableAddAlbumLastfmButton(){
+		if (addAlbumLastfmForm.albumName.value=="" ||
+			addAlbumLastfmForm.albumLength.value=="" ||
+			addAlbumLastfmForm.albumGenre.value=="" ||
+			addAlbumLastfmForm.albumLabel.value=="" ||
+			addAlbumLastfmForm.albumArtist.value=="" ||
+			addAlbumLastfmForm.albumPrice.value=="" ||
+			addAlbumLastfmForm.albumStock.value=="" ||
+			isNaN(addAlbumLastfmForm.albumArtist.value) ||
+			isNaN(addAlbumManualForm.albumPrice.value) ||
+			isNaN(addAlbumManualForm.albumStock.value)){
+			addAlbumLastfmForm.submitButton.disabled=true;
+		}
+		else {
+			addAlbumLastfmForm.submitButton.disabled=false;
 		}
 	}
 	
@@ -133,7 +173,7 @@
 	
 	
 	function disableDeleteButton(form){
-		if(form.ID.value==""){
+		if(form.ID.value=="" || isNaN(form.ID.value)){
 			form.submitButton.disabled=true;
 		}
 		else {
@@ -161,7 +201,7 @@
 	</script>
 </head>
 
-<body>
+<body onLoad="displayError()">
 	<div class="container">
 		<div align="center" class="header">
 			<h1>Music Store</h1>
@@ -365,9 +405,9 @@
 						<br/>
 						<div id="addAlbumManual" align="left" style="background:#CCC; float:left;width:60%; display:none">
 							<form name="addAlbumManualForm" action="/addAlbumManual" method="post">
-								<table onkeyup="disableAddAlbumManualButton()">
+								<table onkeyup="disableAddAlbumManualButton()" width="300">
 									<tr>
-										<td class="label">Name:</td>
+										<td class="label" width="100">Name:</td>
 										<td><input type="text" name="albumName"/></td>
 									</tr>
 									<tr>
@@ -411,7 +451,39 @@
 							</form>
 						</div>
 						<div id="addAlbumLastfm" align="left" style="background:#CCC; float:left;width:60%; display:none">
-							<h3>Using last.fm</h3>
+							<form name="addAlbumLastfmForm" action="/addAlbumLastfm" method="post">
+								<table onkeyup="disableAddAlbumLastfmButton()" width="300">
+									<tr>
+										<td class="label" width="100">Name:</td>
+										<td><input type="text" name="albumName"/></td>
+									</tr>
+									<tr>
+										<td class="label">Length:</td>
+										<td><input type="text" name="albumLength"/></td>
+									</tr>
+									<tr>
+										<td class="label">Genre:</td>
+										<td><input type="text" name="albumGenre"/></td>
+									</tr>
+									<tr>
+										<td class="label">Label:</td>
+										<td><input type="text" name="albumLabel"/></td>
+									</tr>
+									<tr>
+										<td class="label">Artist ID:</td>
+										<td><input type="text" name="albumArtist"/></td>
+									</tr>
+									<tr>
+										<td class="label">Price:</td>
+										<td><input type="text" name="albumPrice"/></td>
+									</tr>
+									<tr>
+										<td class="label">Stock:</td>
+										<td><input type="text" name="albumStock"/></td>
+									</tr>
+								</table>
+								<input type="submit" value="Add" name="submitButton" disabled="true"/>
+							</form>
 						</div>
 					</div>
 					<div id="editAlbum" align="left" style="background:#CCC; float:left;width:60%; display:none">
@@ -556,9 +628,9 @@
 					</div>
 					<div id="deleteMerch" align="left" style="background:#CCC; float:left;width:60%; display:none">
 						<form name="deleteMerchForm" action="/deleteMerch" method="post">
-							<table>
+							<table width="300">
 								<tr>
-									<td class="label">Merch ID:</td>
+									<td class="label">Merchandising ID:</td>
 									<td><input type="text" name="ID" onkeyup="disableDeleteButton(deleteMerchForm)"/></td>
 								</tr>
 							</table>

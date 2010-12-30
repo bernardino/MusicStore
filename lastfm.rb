@@ -20,104 +20,80 @@ class Lastfm
 				arr[0] = ing.inner_html
 			end
 		end
-		
 		#THIS IS JUST TEMPORARY NEED TO IMPROVE
 		arr[1] = (doc/"lfm/artist/bio/summary").inner_html.gsub(']]>',"").gsub('<![CDATA[',"")
 		
-		$manage.addArtist(name, arr[0], arr[1])
+		#we should avoid this by verifying first if last.fm's content isn't null..................
+		begin
+			$manage.addArtist(name, arr[0], arr[1])
+		rescue
+			raise ArtistError
+		end
 	end	
 	
 	
 	#Use Last.fm API to get information we want about this album
-	def addAlbum(artist_name, album_name)
-		url = "http://ws.audioscrobbler.com/2.0/?method=album.getinfo&artist=#{artist_name.gsub(' ','+')}&album=#{album_name.gsub(' ','+')}&api_key=b25b959554ed76058ac220b7b2e0a026" #LAST.FM REST API
-		resp = Net::HTTP.get_response(URI.parse(url)).body
-		arr = Array.new
-		date = String.new
+	def addAlbum(name, length, genre, label, artist_id, price, stock)
 		
-		doc = Hpricot resp
-		arr[0] = ' '
-		(doc/"lfm/album/image").each do |r|
-			if r.attributes["size"] == 'large'
-				arr[0] = r.inner_html
-			end
-		end
-		arr[1] = ' '
-		arr[1] = (doc/"lfm/album/wiki/summary").inner_html.gsub(']]>','').gsub('<![CDATA[','')
-			#arr[1] = r.text.gsub(/\\/, '\&\&').gsub(/'/, "''").gsub('&quot;','')#.gsub(/[^\' '-~]/,'')
-
-
-		date = (doc/"lfm/album/releasedate").inner_html
-		
-		i=0
-		while i < date.length
-			if date[i].chr == ','
-				arr[2] = date[i-4, 4]
-				break
-			end
-			i=i+1
-		end
-		
-		
-		i=3
-		(doc/"lfm/album/tracks/track/name").each do |r|
-			arr[i] = r.inner_html
-			i=i+1
-		end
-		arr	
-	end
-
+		artist_name = $get.artistName(artist_id)
 	
-	def add_album(artist_name, album_name)
-		res = get_album(artist_name, album_name)
-		
-		id = $db.select("	SELECT artist_id
-							FROM artist
-							WHERE upper(artist_name) LIKE upper('#{artist_name}')
-						")
-					
-		exist = get_album_id(artist_name, album_name)
-		
-		if exist == 1
-		
-			product_id = $db.select("SELECT product_number.nextval FROM dual")
-			#THE DESCRIPTION MAY CREATE A CONFLICT DUE TO STRANGE CHARACTERS
-			$manage.addProduct(product_id[0], id[0], 'description', res[0], res[2], '15', '50')
+		if (artist_name[0])
+			url = "http://ws.audioscrobbler.com/2.0/?method=album.getinfo&artist=#{artist_name[0].gsub(' ','+')}&album=#{name.gsub(' ','+')}&api_key=b25b959554ed76058ac220b7b2e0a026"
+			resp = Net::HTTP.get_response(URI.parse(url)).body
+			arr = Array.new
+			date = String.new
 			
-			$manage.addAlbum(product_id[0], album_name, '60m', 'Merge', 'Rock')
+			doc = Hpricot resp
 
+			(doc/"lfm/album/image").each do |r|
+				if r.attributes["size"] == 'large'
+					arr[0] = r.inner_html
+				end
+			end
+
+			arr[1] = (doc/"lfm/album/wiki/summary").inner_html.gsub(']]>','').gsub('<![CDATA[','')
+			#arr[1] = r.text.gsub(/\\/, '\&\&').gsub(/'/, "''").gsub('&quot;','')#.gsub(/[^\' '-~]/,'')
+			#THE DESCRIPTION MAY CREATE A CONFLICT DUE TO STRANGE CHARACTERS
+			date = (doc/"lfm/album/releasedate").inner_html
+			
+			i=0
+			while i < date.length
+				if date[i].chr == ','
+					arr[2] = date[i-4, 4]
+					break
+				end
+				i=i+1
+			end
+			
+			i=3
+			(doc/"lfm/album/tracks/track/name").each do |r|
+				arr[i] = r.inner_html
+				i=i+1
+			end
+			
+			product_id = $db.select("SELECT product_number.nextval FROM dual")
+			
+			#we should avoid this by verifying first if last.fm's content isn't null..................
+			begin
+				$manage.addProduct(product_id[0], artist_id, arr[1], arr[0], arr[2], price, stock)
+			rescue
+				raise AlbumError
+			end
+			$manage.addAlbum(product_id[0], name, length, genre, label)
 			
 			i = 3		
-			while i < res.length
+			while i < arr.length
 				song_id = $db.select("SELECT product_number.nextval FROM DUAL")
 				
-				$manage.addProduct(song_id[0], id[0], 'description', res[0], res[2], '0.99', '-1')
+				$manage.addProduct(song_id[0], artist_id, 'description', arr[0], arr[2], '0.99', '-1')
 				
-				$manage.addSong(song_id[0], product_id[0], res[i], '3m', 'Indie', (i-2))
+				$manage.addSong(song_id[0], product_id[0], arr[i], '3:00', 'Indie', (i-2))
 				
 				i=i+1
-			end				
-					
-			$db.execute("Commit")
+			end
 		else
-			puts 'That album already exists'
+			raise ArtistError
 		end
-	end
-	
-	
-	def get_artist_id(name)
-		res = Array.new
-		
-		res = $db.select("SELECT artist_id 
-					FROM artist 
-					WHERE upper(artist_name) LIKE upper('#{name}')
-				")
-		if res.length > 0
-			puts 'Artist already exists on the database'
-		else
-			puts 'Artist does not exist'
-		end
-		res
 	end
 	
 	
@@ -166,21 +142,6 @@ class Lastfm
 					WHERE product_id = #{info[i]}"
 					)	
 		$db.execute("commit")		
-	end
-	
-	
-	def get_album_id(artist_name,album_name)
-		res = $search.album(album_name)
-		i=0
-		while i < res.length/2
-			if res[i+1] == artist_name
-				return 0
-			else
-				return 1
-			end
-			i=i+2
-		end
-		return 1;
 	end
 	
 	

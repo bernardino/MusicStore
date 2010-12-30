@@ -24,7 +24,7 @@
 /*	CLIENT's field PASSWORD size increased from 20 to 50		*/
 /*  ADDED DELETE TRIGGERS										*/
 /*  CREATED CREDITS IN CLIENT									*/
-/*  "ORDER" TABLE CHANGED to MAIN_ORDER
+/*  "ORDER" TABLE CHANGED to MAIN_ORDER							*/
 /*	ALBUM_GENRE can no longe be null (wtf?)						*/
 /*==============================================================*/
 
