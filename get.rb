@@ -56,20 +56,31 @@ class Get
 						")
 	end
 	
+	
+	def client(client_id)
+		return $db.select("	SELECT name, address, telephone, email
+							FROM client c
+							WHERE upper(c.client_id) = upper('#{client_id}')
+						")
+	end
+	
+	
 	def productPrice(product_id)
 		return $db.select(" SELECT current_price 
 							FROM product 
-							WHERE product_id = '#{product_id}'
+							WHERE product_id = #{product_id}
 						")
 	
 	end
+	
 	
 	def productStock(product_id)
 		return $db.select(" SELECT stock 
 							FROM product
-							WHERE product_id = '#{product_id}'
+							WHERE product_id = #{product_id}
 						")
 	end
+	
 	
 	def cartStock(orders)
 		noStock = Array.new
@@ -85,29 +96,54 @@ class Get
 		
 		return noStock
 	end
+		
 	
+	def checkArtist(artist_id)
+		return $db.select(" SELECT artist_id 
+							FROM artist
+							WHERE artist_id = #{artist_id}
+						")
+	end	
 
-	def client(client_id)
-		return $db.select("	SELECT name, address, telephone, email
-							FROM client c
-							WHERE upper(c.client_id) = upper('#{client_id}')
+
+	def checkAlbum(album_id)
+		return $db.select(" SELECT product_id 
+							FROM album
+							WHERE product_id = #{album_id}
 						")
 	end
-	
+
+
+	def checkSong(song_id)
+		return $db.select(" SELECT product_id 
+							FROM song
+							WHERE product_id = #{song_id}
+						")
+	end
+
+
+	def checkMerch(merch_id)
+		return $db.select(" SELECT product_id 
+							FROM merchandise
+							WHERE product_id = #{merch_id}
+						")
+	end
+
+
 	def checkClient(client_id)
 		return $db.select(" SELECT client_id 
 							FROM client
 							WHERE upper(client_id) like upper('#{client_id}')
-							")
+						")
 	end
+	
 	
 	def checkClientPassword(client_id,passcode)
 		return $db.select(" SELECT client_id 
 							FROM client
 							WHERE upper(client_id) like upper('#{client_id}')
 							AND password = '#{passcode}'
-							")
-		
+						")
 	end
 	
 	
@@ -119,6 +155,7 @@ class Get
 							ORDER BY release_date DESC
 						")
 	end
+	
 	
 	def artist_albums(artist_id)
 		return $db.select(" SELECT p.product_id, al.album_name, p.image
@@ -189,6 +226,14 @@ class Get
 	end
 	
 	
+	def artistName(artist_id)
+		return $db.select("	SELECT artist_name
+							FROM artist
+							WHERE artist_id = #{artist_id}
+						")
+	end
+	
+	
 	def artistSongs(artist_id)
 		return $db.select("	SELECT p.product_id, song_name, DECODE(alb_product_id, null, 'None', (	SELECT album_name
 																									FROM album al, song s2
@@ -220,13 +265,6 @@ class Get
 							WHERE p.product_id = s.product_id
 							AND s.alb_product_id = #{album_id}
 							ORDER BY song_number
-						")
-	end	
-	
-	
-	def clients()
-		return $db.select("	SELECT client_id name, address, telephone, email
-							FROM client c
 						")
 	end
 end
