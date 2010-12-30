@@ -270,10 +270,10 @@ class Get
 	def artistSingleSongs(artist_id)
 		return $db.select("	SELECT p.product_id, song_name, song_number, song_length, rating, votes, current_price
 							FROM song s, product p
-							WHERE s.product_id = p.product_id
-							AND p.
+							WHERE s.alb_product_id IS NULL
+							AND s.product_id = p.product_id
 							AND p.artist_id = #{artist_id}
-							ORDER BY release_date DESC, album_name ASC, song_number ASC
+							ORDER BY release_date DESC
 						")
 	end
 	
