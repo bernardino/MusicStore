@@ -58,9 +58,21 @@
 </head>
 
 <body>
-	<div class="container">
-		<div align="center" class="header">
-			<h1>Music Store</h1>
+	<div class="container" style="overflow: hidden;">
+		<div align="center" class="header" >
+			<table>
+				<tr>
+					<td>
+						<img src="/img/Banana2.png" width="60" height="60"/>
+					</td>
+					<td>
+						<a href="/"><h1>Banana Store</h1></a>
+					</td>
+					<td>
+						<img src="/img/Banana.png" width="60" height="60"/>
+					</td>
+				</tr>
+			</table>
 			<div align="left" style="background:#F93; padding:12px">
 				<div>
 					<span width="100" class="link" onClick="goTo('index')">Home</span>
@@ -88,10 +100,9 @@
 			<!-- !LOGGED_IN -->
 			<% if @logged %>
 			<div style="background:#CCC; float:left;width:15%">
-				<h3>Welcome <%= session[:id] %>!!</h3>
+				<h1 class="head"><%= session[:id] %></h1>
+				<a class="search" href="/client"> Edit your account</a>
 				<br />
-				<a class="search" href="/client"> Edit your personal information</a>
-				<br /><br />
 				<input id="credits_txt" type="text" size="5" style="display:none;" onkeyup="justInt()" /><br />
 				<input id="credits_btn" type="button" value="Buy Credits" onmouseup="credits()">	
 				<br /><br />
@@ -100,7 +111,7 @@
 			<% else %>
 			<div style="background:#CCC; float:left;width:15%;">
 				<form action="/login?p=<%= request.fullpath %>" method="post" accept-charset="utf-8">
-					<h1>Login</h1>
+					<h1 class="head">Login</h1>
 					<h3>Username</h3><input type="text" name="username" />
 					<h3>Password</h3><input type="password" name="password"/><br />
 					<input type="submit" value="Login">
@@ -144,7 +155,7 @@
 			</div>
 			<!-- Shopping Cart -->
 			<div style="background:#CCC; float:left;width:15%;">
-				<h1>Shopping Cart</h1>
+				<h1 class="head">Shopping Cart</h1>
 				<% if session[:orders]=={}%>
 					<p>No orders</p>
 				<% else %>
@@ -162,9 +173,9 @@
 				<%end%>
 			</div>
 		</div>
-		<div align="center" class="footer">
-			Copyright © 2010 - Guilherme Simões, João Penetra, Ricardo Bernardino
-		</div>
+	</div>
+	<div align="center" class="footer">
+		Copyright © 2010 - Guilherme Simões, João Penetra, Ricardo Bernardino
 	</div>
 </body>
 </html>
