@@ -385,6 +385,11 @@ post '/addMerch' do
 end
 
 
+post '/editMerch' do
+
+end
+
+
 post '/editClient' do	
 	if params[:passcode] != ''
 		currentPass = Digest::SHA1.hexdigest("#{params[:currentPasscode]}")
