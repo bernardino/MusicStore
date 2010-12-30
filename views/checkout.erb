@@ -6,18 +6,18 @@
 	<link rel="stylesheet" type="text/css" href="checkout.css" />
 	<script type="text/javascript">
 		function remove(id){
-			window.location="/removeorder?id="+id+"&page=<%= request.fullpath %>";
+			window.location="/removeorder?id="+id+"&page=<%= request.path_info %>";
 		}
 		
 		function add(id){
-			window.location="/addorder?id="+id+"&page=<%= request.fullpath %>";
+			window.location="/addorder?id="+id+"&page=<%= request.path_info %>";
 		}
 
 		function del(id,currQ){
 			if(currQ-1!=0)
-				window.location="/del?id="+id+"&page=<%= request.fullpath %>";
+				window.location="/del?id="+id+"&page=<%= request.path_info %>";
 			else
-				window.location="/removeorder?id="+id+"&page=<%= request.fullpath %>";
+				window.location="/removeorder?id="+id+"&page=<%= request.path_info %>";
 		}
 	</script>
 </head>
