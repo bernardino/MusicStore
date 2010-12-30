@@ -87,7 +87,7 @@
 		<div align="center" class="content">
 			<!-- !LOGGED_IN -->
 			<% if @logged %>
-			<div style="background:#EEE; float:left;width:15%">
+			<div style="background:#CCC; float:left;width:15%">
 				<h3>Welcome <%= session[:id] %>!!</h3>
 				<br />
 				<a class="search" href="/client"> Edit your personal information</a>
@@ -111,10 +111,10 @@
 			</div>
 			<% end %>
 			<!-- Cenas -->
-			<div align="left" style="background:#CCC; float:left;width:70%;">
-				<div style="margin-bottom:30px;">
-				<div style="background:#CCC; float:left;width:50%;">
-					<p class="search"> Top Albums</p>
+			<div align="left" style="background:#EEE; float:left;width:70%;">
+				<div style="margin:20px;">
+				<div style="background:#EEE; float:left;width:50%;">
+					<p class="label"> Top Albums</p>
 					<table >
 						<% 
 						i=0
@@ -140,41 +140,62 @@
 						while i< @songs.length %>
 								<tr>
 									<td>
-										<a class="list" href="/song/<%= @songs[i] %>"><img src="<%= @songs[i+3] %>" height="40" width="40" border="2"/></a>
+										<a class="search" href="/artist/<%= @albums[i+3] %>/album/<%= @albums[i] %>"><img src="<%= @albums[i+4] %>" height="40" width="40" border="2"/></a>
 									</td>
 									<td>
-										<a class="list" href="/song/<%= @songs[i] %>"><%= @songs[i+2] %> - <%= @songs[i+1] %></a>
+										<a class="search" href="/artist/<%= @albums[i+3] %>/album/<%= @albums[i] %>"><%= @albums[i+2] %> - <%= @albums[i+1] %></a>
 									</td>
 								</tr>
-							<% i=i+4 %>
-						<% end %>
-					
-					</table>
-				</div>
+								<% i=i+6 %>
+							<% end %>
+						</table>
+					</div>
 				
-				<div style="background:#CCC; float:left;width:50%;">
-					<p class="search"> Top Merchandising</p>
-					<table>
-						<%
-						i=0
-						while i< @merch.length %>
-								<tr>
-									<td>
-										<a class="list" href="/merch/<%= @merch[i] %>"><img src="<%= @merch[i+3] %>" height="40" width="40" border="2"/></a>
-									</td>
-									<td>
-										<a class="list" href="/merch/<%= @merch[i] %>"><%= @merch[i+2] %> - <%= @merch[i+1] %></a>
-									</td>
-									
-								</tr>
-							<% i=i+4 %>
-						<% end %>
-					</table>
-				</div>
+					<div style="background:#EEE; float:right;width:50%;">
+						<p class="label"> Top Songs</p>
+						<table>
+							<%
+							i=0
+							while i< @songs.length %>
+									<tr>
+										<td>
+											<a class="search" href="/artist/<%=@songs[i+3]%>/song/<%= @songs[i] %>"><img src="<%= @songs[i+4] %>" height="40" width="40" border="2"/></a>
+										</td>
+										<td>
+											<a class="search" href="/artist/<%=@songs[i+3]%>/song/<%= @songs[i] %>"><%= @songs[i+2] %> - <%= @songs[i+1] %></a>
+										</td>
+									</tr>
+								<% i=i+5 %>
+							<% end %>
+						
+						</table>
+					</div>
+				
+					<div style="background:#EEE; float:left;width:50%;">
+						<p class="label"> Top Merchandising</p>
+						<table>
+							<%
+							i=0
+							while i< @merch.length %>
+									<tr>
+										<td>
+											<a class="search" href="/artist/<%=@songs[i+3]%>/merch/<%= @merch[i] %>"><img src="<%= @merch[i+4] %>" height="40" width="40" border="2"/></a>
+										</td>
+										<td>
+											<a class="search" href="/artist/<%=@songs[i+3]%>/merch/<%= @merch[i] %>"><%= @merch[i+2] %> - <%= @merch[i+1] %></a>
+										</td>
+										
+									</tr>
+								<% i=i+5 %>
+							<% end %>
+						</table>
+						<br/>
+						<br/>
+					</div>
 				</div>
 			</div>
 			<!-- Shopping Cart -->
-			<div style="background:#DDD; float:left;width:15%;">
+			<div style="background:#CCC; float:left;width:15%;">
 				<h1>Shopping Cart</h1>
 				<% if session[:orders]=={}%>
 					<p>No orders</p>

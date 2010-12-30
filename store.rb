@@ -22,6 +22,12 @@ configure do
 	enable :sessions
 end
 
+class ArtistError < StandardError
+end
+
+class AlbumError < StandardError
+end
+
 #template(:layout) { :index }
 
 before do
@@ -124,8 +130,8 @@ get '/artist/:id' do
 	erb :artist
 end
 
-#should be '/artist/:name/song/:id'
-get '/song/:id' do
+
+get '/artist/:name/song/:id' do
 	@res = $get.song(params[:id])
 	
 	erb :song
@@ -135,7 +141,7 @@ end
 get '/artist/:name/album/:id' do
 
 	@res = $get.album(params[:id])
-	@songs = $db.select("	SELECT song_number, song_name, song_length
+	@songs = $db.select("	SELECT product_id, song_number, song_name, song_length
 							FROM song
 							WHERE alb_product_id = #{params[:id]}
 							ORDER BY song_number
@@ -211,16 +217,8 @@ post '/search' do
 end
 
 
-get '/merch/:id' do
-	res = $get.merchandise(params[:id])
-	@artist = res[0]
-	@merchID = res[1]
-	@image = res[2]
-	@desc = res[3]
-	@date = res[4]
-	@rating = res[5]
-	@votes = res[6] 
-	@price = res[7]
+get '/artist/:name/merch/:id' do
+	@res = $get.merchandise(params[:id])
 	erb :merch
 end
 
@@ -310,8 +308,11 @@ end
 
 
 post '/addArtistLastfm' do
-	$lf.addArtist(params[:artistName])
-
+	begin
+		$lf.addArtist(params[:artistName])
+	rescue ArtistError
+		redirect '/admin?error=artistnotfound'
+	end
 	redirect '/admin'
 end
 
@@ -319,16 +320,24 @@ end
 post '/addAlbumManual' do
 	album_id = $db.select("SELECT product_number.nextval FROM DUAL")
 	
-	$manage.addProduct(album_id[0], params[:albumArtist], params[:albumDescription], params[:albumImage], params[:albumDate], params[:albumPrice], params[:albumStock])
-	$manage.addAlbum(album_id[0], params[:albumName], params[:albumLength], params[:albumGenre], params[:albumLabel])
-	
+	begin
+		$manage.addProduct(album_id[0], params[:albumArtist], params[:albumDescription], params[:albumImage], params[:albumDate], params[:albumPrice], params[:albumStock])
+		$manage.addAlbum(album_id[0], params[:albumName], params[:albumLength], params[:albumGenre], params[:albumLabel])
+	rescue
+		redirect '/admin?error=badartistid'
+	end
 	redirect '/admin'
 end
 
 
 post '/addAlbumLastfm' do
-	album_id = $db.select("SELECT product_number.nextval FROM DUAL")
-
+	begin
+		$lf.addAlbum(params[:albumName], params[:albumLength], params[:albumGenre], params[:albumLabel], params[:albumArtist], params[:albumPrice], params[:albumStock])
+	rescue ArtistError
+		redirect '/admin?error=badartistid'
+	rescue AlbumError
+		redirect '/admin?error=albumnotfound'
+	end
 	redirect '/admin'
 end
 
@@ -336,12 +345,22 @@ end
 post '/addSong' do
 	song_id = $db.select("SELECT product_number.nextval FROM DUAL")
 	
-	$manage.addProduct(song_id[0], params[:songArtist], params[:songDescription], params[:songImage], params[:songDate], params[:songPrice], '-1')
+	begin
+		$manage.addProduct(song_id[0], params[:songArtist], params[:songDescription], params[:songImage], params[:songDate], params[:songPrice], '-1')
+	rescue
+		redirect '/admin?error=badartistid'
+	end
+	
 	if (params[:addSongAlbum] != '')
-		$manage.addSong(song_id[0], params[:songAlbum], params[:songName], params[:songLength], params[:songGenre], params[:songNumber])
+		begin
+			$manage.addSong(song_id[0], params[:songAlbum], params[:songName], params[:songLength], params[:songGenre], params[:songNumber])
+		rescue
+			redirect '/admin?error=badalbumid'
+		end
 	else
 		$manage.addSong(song_id[0], 'null', params[:songName], params[:songLength], params[:songGenre], 'null')
 	end
+	
 
 	redirect '/admin'
 end
@@ -350,8 +369,12 @@ end
 post '/addMerch' do
 	merch_id = $db.select("SELECT product_number.nextval FROM DUAL")
 
-	$manage.addProduct(merch_id[0], params[:merchArtist], params[:merchDescription], params[:merchImage], params[:merchDate], params[:merchPrice], params[:merchStock])
-	$manage.addMerch(merch_id[0], params[:merchName])
+	begin
+		$manage.addProduct(merch_id[0], params[:merchArtist], params[:merchDescription], params[:merchImage], params[:merchDate], params[:merchPrice], params[:merchStock])
+		$manage.addMerch(merch_id[0], params[:merchName])
+	rescue
+		redirect '/admin?error=badartistid'
+	end
 
 	redirect '/admin'
 end
@@ -407,37 +430,57 @@ end
 
 
 post '/deleteArtist' do
-	$manage.deleteArtist(params[:ID])
-	
-	redirect '/admin'
+	res = $get.checkArtist(params[:ID])
+	if (res[0])
+		$manage.deleteArtist(params[:ID])
+		redirect '/admin'
+	else
+		redirect '/admin?error=badartistid'
+	end
 end
 
 
 post '/deleteAlbum' do
-	$manage.deleteAlbum(params[:ID])
-	
-	redirect '/admin'
+	res = $get.checkAlbum(params[:ID])
+	if (res[0])
+		$manage.deleteAlbum(params[:ID])
+		redirect '/admin'
+	else
+		redirect '/admin?error=badalbumid'
+	end
 end
 
 
 post '/deleteSong' do
-	$manage.deleteSong(params[:ID])
-	
-	redirect '/admin'
+	res = $get.checkSong(params[:ID])
+	if (res[0])
+		$manage.deleteSong(params[:ID])
+		redirect '/admin'
+	else
+		redirect '/admin?error=badsongid'
+	end
 end
 
 
 post '/deleteMerch' do
-	$manage.deleteMerch(params[:ID])
-	
-	redirect '/admin'
+	res = $get.checkMerch(params[:ID])
+	if (res[0])
+		$manage.deleteMerch(params[:ID])
+		redirect '/admin'
+	else
+		redirect '/admin?error=badmerchid'
+	end
 end
 
 
 post '/deleteClient' do
-	$manage.deleteClient(params[:ID])
-	
-	redirect '/admin'
+	res = $get.checkClient(params[:ID])
+	if (res[0])
+		$manage.deleteClient(params[:ID])
+		redirect '/admin'
+	else
+		redirect '/admin?error=badclientid'
+	end
 end
 
 
