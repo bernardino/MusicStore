@@ -180,57 +180,67 @@ class Get
 	
 	
 	def recentlyAddedSongs()
-		return $db.select(" SELECT p.product_id, s.song_name, ar.artist_name, p.image,ar.artist_id
-							FROM product p, song s, artist ar
-							WHERE p.product_id = s.product_id
-							AND p.artist_id = ar.artist_id
-							AND rownum < 4
-							ORDER by p.added_date DESC
+		return $db.select(" SELECT *
+							FROM (	SELECT p.product_id, s.song_name, ar.artist_name, p.image,ar.artist_id
+									FROM product p, song s, artist ar
+									WHERE p.product_id = s.product_id
+									AND p.artist_id = ar.artist_id
+									ORDER by p.added_date DESC
+								)
+							WHERE rownum < 4
 						")
 	end	
 	
 	
 	def recentlyAddedMerch()
-		return $db.select(" SELECT p.product_id, m.merchandise_name, ar.artist_name, p.image, ar.artist_id
-							FROM product p, merchandise m, artist ar
-							WHERE p.product_id = m.product_id
-							AND p.artist_id = ar.artist_id
-							AND rownum < 4
-							ORDER by p.added_date DESC
+		return $db.select(" SELECT *
+							FROM (	SELECT p.product_id, m.merchandise_name, ar.artist_name, p.image, ar.artist_id
+									FROM product p, merchandise m, artist ar
+									WHERE p.product_id = m.product_id
+									AND p.artist_id = ar.artist_id
+									ORDER by p.added_date DESC
+								)
+							WHERE rownum < 4
 						")
 	end
 	
 	
 	def topAlbums()
-		return $db.select(" SELECT p.product_id, al.album_name, ar.artist_name,ar.artist_id, p.image, ar.artist_id
-							FROM product p, album al, artist ar
-							WHERE p.product_id = al.product_id
-							AND p.artist_id = ar.artist_id
-							AND rownum < 11
-							ORDER by p.num_sells DESC
+		return $db.select(" SELECT *
+							FROM (	SELECT p.product_id, al.album_name, ar.artist_name, p.image, ar.artist_id
+									FROM product p, album al, artist ar
+									WHERE p.product_id = al.product_id
+									AND p.artist_id = ar.artist_id
+									ORDER by p.num_sells DESC
+								)
+							WHERE rownum < 11
 						")
 	end
 	
 	
 	def topSongs()
-		return $db.select(" SELECT p.product_id, s.song_name, ar.artist_name,ar.artist_id, p.image
-							FROM product p, song s, artist ar
-							WHERE p.product_id = s.product_id
-							AND p.artist_id = ar.artist_id
-							AND rownum < 11
-							ORDER by p.num_sells DESC
+		return $db.select(" SELECT *
+							FROM (	SELECT p.product_id, s.song_name, ar.artist_name,ar.artist_id, p.image
+									FROM product p, song s, artist ar
+									WHERE p.product_id = s.product_id
+									AND p.artist_id = ar.artist_id
+									ORDER by p.num_sells DESC
+								)
+							WHERE rownum < 11
 						")
 	end
 	
 	
 	def topMerch()
-		return $db.select(" SELECT p.product_id, m.merchandise_name, ar.artist_name,ar.artist_id, p.image
-							FROM product p, merchandise m, artist ar
-							WHERE p.product_id = m.product_id
-							AND p.artist_id = ar.artist_id
-							AND rownum < 11
-							ORDER by p.num_sells DESC")
-	
+		return $db.select(" SELECT *
+							FROM (	SELECT p.product_id, m.merchandise_name, ar.artist_name,ar.artist_id, p.image
+									FROM product p, merchandise m, artist ar
+									WHERE p.product_id = m.product_id
+									AND p.artist_id = ar.artist_id
+									ORDER by p.num_sells DESC
+								)
+							WHERE rownum < 11
+						")
 	end
 	
 	

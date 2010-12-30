@@ -325,9 +325,9 @@
 						<br/>
 						<div id="addArtistManual" align="left" style="background:#EEE; float:left;width:60%; display:none">
 							<form name="addArtistManualForm" action="/addArtistManual" method="post">
-								<table onkeyup="disableAddArtistManualButton()">
+								<table onkeyup="disableAddArtistManualButton()" width="300">
 									<tr>
-										<td class="label">Name:</td>
+										<td class="label" width="65">Name:</td>
 										<td><input type="text" name="artistName"/></td>
 									</tr>
 									<tr>
@@ -344,9 +344,9 @@
 						</div>
 						<div id="addArtistLastfm" align="left" style="background:#EEE; float:left;width:60%; display:none">
 							<form name="addArtistLastfmForm" action="/addArtistLastfm" method="post">
-								<table>
+								<table width="300">
 									<tr>
-										<td class="label">Name:</td>
+										<td class="label" width="65">Name:</td>
 										<td><input type="text" name="artistName" onkeyup="disableAddArtistLastfmButton()"/></td>
 									</tr>
 								</table>
@@ -407,7 +407,7 @@
 							<form name="addAlbumManualForm" action="/addAlbumManual" method="post">
 								<table onkeyup="disableAddAlbumManualButton()" width="300">
 									<tr>
-										<td class="label" width="100">Name:</td>
+										<td class="label" width="110">Name:</td>
 										<td><input type="text" name="albumName"/></td>
 									</tr>
 									<tr>
@@ -454,7 +454,7 @@
 							<form name="addAlbumLastfmForm" action="/addAlbumLastfm" method="post">
 								<table onkeyup="disableAddAlbumLastfmButton()" width="300">
 									<tr>
-										<td class="label" width="100">Name:</td>
+										<td class="label" width="110">Name:</td>
 										<td><input type="text" name="albumName"/></td>
 									</tr>
 									<tr>
@@ -628,9 +628,9 @@
 					</div>
 					<div id="deleteMerch" align="left" style="background:#EEE; float:left;width:60%; display:none">
 						<form name="deleteMerchForm" action="/deleteMerch" method="post">
-							<table width="300">
+							<table width="315">
 								<tr>
-									<td class="label">Merchandising ID:</td>
+									<td class="label">Merchandise ID:</td>
 									<td><input type="text" name="ID" onkeyup="disableDeleteButton(deleteMerchForm)"/></td>
 								</tr>
 							</table>
