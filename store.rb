@@ -320,9 +320,12 @@ end
 post '/addAlbumManual' do
 	album_id = $db.select("SELECT product_number.nextval FROM DUAL")
 	
-	$manage.addProduct(album_id[0], params[:albumArtist], params[:albumDescription], params[:albumImage], params[:albumDate], params[:albumPrice], params[:albumStock])
-	$manage.addAlbum(album_id[0], params[:albumName], params[:albumLength], params[:albumGenre], params[:albumLabel])
-	
+	begin
+		$manage.addProduct(album_id[0], params[:albumArtist], params[:albumDescription], params[:albumImage], params[:albumDate], params[:albumPrice], params[:albumStock])
+		$manage.addAlbum(album_id[0], params[:albumName], params[:albumLength], params[:albumGenre], params[:albumLabel])
+	rescue
+		puts "Database exception encountered."
+	end
 	redirect '/admin'
 end
 
