@@ -77,7 +77,7 @@ end
 
 
 post '/register' do
-	res = $db.select("select client_id from client where upper(client_id) like upper('#{params[:username]}')")
+	res = $get.checkClient(params[:username])
 	unless res[0]
 		passcode = Digest::SHA1.hexdigest(params[:passcode])
 		$manage.addClient(params[:username], passcode, params[:name], params[:address], params[:phone], params[:email])
@@ -91,7 +91,7 @@ end
 
 post '/login' do
 	passcode = Digest::SHA1.hexdigest(params[:password])
-	res = $db.select("SELECT client_id FROM client WHERE upper(client_id) LIKE upper('#{params[:username]}') and password LIKE '#{passcode}'")
+	res = $get.checkClientPassword(params[:username],passcode)
 	if res[0]
 		session[:id] = params[:username]
 	end
@@ -235,7 +235,7 @@ end
 
 
 get '/addorder' do
-  price = $db.select("select current_price from product where product_id = '#{params[:id]}'")
+  price = $get.productPrice(params[:id])
   if session[:orders][params[:id]]
     session[:orders][params[:id]][0] += 1
     session[:orders][params[:id]][3]+= price[0]
@@ -248,13 +248,13 @@ get '/addorder' do
       session[:orders][params[:id]] << params[:type]
       session[:orders][params[:id]] << price[0]
     elsif params[:type]=='m' #merchandise
-      res = $db.select("select merchandise_name from album where product_id = '#{params[:id]}'")
+      res = $db.select("select merchandise_name from merchandise where product_id = '#{params[:id]}'")
       session[:orders][params[:id]] << 1
       session[:orders][params[:id]] << res[0]
       session[:orders][params[:id]] << params[:type]
       session[:orders][params[:id]] << price[0]
     elsif params[:type]=='s' #song
-      res = $db.select("select song_name from album where product_id = '#{params[:id]}'")
+      res = $db.select("select song_name from song where product_id = '#{params[:id]}'")
       session[:orders][params[:id]] << 1
       session[:orders][params[:id]] << res[0]
       session[:orders][params[:id]] << params[:type]
@@ -278,7 +278,7 @@ end
 
 
 get '/del' do
-  price = $db.select("select current_price from product where product_id = '#{params[:id]}'")
+  price = $get.productPrice(params[:id])
   session[:orders][params[:id]][0]-=1
   session[:orders][params[:id]][3]-=price[0]
   session[:total]-=price[0]
@@ -297,8 +297,7 @@ end
 
 
 get '/client' do
-	@info = $get.client(session[:id])
-	
+	@info = $get.client(session[:id])	
 	erb :client
 end
 
@@ -362,7 +361,6 @@ end
 
 
 post '/editClient' do	
-	################################################### VERIFY IF IT WAS SUCCESSFULLY UPDATED ##########################################
 	if params[:passcode] != ''
 		currentPass = Digest::SHA1.hexdigest("#{params[:currentPasscode]}")
 		passcode = Digest::SHA1.hexdigest("#{params[:passcode]}")
@@ -396,7 +394,7 @@ post '/editClient' do
 	
 	if (res[0] == params[:name] && res[1] == params[:address] && res[2] == params[:phone] && res[3] == params[:email])
 		if (params[:passcode] != '')
-			info = $db.select("SELECT client_id FROM client WHERE client_id = '#{session[:id]}' AND password = '#{currentPass}'")
+			info = $get.checkClientPassword(session[:id],passcode)
 			if info[0]
 				redirect '/client?erro=f'
 			else
@@ -408,7 +406,6 @@ post '/editClient' do
 	else
 		redirect '/client?erro=t'
 	end
-	redirect '/client'
 end
 
 
@@ -448,8 +445,25 @@ end
 
 
 
-get 'final' do #client adds an order to the database
-  redirect '/'
+get '/final' do #client adds an order to the database
+		
+	res = $get.cartStock(session[:orders])
+	if res.length == 0
+		$manage.addOrder(session[:id],session[:orders],session[:total])
+		session[:orders] = {}
+		session[:total] = 0
+	
+		redirect '/?erro=f'
+	else
+		i=0
+		erro=''
+		while i < res.length
+			erro.concat(res[i])
+			erro.concat(':')
+			i=i+1
+		end
+		redirect "/checkout?erro=#{erro}"
+	end
 end
 
 get '/addvote' do

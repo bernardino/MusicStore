@@ -60,19 +60,35 @@
 					<td>YOUR CREDITS</td>
 				</tr>
 				<tr align="center">
-					<td><%= session[:total]? session[:total] : 0 %> credits</td>
-					<td>0</td>
+					<td><%= session[:total]? Float(session[:total]) : 0 %> credits</td>
+					<td><% res = $db.select("select address, credits from client where client_id='#{session[:id]}'") %><%= res[1] %></td>
 				</tr>
 			</table>
 		</div>
 		<div align="left" style="margin-left:10%;margin-right:10%;">
 			<p>Your Address:</p>
-			<p><% res = $db.select("select address from client where client_id='#{session[:id]}'") %> <%= res[0]%> </p>
+			<p><%= res[0]%> </p>
 		</div>
 		<% if session[:orders] == {} %>
 		<p><input id="order_btn" type="button" value="Add Order" disabled="true"><input type="button" value="Home" onmouseup="window.location='/'"></p></p>
-		<% else %>
-		<p><input id="order_btn" type="button" value="Add Order"><input type="button" value="Home" onmouseup="window.location='/'"></p>
+		<% else 			
+			if Float(session[:total]) > Float(res[1]) %>
+				<p>You do not have enough credits</p>
+				<p><input id="order_btn" type="button" value="Add Order" disabled="true"><input type="button" value="Home" onmouseup="window.location='/'"></p></p>
+			<% elsif (params[:erro] != nil) %>
+				<p><input id="order_btn" type="button" value="Add Order" disabled="true"><input type="button" value="Home" onmouseup="window.location='/'"></p></p>
+				<p> The products: <%
+					ids = params[:erro].split(":")
+					ids.each do |i| %>
+						<%=session[:orders][i][1]%>
+						<% if(i != ids.last)%>
+							,
+						<% end %>
+					<% end %>
+					are not available, please try again another time</p>
+			<% else  %>
+				<p><input id="order_btn" type="button" value="Add Order" onmouseup="window.location='/final'"><input type="button" value="Home" onmouseup="window.location='/'"></p>
+			<% end %>
 		<% end %>
 		<div align="center" class="footer">
 			Copyright © 2010 - Guilherme Simões, João Penetra, Ricardo Bernardino

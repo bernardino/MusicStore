@@ -126,7 +126,8 @@
 				<p>Genre: <%= @res[5] %></p>
 				<p>Release Date: <%= @res[6] %></p>
 				<p>Rating: <%= @res[7] %></p> 
-				<p>Price: <%= @res[9] %> euro/s</p> 
+				<p>Price: <%= @res[9] %> euro/s</p>
+				<a href="/addorder?page=<%= request.fullpath %>&id=<%= params[:id] %>&type=s"><input type="button" value="Buy"></a>
 				</div>
 		      </div>
 			<!-- Shopping Cart -->

@@ -23,6 +23,8 @@
 /*	VARCHAR (20)												*/
 /*	CLIENT's field PASSWORD size increased from 20 to 50		*/
 /*  ADDED DELETE TRIGGERS										*/
+/*  CREATED CREDITS IN CLIENT									*/
+/*  "ORDER" TABLE CHANGED to MAIN_ORDER
 /*	ALBUM_GENRE can no longe be null (wtf?)						*/
 /*==============================================================*/
 
@@ -146,6 +148,7 @@ create table CLIENT
    ADDRESS              VARCHAR2(100)		 not null,
    TELEPHONE            VARCHAR2(20)		 not null,
    EMAIL                VARCHAR2(50)         not null,
+   CREDITS 				FLOAT				 not null,
    constraint PK_CLIENT primary key (CLIENT_ID)
 );
 
@@ -160,9 +163,9 @@ create table MERCHANDISE
 );
 
 /*==============================================================*/
-/* Table: "ORDER"                                               */
+/* Table: MAIN_ORDER                                            */
 /*==============================================================*/
-create table "ORDER" 
+create table MAIN_ORDER
 (
    REGISTRY_ID          INTEGER               not null,
    CLIENT_ID            VARCHAR2(20)          not null,
@@ -174,7 +177,7 @@ create table "ORDER"
 /*==============================================================*/
 /* Index: MAKES_FK                                              */
 /*==============================================================*/
-create index MAKES_FK on "ORDER" (
+create index MAKES_FK on MAIN_ORDER (
    CLIENT_ID ASC
 );
 
@@ -260,13 +263,13 @@ alter table MERCHANDISE
    add constraint FK_MERCHAND_INHERITAN_PRODUCT foreign key (PRODUCT_ID)
       references PRODUCT (PRODUCT_ID);
 
-alter table "ORDER"
+alter table MAIN_ORDER
    add constraint FK_ORDER_MAKES_CLIENT foreign key (CLIENT_ID)
       references CLIENT (CLIENT_ID);
 
 alter table ORDER_DETAILS
    add constraint FK_ORDER_DE_HAS_ORDER foreign key (REGISTRY_ID)
-      references "ORDER" (REGISTRY_ID);
+      references MAIN_ORDER (REGISTRY_ID);
 
 alter table ORDER_DETAILS
    add constraint FK_ORDER_DE_HAS_ONE_PRODUCT foreign key (PRODUCT_ID)
@@ -355,3 +358,33 @@ BEGIN
 								WHERE artist_id = :OLD.artist_id);
 END;
 /
+
+
+CREATE OR REPLACE TRIGGER decreaseCredits
+AFTER
+INSERT ON main_order
+FOR EACH ROW
+DECLARE
+
+BEGIN
+	UPDATE client
+	SET credits = credits - :new.total_price
+	WHERE upper(client_id) = upper(:new.client_id);
+END;
+/
+
+CREATE OR REPLACE TRIGGER sellItem
+AFTER
+INSERT ON order_details
+FOR EACH ROW
+DECLARE
+
+BEGIN
+	UPDATE product
+	SET num_sells = num_sells + :new.quantity,
+	stock = stock - :new.quantity
+	WHERE product_id = :new.product_id
+	AND stock > -1;
+END;
+/
+

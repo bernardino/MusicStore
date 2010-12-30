@@ -92,8 +92,7 @@
 			<% if @logged %>
 			<div style="background:#EEE; float:left;width:15%">
 				<h3>Welcome <%= session[:id] %>!!</h3>
-				<br />
-				<a class="search" href="/client"> Edit your personal information</a>
+				<a class="search" href="/client"> Edit your account</a>
 				<br /><br />
 				<input id="credits_txt" type="text" size="5" style="display:none;" onkeyup="justInt()" /><br />
 				<input id="credits_btn" type="button" value="Buy Credits" onmouseup="credits()">	
@@ -183,6 +182,9 @@
 			<!-- Shopping Cart -->
 			<div style="background:#DDD; float:left;width:15%;">
 				<h1>Shopping Cart</h1>
+				<% if params[:erro] == "f" %>
+					<p>Your order was done sucessfully. Thanks for using our store</p>
+				<% end %>
 				<% if session[:orders]=={}%>
 					<p>No orders</p>
 				<% else %>
