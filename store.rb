@@ -368,9 +368,11 @@ end
 
 post '/addMerch' do
 	merch_id = $db.select("SELECT product_number.nextval FROM DUAL")
-
+  url = "http://tinyurl.com/api-create.php?url=#{params[:merchImage]}"
+  resp = Net::HTTP.get_response(URI.parse(url))
+  image=resp.body
 	begin
-		$manage.addProduct(merch_id[0], params[:merchArtist], params[:merchDescription], params[:merchImage], params[:merchDate], params[:merchPrice], params[:merchStock])
+		$manage.addProduct(merch_id[0], params[:merchArtist], params[:merchDescription], image, params[:merchDate], params[:merchPrice], params[:merchStock])
 		$manage.addMerch(merch_id[0], params[:merchName])
 	rescue
 		redirect '/admin?error=badartistid'
