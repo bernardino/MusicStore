@@ -5,7 +5,7 @@
 
 
 /*==============================================================*/
-/*                      Patch Notes 2.83						*/
+/*                      Patch Notes 2.85						*/
 /*   										                    */
 /*	SONG's ALB_PRODUCT_ID can now be null						*/
 /*	SONG's SONG_NUMBER can now be null							*/
@@ -23,6 +23,7 @@
 /*	VARCHAR (20)												*/
 /*	CLIENT's field PASSWORD size increased from 20 to 50		*/
 /*  ADDED DELETE TRIGGERS										*/
+/*	ALBUM_GENRE can no longe be null (wtf?)						*/
 /*==============================================================*/
 
 
@@ -117,8 +118,8 @@ create table ALBUM
    PRODUCT_ID           INTEGER               not null,
    ALBUM_NAME			VARCHAR2(100)         not null,
    ALBUM_LENGTH         VARCHAR2(10)          not null,
+   ALBUM_GENRE          VARCHAR2(50)          not null,
    ALBUM_LABEL          VARCHAR2(50)          not null,
-   ALBUM_GENRE          VARCHAR2(50),
    constraint PK_ALBUM primary key (PRODUCT_ID)
 );
 

@@ -14,6 +14,7 @@
 	
 	var displayed = new refString("");
 	var displayed2 = new refString("");
+	var displayed3 = new refString("");
 	
 	
 	function goTo(page){
@@ -42,50 +43,101 @@
 	}
 	
 	
-	function disableAddSongButton(){
-		if (document.addSongForm.addSongName.value=="" ||
-			document.addSongForm.addSongLength.value=="" ||
-			document.addSongForm.addSongGenre.value=="" ||
-			document.addSongForm.addSongArtist.value=="" ||
-			document.addSongForm.addSongDescription.value=="" ||
-			document.addSongForm.addSongImage.value=="" ||
-			document.addSongForm.addSongDate.value=="" ||
-			document.addSongForm.addSongPrice.value==""){
-			document.addSongForm.addSongButton.disabled=true;
+	function disableAddArtistManualButton(){
+		if (addArtistManualForm.artistName.value=="" ||
+			addArtistManualForm.artistBio.value=="" ||
+			addArtistManualForm.artistImage.value==""){
+			addArtistManualForm.submitButton.disabled=true;
 		}
 		else {
-			if (document.addSongForm.addSongAlbum.value!="" && document.addSongForm.addSongNumber.value==""){
-				document.addSongForm.addSongButton.disabled=true;
-			}
-			else{
-				document.addSongForm.addSongButton.disabled=false;
-			}
+			addArtistManualForm.submitButton.disabled=false;
+		}
+	}
+	
+	
+	function disableAddArtistLastfmButton(){
+		if (addArtistLastfmForm.artistName.value==""){
+			addArtistLastfmForm.submitButton.disabled=true;
+		}
+		else {
+			addArtistLastfmForm.submitButton.disabled=false;
+		}
+	}
+	
+	
+	function disableAddAlbumManualButton(){
+		if (addAlbumManualForm.albumName.value=="" ||
+			addAlbumManualForm.albumLength.value=="" ||
+			addAlbumManualForm.albumGenre.value=="" ||
+			addAlbumManualForm.albumLabel.value=="" ||
+			addAlbumManualForm.albumArtist.value=="" ||
+			addAlbumManualForm.albumDescription.value=="" ||
+			addAlbumManualForm.albumImage.value=="" ||
+			addAlbumManualForm.albumDate.value=="" ||
+			addAlbumManualForm.albumPrice.value=="" ||
+			addAlbumManualForm.albumStock.value=="" ||
+			isNaN(addAlbumManualForm.albumArtist.value) ||
+			isNaN(addAlbumManualForm.albumDate.value) ||
+			isNaN(addAlbumManualForm.albumPrice.value) ||
+			isNaN(addAlbumManualForm.albumStock.value)){
+			addAlbumManualForm.submitButton.disabled=true;
+		}
+		else {
+			addAlbumManualForm.submitButton.disabled=false;
+		}
+	}
+	
+
+	function disableAddSongButton(){
+		if (addSongForm.songName.value=="" ||
+			addSongForm.songLength.value=="" ||
+			addSongForm.songGenre.value=="" ||
+			addSongForm.songArtist.value=="" ||
+			addSongForm.songDescription.value=="" ||
+			addSongForm.songImage.value=="" ||
+			addSongForm.songDate.value=="" ||
+			addSongForm.songPrice.value=="" ||
+			(addSongForm.songAlbum.value!="" &&	addSongForm.songNumber.value=="") ||
+			(addSongForm.songAlbum.value=="" &&	addSongForm.songNumber.value!="") ||
+			isNaN(addSongForm.songAlbum.value) ||
+			isNaN(addSongForm.songNumber.value) ||
+			isNaN(addSongForm.songArtist.value) ||
+			isNaN(addSongForm.songDate.value) ||
+			isNaN(addSongForm.songPrice.value)){
+			addSongForm.submitButton.disabled=true;
+		}
+		else {
+			addSongForm.submitButton.disabled=false;
 		}
 	}
 	
 	
 	function disableAddMerchButton(){
-		if (document.addMerchForm.addMerchName.value=="" ||
-			document.addMerchForm.addMerchArtist.value=="" ||
-			document.addMerchForm.addMerchDescription.value=="" ||
-			document.addMerchForm.addMerchImage.value=="" ||
-			document.addMerchForm.addMerchDate.value=="" ||
-			document.addMerchForm.addMerchPrice.value=="" ||
-			document.addMerchForm.addMerchStock.value==""){
-			document.addMerchForm.addMerchButton.disabled=true;
+		if (addMerchForm.merchName.value=="" ||
+			addMerchForm.merchArtist.value=="" ||
+			addMerchForm.merchDescription.value=="" ||
+			addMerchForm.merchImage.value=="" ||
+			addMerchForm.merchDate.value=="" ||
+			addMerchForm.merchPrice.value=="" ||
+			addMerchForm.merchStock.value=="" ||
+			isNaN(addMerchForm.merchArtist.value) ||
+			isNaN(addMerchForm.merchDate.value) ||
+			isNaN(addMerchForm.merchPrice.value) ||
+			isNaN(addMerchForm.merchStock.value)){
+			addMerchForm.submitButton.disabled=true;
 		}
 		else {
-			document.addMerchForm.addMerchButton.disabled=false;
+			addMerchForm.submitButton.disabled=false;
 		}
 	}
 	
 	
-	function disableDeleteClientButton(){
-		if(document.deleteClientForm.deleteClientUsername.value==""){
-			document.deleteClientForm.deleteClientButton.disabled=true;
+	function disableDeleteButton(form){
+		if(form.ID.value==""){
+			form.submitButton.disabled=true;
 		}
 		else {
-			document.deleteClientForm.deleteClientButton.disabled=false;
+			form.submitButton.disabled=false;
 		}
 	}
 	
@@ -209,37 +261,181 @@
 			
 				<div id="artists" align="left" style="background:#CCC; float:left;width:60%; display:none">
 					<br/>
-					<span id="addArtistButton" width="100" class="link" onClick="showContent(displayed2, 'addArtist')">Add</span>
-					<span id="editArtistButton" width="100" class="link" onClick="showContent(displayed2, 'editArtist')">Edit</span>
+					<span id="addArtistButton" width="100" class="link" onClick="	showContent(displayed2, 'addArtist')
+																					displayed3.value = ''
+																					addArtistManualButton.className='link';
+																					addArtistManual.style.display='none';
+																					addArtistLastfmButton.className='link';
+																					addArtistLastfm.style.display='none';
+																				">Add</span>
+					<span id="editArtistButton" width="100" class="link" onClick="	showContent(displayed2, 'editArtist')
+																					displayed3.value = ''
+																					editArtistManualButton.className='link';
+																					editArtistManual.style.display='none';
+																					editArtistLastfmButton.className='link';
+																					editArtistLastfm.style.display='none';
+																				">Edit</span>
 					<span id="deleteArtistButton" width="100" class="link" onClick="showContent(displayed2, 'deleteArtist')">Delete</span>
 					<br/>
-					<br/>	
+					<br/>
 					<div id="addArtist" align="left" style="background:#CCC; float:left;width:60%; display:none">
-						<h3>Artist1</h3>
+						<span id="addArtistManualButton" width="100" class="link" onClick="showContent(displayed3, 'addArtistManual')">Manually</span>
+						<span id="addArtistLastfmButton" width="100" class="link" onClick="showContent(displayed3, 'addArtistLastfm')">Using last.fm</span>
+						<br/>
+						<br/>
+						<div id="addArtistManual" align="left" style="background:#CCC; float:left;width:60%; display:none">
+							<form name="addArtistManualForm" action="/addArtistManual" method="post">
+								<table onkeyup="disableAddArtistManualButton()">
+									<tr>
+										<td class="label">Name:</td>
+										<td><input type="text" name="artistName"/></td>
+									</tr>
+									<tr>
+										<td class="label">Bio:</td>
+										<td><input type="text" name="artistBio"/></td>
+									</tr>
+									<tr>
+										<td class="label">Image:</td>
+										<td><input type="text" name="artistImage"/></td>
+									</tr>
+								</table>
+								<input type="submit" value="Add" name="submitButton" disabled="true"/>
+							</form>
+						</div>
+						<div id="addArtistLastfm" align="left" style="background:#CCC; float:left;width:60%; display:none">
+							<form name="addArtistLastfmForm" action="/addArtistLastfm" method="post">
+								<table>
+									<tr>
+										<td class="label">Name:</td>
+										<td><input type="text" name="artistName" onkeyup="disableAddArtistLastfmButton()"/></td>
+									</tr>
+								</table>
+								<input type="submit" value="Add" name="submitButton" disabled="true"/>
+							</form>
+						</div>
 					</div>
 					<div id="editArtist" align="left" style="background:#CCC; float:left;width:60%; display:none">
-						<h3>Artist2</h3>
+						<span id="editArtistManualButton" width="100" class="link" onClick="showContent(displayed3, 'editArtistManual')">Manually</span>
+						<span id="editArtistLastfmButton" width="100" class="link" onClick="showContent(displayed3, 'editArtistLastfm')">Using last.fm</span>
+						<br/>
+						<br/>
+						<div id="editArtistManual" align="left" style="background:#CCC; float:left;width:60%; display:none">
+							<h3>Manually</h3>
+						</div>
+						<div id="editArtistLastfm" align="left" style="background:#CCC; float:left;width:60%; display:none">
+							<h3>Using last.fm</h3>
+						</div>
 					</div>
 					<div id="deleteArtist" align="left" style="background:#CCC; float:left;width:60%; display:none">
-						<h3>Artist3</h3>
+						<form name="deleteArtistForm" action="/deleteArtist" method="post">
+							<table>
+								<tr>
+									<td class="label">Artist ID:</td>
+									<td><input type="text" name="ID" onkeyup="disableDeleteButton(deleteArtistForm)"/></td>
+								</tr>
+							</table>
+							<input type="submit" value="Delete" name="submitButton" disabled="true"/>
+						</form>
 					</div>
 				</div>
 				
 				<div id="albums" align="left" style="background:#CCC; float:left;width:60%; display:none">
 					<br/>
-					<span id="addAlbumButton" width="100" class="link" onClick="showContent(displayed2, 'addAlbum')">Add</span>
-					<span id="editAlbumButton" width="100" class="link" onClick="showContent(displayed2, 'editAlbum')">Edit</span>
+					<span id="addAlbumButton" width="100" class="link" onClick="	showContent(displayed2, 'addAlbum')
+																					displayed3.value = ''
+																					addAlbumManualButton.className='link';
+																					addAlbumManual.style.display='none';
+																					addAlbumLastfmButton.className='link';
+																					addAlbumLastfm.style.display='none';
+																				">Add</span>
+					<span id="editAlbumButton" width="100" class="link" onClick=	"showContent(displayed2, 'editAlbum')
+																					displayed3.value = ''
+																					editAlbumManualButton.className='link';
+																					editAlbumManual.style.display='none';
+																					editAlbumLastfmButton.className='link';
+																					editAlbumLastfm.style.display='none';
+																				">Edit</span>
 					<span id="deleteAlbumButton" width="100" class="link" onClick="showContent(displayed2, 'deleteAlbum')">Delete</span>
 					<br/>
 					<br/>
 					<div id="addAlbum" align="left" style="background:#CCC; float:left;width:60%; display:none">
-						<h3>Album1</h3>
+						<span id="addAlbumManualButton" width="100" class="link" onClick="showContent(displayed3, 'addAlbumManual')">Manually</span>
+						<span id="addAlbumLastfmButton" width="100" class="link" onClick="showContent(displayed3, 'addAlbumLastfm')">Using last.fm</span>
+						<br/>
+						<br/>
+						<div id="addAlbumManual" align="left" style="background:#CCC; float:left;width:60%; display:none">
+							<form name="addAlbumManualForm" action="/addAlbumManual" method="post">
+								<table onkeyup="disableAddAlbumManualButton()">
+									<tr>
+										<td class="label">Name:</td>
+										<td><input type="text" name="albumName"/></td>
+									</tr>
+									<tr>
+										<td class="label">Length:</td>
+										<td><input type="text" name="albumLength"/></td>
+									</tr>
+									<tr>
+										<td class="label">Genre:</td>
+										<td><input type="text" name="albumGenre"/></td>
+									</tr>
+									<tr>
+										<td class="label">Label:</td>
+										<td><input type="text" name="albumLabel"/></td>
+									</tr>
+									<tr>
+										<td class="label">Artist ID:</td>
+										<td><input type="text" name="albumArtist"/></td>
+									</tr>
+									<tr>
+										<td class="label">Description:</td>
+										<td><input type="text" name="albumDescription"/></td>
+									</tr>
+									<tr>
+										<td class="label">Image:</td>
+										<td><input type="text" name="albumImage"/></td>
+									</tr>
+									<tr>
+										<td class="label">Release Date:</td>
+										<td><input type="text" name="albumDate"/></td>
+									</tr>
+									<tr>
+										<td class="label">Price:</td>
+										<td><input type="text" name="albumPrice"/></td>
+									</tr>
+									<tr>
+										<td class="label">Stock:</td>
+										<td><input type="text" name="albumStock"/></td>
+									</tr>
+								</table>
+								<input type="submit" value="Add" name="submitButton" disabled="true"/>
+							</form>
+						</div>
+						<div id="addAlbumLastfm" align="left" style="background:#CCC; float:left;width:60%; display:none">
+							<h3>Using last.fm</h3>
+						</div>
 					</div>
 					<div id="editAlbum" align="left" style="background:#CCC; float:left;width:60%; display:none">
-						<h3>Album2</h3>
+						<span id="editAlbumManualButton" width="100" class="link" onClick="showContent(displayed3, 'editAlbumManual')">Manually</span>
+						<span id="editAlbumLastfmButton" width="100" class="link" onClick="showContent(displayed3, 'editAlbumLastfm')">Using last.fm</span>
+						<br/>
+						<br/>
+						<div id="editAlbumManual" align="left" style="background:#CCC; float:left;width:60%; display:none">
+							<h3>Manually</h3>
+						</div>
+						<div id="editAlbumLastfm" align="left" style="background:#CCC; float:left;width:60%; display:none">
+							<h3>Using last.fm</h3>
+						</div>
 					</div>
 					<div id="deleteAlbum" align="left" style="background:#CCC; float:left;width:60%; display:none">
-						<h3>Album3</h3>
+						<form name="deleteAlbumForm" action="/deleteAlbum" method="post">
+							<table>
+								<tr>
+									<td class="label">Album ID:</td>
+									<td><input type="text" name="ID" onkeyup="disableDeleteButton(deleteAlbumForm)"/></td>
+								</tr>
+							</table>
+							<input type="submit" value="Delete" name="submitButton" disabled="true"/>
+						</form>
 					</div>
 				</div>
 				
@@ -255,54 +451,61 @@
 							<table onkeyup="disableAddSongButton()">
 								<tr>
 									<td class="label">Name:</td>
-									<td><input type="text" name="addSongName"/></td>
+									<td><input type="text" name="songName"/></td>
 								</tr>
 								<tr>
 									<td class="label">Length:</td>
-									<td><input type="text" name="addSongLength"/></td>
+									<td><input type="text" name="songLength"/></td>
 								</tr>
 								<tr>
 									<td class="label">Genre:</td>
-									<td><input type="text" name="addSongGenre"/></td>
+									<td><input type="text" name="songGenre"/></td>
 								</tr>
 								<tr>
 									<td class="label">Number:</td>
-									<td><input type="text" name="addSongNumber"/></td>
+									<td><input type="text" name="songNumber"/></td>
 								</tr>
 								<tr>
 									<td class="label">Album ID:</td>
-									<td><input type="text" name="addSongAlbum"/></td>
+									<td><input type="text" name="songAlbum"/></td>
 								</tr>
 								<tr>
 									<td class="label">Artist ID:</td>
-									<td><input type="text" name="addSongArtist"/></td>
+									<td><input type="text" name="songArtist"/></td>
 								</tr>
 								<tr>
 									<td class="label">Description:</td>
-									<td><input type="text" name="addSongDescription"/></td>
+									<td><input type="text" name="songDescription"/></td>
 								</tr>
 								<tr>
 									<td class="label">Image:</td>
-									<td><input type="text" name="addSongImage"/></td>
+									<td><input type="text" name="songImage"/></td>
 								</tr>
 								<tr>
 									<td class="label">Release Date:</td>
-									<td><input type="text" name="addSongDate"/></td>
+									<td><input type="text" name="songDate"/></td>
 								</tr>
 								<tr>
 									<td class="label">Current Price:</td>
-									<td><input type="text" name="addSongPrice"/></td>
+									<td><input type="text" name="songPrice"/></td>
 								</tr>
-								<tr>
 							</table>
-						<input type="submit" value="Add" name="addSongButton" disabled="true"/>
+							<input type="submit" value="Add" name="submitButton" disabled="true"/>
 						</form>
 					</div>
 					<div id="editSong" align="left" style="background:#CCC; float:left;width:60%; display:none">
 						<h3>Song2</h3>
 					</div>
 					<div id="deleteSong" align="left" style="background:#CCC; float:left;width:60%; display:none">
-						<h3>Song3</h3>
+						<form name="deleteSongForm" action="/deleteSong" method="post">
+							<table>
+								<tr>
+									<td class="label">Song ID:</td>
+									<td><input type="text" name="ID" onkeyup="disableDeleteButton(deleteSongForm)"/></td>
+								</tr>
+							</table>
+							<input type="submit" value="Delete" name="submitButton" disabled="true"/>
+						</form>
 					</div>
 				</div>
 				
@@ -318,41 +521,49 @@
 							<table onkeyup="disableAddMerchButton()">
 								<tr>
 									<td class="label">Name:</td>
-									<td><input type="text" name="addMerchName"/></td>
+									<td><input type="text" name="merchName"/></td>
 								</tr>
 								<tr>
 									<td class="label">Artist ID:</td>
-									<td><input type="text" name="addMerchArtist"/></td>
+									<td><input type="text" name="merchArtist"/></td>
 								</tr>
 								<tr>
 									<td class="label">Description:</td>
-									<td><input type="text" name="addMerchDescription"/></td>
+									<td><input type="text" name="merchDescription"/></td>
 								</tr>
 								<tr>
 									<td class="label">Image:</td>
-									<td><input type="text" name="addMerchImage"/></td>
+									<td><input type="text" name="merchImage"/></td>
 								</tr>
 								<tr>
 									<td class="label">Release Date:</td>
-									<td><input type="text" name="addMerchDate"/></td>
+									<td><input type="text" name="merchDate"/></td>
 								</tr>
 								<tr>
-									<td class="label">Current Price:</td>
-									<td><input type="text" name="addMerchPrice"/></td>
+									<td class="label">Price:</td>
+									<td><input type="text" name="merchPrice"/></td>
 								</tr>
 								<tr>
 									<td class="label">Stock:</td>
-									<td><input type="text" name="addMerchStock"/></td>
+									<td><input type="text" name="merchStock"/></td>
 								</tr>
 							</table>
-						<input type="submit" value="Add" name="addMerchButton" disabled="true"/>
+							<input type="submit" value="Add" name="submitButton" disabled="true"/>
 						</form>
 					</div>
 					<div id="editMerch" align="left" style="background:#CCC; float:left;width:60%; display:none">
 						<h3>Merchandising2</h3>
 					</div>
 					<div id="deleteMerch" align="left" style="background:#CCC; float:left;width:60%; display:none">
-						<h3>Merchandising3</h3>
+						<form name="deleteMerchForm" action="/deleteMerch" method="post">
+							<table>
+								<tr>
+									<td class="label">Merch ID:</td>
+									<td><input type="text" name="ID" onkeyup="disableDeleteButton(deleteMerchForm)"/></td>
+								</tr>
+							</table>
+							<input type="submit" value="Delete" name="submitButton" disabled="true"/>
+						</form>
 					</div>
 				</div>
 				
@@ -366,10 +577,10 @@
 							<table>
 								<tr>
 									<td class="label">Username:</td>
-									<td><input type="text" name="deleteClientUsername" onkeyup="disableDeleteClientButton()"/></td>
+									<td><input type="text" name="ID" onkeyup="disableDeleteButton(deleteClientForm)"/></td>
 								</tr>
 							</table>
-						<input type="submit" value="Delete" name="deleteClientButton" disabled="true"/>
+							<input type="submit" value="Delete" name="submitButton" disabled="true"/>
 						</form>
 					</div>
 				</div>
