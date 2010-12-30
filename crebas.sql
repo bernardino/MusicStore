@@ -108,7 +108,8 @@ BEGIN
 	allvotes:=allvotes+1;
 	update product set rating = new_rating where product_id=id;
 	update product set votes = allvotes where product_id=id;
-END; /
+END;
+/
 
 
 
@@ -299,6 +300,7 @@ BEGIN
 		WHERE product_id = :OLD.product_id;
 	
 END;
+/
 
 
 CREATE OR REPLACE TRIGGER deleteMerch
@@ -312,6 +314,7 @@ BEGIN
 		WHERE p.product_id = :OLD.product_id;
 	
 END;
+/
 
 
 CREATE OR REPLACE TRIGGER deleteAlbumSongs
@@ -324,6 +327,7 @@ BEGIN
 	DELETE FROM song s
 	WHERE s.alb_product_id = :OLD.product_id;
 END;
+/
 
 CREATE OR REPLACE TRIGGER deleteAlbumProduct
 AFTER
@@ -335,7 +339,7 @@ BEGIN
 	DELETE FROM product p
 	WHERE p.product_id = :OLD.product_id;
 END;
-
+/
 
 CREATE OR REPLACE TRIGGER deleteArtist
 AFTER
