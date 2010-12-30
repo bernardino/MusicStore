@@ -50,6 +50,8 @@
 				alert("The artist you entered does not exist in last.fm\nTry adding it manually");
 			if (error[1] == "albumnotfound")
 				alert("The album you entered does not exist in last.fm\nTry adding it manually");
+			if (error[1] == "badsongdata")
+				alert("A song could not be added to the database.\n Try adding it manually");
 			else if (error[1] == "badartistid")
 				alert("The Artist ID you entered is incorrect");
 			else if (error[1] == "badalbumid")

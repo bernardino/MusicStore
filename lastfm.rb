@@ -7,6 +7,18 @@ class Lastfm
 	def initialize()
 	end
 	
+	def getOrclStr(string)
+		orclString = string.gsub("'","''")
+		if orclString[0] == "'"
+			orclString = "'" + orclString
+		end
+		if orclString[orclString.length-1] == "'"
+			orclString = orclString + "'"
+		end
+		
+		orclString
+	end
+	
 	
 	def addArtist(name)
 		url = "http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=#{name.gsub(' ','+')}&api_key=b25b959554ed76058ac220b7b2e0a026" #LAST.FM REST API
@@ -22,6 +34,8 @@ class Lastfm
 		end
 		#THIS IS JUST TEMPORARY NEED TO IMPROVE
 		arr[1] = (doc/"lfm/artist/bio/summary").inner_html.gsub(']]>',"").gsub('<![CDATA[',"")
+		
+		arr[1] = getOrclStr(arr[1])
 		
 		#we should avoid this by verifying first if last.fm's content isn't null..................
 		begin
@@ -52,6 +66,8 @@ class Lastfm
 			end
 
 			arr[1] = (doc/"lfm/album/wiki/summary").inner_html.gsub(']]>','').gsub('<![CDATA[','')
+			
+			arr[1] = getOrclStr(arr[1])
 			#arr[1] = r.text.gsub(/\\/, '\&\&').gsub(/'/, "''").gsub('&quot;','')#.gsub(/[^\' '-~]/,'')
 			#THE DESCRIPTION MAY CREATE A CONFLICT DUE TO STRANGE CHARACTERS
 			date = (doc/"lfm/album/releasedate").inner_html
@@ -71,17 +87,11 @@ class Lastfm
 			
 			i=3
 			(doc/"lfm/album/tracks/track/name").each do |r|
-				arr[i] = r.inner_html
+				arr[i] = getOrclStr(r.inner_html)
 				i=i+1
 			end
 			
-			product_id = $db.select("SELECT product_number.nextval FROM dual")
-			
-			puts 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
-			puts 'x'+date+'x'
-			puts 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
-			puts arr[2]
-			puts 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+			product_id = $db.select("SELECT product_number.nextval FROM dual")			
 			
 			#we should avoid this by verifying first if last.fm's content isn't null..................
 			begin
@@ -95,14 +105,23 @@ class Lastfm
 			while i < arr.length
 				song_id = $db.select("SELECT product_number.nextval FROM DUAL")
 				
-				$manage.addProduct(song_id[0], artist_id, 'description', arr[0], arr[2], '0.99', '-1')
+				begin
+					$manage.addProduct(song_id[0], artist_id, 'description', arr[0], arr[2], '0.99', '-1')
 				
-				$manage.addSong(song_id[0], product_id[0], arr[i], '3:00', 'Indie', (i-2))
+					$manage.addSong(song_id[0], product_id[0], arr[i], '3:00', 'Other', (i-2))
+				rescue
+					$db.execute("Rollback")
+					bool=1
+				end
 				
 				i=i+1
 			end
 		else
 			raise ArtistError
+		end
+		
+		if bool
+			raise SongError
 		end
 	end
 	
