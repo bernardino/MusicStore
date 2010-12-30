@@ -120,7 +120,7 @@
 			<div style="background:#CCC; float:left;width:15%;min-height:100%;">
 				<h3>Welcome <%= session[:id] %>!!</h3>
 				<br />
-				<a class="search" href="/client"> Edit your personal information</a>
+				<a class="search" href="/client"> Edit your account</a>
 				<br /><br />
 				<input id="credits_txt" type="text" size="5" style="display:none;" onkeyup="justInt()" /><br />
 				<input id="credits_btn" type="button" value="Buy Credits" onmouseup="credits()">	
@@ -128,7 +128,7 @@
 				<a href="/logout">Logout</a>
 			</div>
 			<% else %>
-			<div style="background:#CCC; float:left;width:15%;min-height:100%;">
+			<div style="background:#CCC; float:left;width:15%;">
 				<form action="/login?p=<%= request.fullpath %>" method="post" accept-charset="utf-8">
 					<h1>Login</h1>
 					<h3>Username</h3><input type="text" name="username" />
@@ -143,16 +143,16 @@
 			<!-- Cenas -->
 			<div style="background-color:#EEE; float:left;width:70%;">
 				<div style="float:right;margin:30px;">
-					<img src="<%=@res[2] %>" />
+					<img src="<%=@res[2] %>" border="2" />
 				</div>
 
 				
 				
 		      	<div align="left" style="margin: 30px;"><!-- Artist Info -->
-					<a class="headline" href ="/artist/<%= params[:name] %>"> <%= @res[0] %> </a>
+					<a class="headlinelink" href ="/artist/<%= params[:name] %>"> <%= @res[0] %> </a>
 					<br/><br/>
 					<a class="subhead"> <%= @res[1] %></a>
-					<br/>
+					<br/><br/>
 					<info><%= @res[3] %></info>
 					<br/><br/>
 					<a class="subhead">Length:</a> <a class="item"> <%= @res[5] %></a>
@@ -169,26 +169,28 @@
 					<br/><br/>
 					<a href="/addorder?page=<%= request.fullpath %>&id=<%= params[:id] %>&type=a"><input type="button" value="Buy"></a>
 					<br/><br/>
-					<a class="subhead">Track Listing: </a>
+					<a class="subhead">Track List: </a>
 					<table>
 					<% 	tracks = @songs.length
 						i=0
 						while i < tracks %>
 							<tr>
 								<td>
-									<%= @songs[i] %>-
+									<a class="list" href="/artist/<%= params[:name] %>/song/<%=@songs[i] %>"><%= @songs[i+1] %>-</a>
 								</td>
 								<td>
-									<%= @songs[i+1] %>
+									<a class="list" href="/artist/<%= params[:name] %>/song/<%=@songs[i] %>"><%= @songs[i+2] %></a>
 								</td>
 								<td>
-									&nbsp&nbsp <%= @songs[i+2] %>
+									<a class="list" href="/artist/<%= params[:name] %>/song/<%=@songs[i] %>">&nbsp&nbsp <%= @songs[i+3] %></a>
 								</td>
 							</tr>
-						<% i=i+3 %>
+						<% i=i+4 %>
 						<% end  %>
 					</table>
-					<p>More Albuns From this Artist: </p>
+					<br/><br/>
+					<a class="subhead">More Albuns From this Artist: </a>
+					<br/><br/>
 					<table>
 						<% album = @albums.length
 						i=0
@@ -197,7 +199,7 @@
 							if params[:id] != @albums[i].to_s %>
 								<tr>
 									<td>
-										<a class="search" href="/artist/<%=params[:name]%>/album/<%= @albums[i] %>"><img src="<%=@albums[i+2] %>"/></a>
+										<a class="search" href="/artist/<%=params[:name]%>/album/<%= @albums[i] %>"><img src="<%=@albums[i+2] %>" height="120" width="120" border="3"/></a>
 									</td>
 									<td>
 										<a class="search" href="/artist/<%=params[:name]%>/album/<%= @albums[i] %>" ><%=@albums[i+1] %></a>

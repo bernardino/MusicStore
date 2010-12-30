@@ -16,6 +16,36 @@
 		}
 	}
 	
+	function rating(){
+		var rating= Math.ceil(<%= @res[5] %>);
+		var i=0;
+		var img;
+		
+		for(i=0; i<rating ;i++){
+			img=document.getElementById("star"+i);
+			img.src="/img/star.png";
+		}
+		for(i; i<5 ;i++){
+			img=document.getElementById("star"+i);
+			img.src="/img/blank.png";
+		}
+	}
+	
+	function imgOver(id){
+		for(i=0; i<id+1 ;i++){
+			img=document.getElementById("star"+i);
+			img.src="/img/star.png";
+		}
+		for(i; i<5 ;i++){
+			img=document.getElementById("star"+i);
+			img.src="/img/blank.png";
+		}
+	}
+	
+	function vote(id){
+		window.location="/addvote?page=<%= request.fullpath %>&v="+id+"&id=<%= params[:id] %>";
+	}
+	
 	function remove(id){
 		window.location="/removeorder?id="+id+"&page=<%= request.fullpath %>";
 	}
@@ -57,7 +87,7 @@
 	</script>
 </head>
 
-<body>
+<body onload="rating();>
 	<div class="container">
 		<div align="center" class="header">
 			<h1>Music Store</h1>
@@ -113,18 +143,18 @@
 			<!-- Cenas -->
 			<div style="background-color:#CCC; float:left;width:70%">
 				<embed src="http://dl.dropbox.com/u/4898423/Song%20of%20the%20week.mp3" controls="console" type="audio/mpeg autostart="FALSE" height="20" width="100">
-				<div style="float:left;margin:10px;">
-					<img src="<%=@image %>" />
+				<div style="float:right;margin:10px;">
+					<img src="<%= @res[2] %>" />
 				</div>
 				<div align="left" style="margin: 10px;">
-					<p>Artist: <%= @artist %></p>
-					<p>Name: <%= @merchID %></p> 
-					<p>Description: <%= @desc %></p>
-					<p>Price: <%= @price %> euros</p>
+					<a class="headline" href =""> <%= @res[0] %></a><br/><br/>
+					<a class="subhead">Name: </a> <a class="item"><%= @res[1] %></a><br/>
+					<a class="subhead">Description:</a> <info><%= @res[3] %></info><br/>
+					<a class="subhead">Rating: </a> <img id="star0" onmouseover="imgOver(0)" onmouseout="rating()" onmouseup="vote(1)" src="/img/blank.png"><img id="star1" onmouseover="imgOver(1)" onmouseout="rating()" onmouseup="vote(2)" src="/img/blank.png"><img id="star2" onmouseover="imgOver(2)" onmouseout="rating()" onmouseup="vote(3)" src="/img/blank.png"><img id="star3" onmouseover="imgOver(3)" onmouseout="rating()" onmouseup="vote(4)" src="/img/blank.png"><img id="star4" onmouseup="vote(5)" onmouseover="imgOver(4)" onmouseout="rating()" src="/img/blank.png"></a></br>
+					<a class="subhead">Price: </a> <a class="item"> <%= @res[7] %> euros</a><br/>
+					<a class="subhead">Date:</a> <a class="item"> <%= @res[4] %></a><br/>
 					<br/>
-					<a href="/addorder?page=<%= request.fullpath %>&id=<%= params[:id] %>&type=m"><input type="button" value="Buy"></a>
-					<p>Date: <%= @r_date %></p>
-					<p>Rating: <%= @rating %></p>
+					<a href="/addorder?page=<%= request.fullpath %>&id=<%= params[:id] %>&type=m"><input type="button" value="Buy"></a><br/>
 				</div>
 			</div>
 		</div>

@@ -5,9 +5,9 @@ body {
 }
 
 h1 {
-	color:#999;
+	color:#fff;
 	font-weight:bold;
-	font-family:"Palatino Linotype", "Book Antiqua", Palatino, serif;
+	font-family:Trebuchet MS, Arial, Helvetica, sans-serif;
 }
 
 info{
@@ -26,7 +26,7 @@ info{
 }
 
 .header {
-	background:#FFF;
+	background:#000;
 }
 
 .content {
@@ -40,14 +40,38 @@ info{
 	font-size: 22px;
 	text-align:center;
 	color:#000;
-
 }
-.subhead{
+
+.headlinelink{
 	font-family:Trebuchet MS, Arial, Helvetica, sans-serif;
-	font-size: 17px;
+	text-decoration:none;
+	font-size: 22px;
 	text-align:center;
 	color:#000;
 }
+.headlinelink:hover{
+	color:#fff;
+}
+
+
+.subhead{
+	font-family:Trebuchet MS, Arial, Helvetica, sans-serif;
+	font-size: 17px;
+	text-decoration:none;
+	text-align:center;
+	color:#000;
+}
+.subheadlink{
+	font-family:Trebuchet MS, Arial, Helvetica, sans-serif;
+	font-size: 17px;
+	text-decoration:none;
+	text-align:center;
+	color:#000;
+}
+.subheadlink:hover{
+	color:#fff;
+}
+
 .items{
 	font-family:Trebuchet MS, Arial, Helvetica, sans-serif;
 	font-size: 17px;
@@ -76,14 +100,17 @@ info{
 
 .label {
 	font-family:Trebuchet MS, Arial, Helvetica, sans-serif;
+	font-size:20px;
 	text-decoration:none;
 	color:#000;
+
 }
 
 .search {
 	font-family:Trebuchet MS, Arial, Helvetica, sans-serif;
 	text-decoration:none;
 	color:#000;
+	font-size:15px;
 }
 .search:hover{
 	color:#fff;

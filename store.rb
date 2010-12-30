@@ -124,8 +124,8 @@ get '/artist/:id' do
 	erb :artist
 end
 
-#should be '/artist/:name/song/:id'
-get '/song/:id' do
+
+get '/artist/:name/song/:id' do
 	@res = $get.song(params[:id])
 	
 	erb :song
@@ -135,7 +135,7 @@ end
 get '/artist/:name/album/:id' do
 
 	@res = $get.album(params[:id])
-	@songs = $db.select("	SELECT song_number, song_name, song_length
+	@songs = $db.select("	SELECT product_id, song_number, song_name, song_length
 							FROM song
 							WHERE alb_product_id = #{params[:id]}
 							ORDER BY song_number
@@ -211,16 +211,8 @@ post '/search' do
 end
 
 
-get '/merch/:id' do
-	res = $get.merchandise(params[:id])
-	@artist = res[0]
-	@merchID = res[1]
-	@image = res[2]
-	@desc = res[3]
-	@date = res[4]
-	@rating = res[5]
-	@votes = res[6] 
-	@price = res[7]
+get '/artist/:name/merch/:id' do
+	@res = $get.merchandise(params[:id])
 	erb :merch
 end
 
