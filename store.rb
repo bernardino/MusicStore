@@ -304,7 +304,11 @@ end
 
 
 post '/addArtistManual' do
-	$manage.addArtist(params[:artistName], params[:artistImage], params[:artistBio])
+	begin
+		$manage.addArtist(params[:artistName], params[:artistImage], params[:artistBio])
+	rescue
+		redirect '/admin?error=badartistdata'
+	end
 
 	redirect '/admin'
 end
@@ -327,7 +331,8 @@ post '/addAlbumManual' do
 		$manage.addProduct(album_id[0], params[:albumArtist], params[:albumDescription], params[:albumImage], params[:albumDate], params[:albumPrice], params[:albumStock])
 		$manage.addAlbum(album_id[0], params[:albumName], params[:albumLength], params[:albumGenre], params[:albumLabel])
 	rescue
-		redirect '/admin?error=badartistid'
+		$db.execute("Rollback")
+		redirect '/admin?error=badalbumdata'
 	end
 	redirect '/admin'
 end
@@ -341,7 +346,7 @@ post '/addAlbumLastfm' do
 	rescue AlbumError
 		redirect '/admin?error=albumnotfound'
 	rescue SongError
-		redirect '/admin?error=badsongdata'
+		redirect '/admin?error=badlastfmsongdata'
 	end
 	redirect '/admin'
 end
@@ -352,20 +357,16 @@ post '/addSong' do
 	
 	begin
 		$manage.addProduct(song_id[0], params[:songArtist], params[:songDescription], params[:songImage], params[:songDate], params[:songPrice], '-1')
-	rescue
-		redirect '/admin?error=badartistid'
-	end
-	
-	if (params[:addSongAlbum] != '')
-		begin
+
+		if (params[:addSongAlbum] != '')
 			$manage.addSong(song_id[0], params[:songAlbum], params[:songName], params[:songLength], params[:songGenre], params[:songNumber])
-		rescue
-			redirect '/admin?error=badalbumid'
+		else
+			$manage.addSong(song_id[0], 'null', params[:songName], params[:songLength], params[:songGenre], 'null')
 		end
-	else
-		$manage.addSong(song_id[0], 'null', params[:songName], params[:songLength], params[:songGenre], 'null')
+	rescue
+		$db.execute("Rollback")
+		redirect '/admin?error=badsongdata'
 	end
-	
 
 	redirect '/admin'
 end
@@ -380,7 +381,8 @@ post '/addMerch' do
 		$manage.addProduct(merch_id[0], params[:merchArtist], params[:merchDescription], image, params[:merchDate], params[:merchPrice], params[:merchStock])
 		$manage.addMerch(merch_id[0], params[:merchName])
 	rescue
-		redirect '/admin?error=badartistid'
+		$db.execute("Rollback")
+		redirect '/admin?error=badmerchdata'
 	end
 
 	redirect '/admin'
