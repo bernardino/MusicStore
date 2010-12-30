@@ -79,20 +79,20 @@ class Lastfm
 			date = String.new
 			
 			doc = Hpricot resp
+			
+			arr[0] = getOrclStr((doc/"lfm/album/wiki/summary").inner_html.gsub(']]>','').gsub('<![CDATA[',''))
+			
+			if (arr[0]==nil || arr[0].length<5)
+				arr[0] = "N/A"
+			end
 
 			(doc/"lfm/album/image").each do |r|
 				if r.attributes["size"] == 'large'
-					arr[0] = r.inner_html
+					arr[1] = r.inner_html
 				end
 			end
-
-			arr[1] = (doc/"lfm/album/wiki/summary").inner_html.gsub(']]>','').gsub('<![CDATA[','')
 			
-			arr[1] = getOrclStr(arr[1])
-			#arr[1] = r.text.gsub(/\\/, '\&\&').gsub(/'/, "''").gsub('&quot;','')#.gsub(/[^\' '-~]/,'')
-			#THE DESCRIPTION MAY CREATE A CONFLICT DUE TO STRANGE CHARACTERS
 			date = (doc/"lfm/album/releasedate").inner_html
-			
 			if (date.length<5)
 				arr[2] = -1
 			else
@@ -112,11 +112,20 @@ class Lastfm
 				i=i+1
 			end
 			
-			product_id = $db.select("SELECT product_number.nextval FROM dual")			
+			product_id = $db.select("SELECT product_number.nextval FROM dual")	
+
+			
+			puts 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+			puts 'x'+arr[0]+'x'
+			puts 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+			puts 'x'+arr[1]+'x'
+			puts 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+			puts 'x'+arr[2]+'x'
+			puts 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
 			
 			#we should avoid this by verifying first if last.fm's content isn't null..................
 			begin
-				$manage.addProduct(product_id[0], artist_id, arr[1], arr[0], arr[2], price, stock)
+				$manage.addProduct(product_id[0], artist_id, arr[0], arr[1], arr[2], price, stock)
 			rescue
 				raise AlbumError
 			end
@@ -127,7 +136,7 @@ class Lastfm
 				song_id = $db.select("SELECT product_number.nextval FROM DUAL")
 				
 				begin
-					$manage.addProduct(song_id[0], artist_id, 'description', arr[0], arr[2], '0.99', '-1')
+					$manage.addProduct(song_id[0], artist_id, 'N/A', arr[1], arr[2], '0.99', '-1')
 				
 					$manage.addSong(song_id[0], product_id[0], arr[i], '3:00', 'Other', (i-2))
 				rescue

@@ -608,9 +608,9 @@
 					<br/>					
 					<div id="addMerch" align="left" style="background:#EEE; float:left;width:60%; display:none">
 						<form name="addMerchForm" action="/addMerch" method="post">
-							<table onkeyup="disableAddMerchButton()">
+							<table onkeyup="disableAddMerchButton()" width="300">
 								<tr>
-									<td class="label">Name:</td>
+									<td class="label" width="130">Name:</td>
 									<td><input type="text" name="merchName"/></td>
 								</tr>
 								<tr>
@@ -626,7 +626,7 @@
 									<td><input type="text" name="merchImage"/></td>
 								</tr>
 								<tr>
-									<td class="label">Release Date:</td>
+									<td class="label">Release Year:</td>
 									<td><input type="text" name="merchDate"/></td>
 								</tr>
 								<tr>
@@ -642,7 +642,58 @@
 						</form>
 					</div>
 					<div id="editMerch" align="left" style="background:#EEE; float:left;width:60%; display:none">
-						<h3>Merchandising2</h3>
+						
+						
+						
+						
+						
+						<form name="editMerchForm" action="/editMerch" method="post">
+							<table onkeyup="disableEditMerchButton()" width="300">
+								<tr>
+									<td class="label" width="130">Name:</td>
+									<td><input type="text" name="merchName"/></td>
+								</tr>
+								<tr>
+									<td class="label">Artist ID:</td>
+									<td><input type="text" name="merchArtist"/></td>
+								</tr>
+								<tr>
+									<td class="label">Description:</td>
+									<td><input type="text" name="merchDescription"/></td>
+								</tr>
+								<tr>
+									<td class="label">Image:</td>
+									<td><input type="text" name="merchImage"/></td>
+								</tr>
+								<tr>
+									<td class="label">Release Year:</td>
+									<td><input type="text" name="merchDate"/></td>
+								</tr>
+								<tr>
+									<td class="label">Price:</td>
+									<td><input type="text" name="merchPrice"/></td>
+								</tr>
+								<tr>
+									<td class="label">Stock:</td>
+									<td><input type="text" name="merchStock"/></td>
+								</tr>
+							</table>
+							<input type="submit" value="Edit" name="submitButton" disabled="true"/>
+						</form>
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
 					</div>
 					<div id="deleteMerch" align="left" style="background:#EEE; float:left;width:60%; display:none">
 						<form name="deleteMerchForm" action="/deleteMerch" method="post">

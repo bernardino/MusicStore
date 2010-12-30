@@ -88,6 +88,11 @@ START with 1
 INCREMENT by 1
 NOCYCLE;
 
+CREATE sequence order_number
+START with 1
+INCREMENT by 1
+NOCYCLE;
+
 CREATE sequence product_number
 START with 1
 INCREMENT by 1
@@ -108,6 +113,17 @@ BEGIN
 	allvotes:=allvotes+1;
 	update product set rating = new_rating where product_id=id;
 	update product set votes = allvotes where product_id=id;
+END;
+/
+
+create or replace procedure buy_credits (creditos in client.credits%type, id in client.client_id%type) IS
+old_credits client.credits%type;
+new_credits client.credits%type;
+BEGIN
+	select credits into old_credits from client where client_id = id;
+	new_credits := creditos + old_credits;
+	update client set credits = new_credits where client_id=id;
+	commit;
 END;
 /
 
