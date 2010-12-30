@@ -167,13 +167,17 @@ class Get
 	
 
 	def recentlyAddedAlbums()
-		return $db.select(" SELECT p.product_id, al.album_name, ar.artist_name,ar.artist_id, p.image
-							FROM product p, album al, artist ar
-							WHERE p.product_id = al.product_id
-							AND p.artist_id = ar.artist_id
-							AND rownum < 4
-							ORDER by p.added_date DESC")
+		return $db.select(" SELECT *
+							FROM (	SELECT p.product_id, al.album_name, ar.artist_name, ar.artist_id, p.image
+									FROM product p, album al, artist ar
+									WHERE p.product_id = al.product_id
+									AND p.artist_id = ar.artist_id
+									ORDER by p.added_date DESC
+								)
+							WHERE rownum < 4
+						")
 	end
+	
 	
 	def recentlyAddedSongs()
 		return $db.select(" SELECT p.product_id, s.song_name, ar.artist_name, p.image,ar.artist_id
@@ -181,9 +185,10 @@ class Get
 							WHERE p.product_id = s.product_id
 							AND p.artist_id = ar.artist_id
 							AND rownum < 4
-							ORDER by p.added_date DESC")
-	
+							ORDER by p.added_date DESC
+						")
 	end	
+	
 	
 	def recentlyAddedMerch()
 		return $db.select(" SELECT p.product_id, m.merchandise_name, ar.artist_name, p.image, ar.artist_id
@@ -191,9 +196,10 @@ class Get
 							WHERE p.product_id = m.product_id
 							AND p.artist_id = ar.artist_id
 							AND rownum < 4
-							ORDER by p.added_date DESC")
-	
+							ORDER by p.added_date DESC
+						")
 	end
+	
 	
 	def topAlbums()
 		return $db.select(" SELECT p.product_id, al.album_name, ar.artist_name,ar.artist_id, p.image, ar.artist_id
@@ -201,9 +207,10 @@ class Get
 							WHERE p.product_id = al.product_id
 							AND p.artist_id = ar.artist_id
 							AND rownum < 11
-							ORDER by p.num_sells DESC")
-	
+							ORDER by p.num_sells DESC
+						")
 	end
+	
 	
 	def topSongs()
 		return $db.select(" SELECT p.product_id, s.song_name, ar.artist_name,ar.artist_id, p.image
@@ -211,9 +218,10 @@ class Get
 							WHERE p.product_id = s.product_id
 							AND p.artist_id = ar.artist_id
 							AND rownum < 11
-							ORDER by p.num_sells DESC")
-	
+							ORDER by p.num_sells DESC
+						")
 	end
+	
 	
 	def topMerch()
 		return $db.select(" SELECT p.product_id, m.merchandise_name, ar.artist_name,ar.artist_id, p.image
