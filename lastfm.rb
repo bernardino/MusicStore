@@ -8,7 +8,7 @@ class Lastfm
 	end
 	
 	
-	def add_artist(name)
+	def addArtist(name)
 		url = "http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=#{name.gsub(' ','+')}&api_key=b25b959554ed76058ac220b7b2e0a026" #LAST.FM REST API
 		resp = Net::HTTP.get_response(URI.parse(url))
 		arr = Array.new
@@ -26,6 +26,46 @@ class Lastfm
 		
 		$manage.addArtist(name, arr[0], arr[1])
 	end	
+	
+	
+	#Use Last.fm API to get information we want about this album
+	def addAlbum(artist_name, album_name)
+		url = "http://ws.audioscrobbler.com/2.0/?method=album.getinfo&artist=#{artist_name.gsub(' ','+')}&album=#{album_name.gsub(' ','+')}&api_key=b25b959554ed76058ac220b7b2e0a026" #LAST.FM REST API
+		resp = Net::HTTP.get_response(URI.parse(url)).body
+		arr = Array.new
+		date = String.new
+		
+		doc = Hpricot resp
+		arr[0] = ' '
+		(doc/"lfm/album/image").each do |r|
+			if r.attributes["size"] == 'large'
+				arr[0] = r.inner_html
+			end
+		end
+		arr[1] = ' '
+		arr[1] = (doc/"lfm/album/wiki/summary").inner_html.gsub(']]>','').gsub('<![CDATA[','')
+			#arr[1] = r.text.gsub(/\\/, '\&\&').gsub(/'/, "''").gsub('&quot;','')#.gsub(/[^\' '-~]/,'')
+
+
+		date = (doc/"lfm/album/releasedate").inner_html
+		
+		i=0
+		while i < date.length
+			if date[i].chr == ','
+				arr[2] = date[i-4, 4]
+				break
+			end
+			i=i+1
+		end
+		
+		
+		i=3
+		(doc/"lfm/album/tracks/track/name").each do |r|
+			arr[i] = r.inner_html
+			i=i+1
+		end
+		arr	
+	end
 
 	
 	def add_album(artist_name, album_name)
@@ -90,45 +130,6 @@ class Lastfm
 					")
 					
 		$db.execute("Commit")
-	end
-	
-	#Use Last.fm API to get information we want about this album
-	def get_album(artist_name,album_name)
-		url = "http://ws.audioscrobbler.com/2.0/?method=album.getinfo&artist=#{artist_name.gsub(' ','+')}&album=#{album_name.gsub(' ','+')}&api_key=b25b959554ed76058ac220b7b2e0a026" #LAST.FM REST API
-		resp = Net::HTTP.get_response(URI.parse(url)).body
-		arr = Array.new
-		date = String.new
-		
-		doc = Hpricot resp
-		arr[0] = ' '
-		(doc/"lfm/album/image").each do |r|
-			if r.attributes["size"] == 'large'
-				arr[0] = r.inner_html
-			end
-		end
-		arr[1] = ' '
-		arr[1] = (doc/"lfm/album/wiki/summary").inner_html.gsub(']]>','').gsub('<![CDATA[','')
-			#arr[1] = r.text.gsub(/\\/, '\&\&').gsub(/'/, "''").gsub('&quot;','')#.gsub(/[^\' '-~]/,'')
-
-
-		date = (doc/"lfm/album/releasedate").inner_html
-		
-		i=0
-		while i < date.length
-			if date[i].chr == ','
-				arr[2] = date[i-4, 4]
-				break
-			end
-			i=i+1
-		end
-		
-		
-		i=3
-		(doc/"lfm/album/tracks/track/name").each do |r|
-			arr[i] = r.inner_html
-			i=i+1
-		end
-		arr	
 	end
 	
 	

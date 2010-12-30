@@ -30,6 +30,30 @@
 		else
 			window.location="/removeorder?id="+id+"&page=<%= request.fullpath %>";
 	}
+	
+	function credits() {
+		var txt = document.getElementById('credits_txt');
+		var btn = document.getElementById('credits_btn');
+		if(txt.style.display=='none'){
+			txt.style.display='';
+			btn.disabled=true;
+		} else {
+			window.location='/addcredits?c='+txt.value+'&page=<%= request.fullpath %>';
+			txt.style.display='none';
+		}
+	}
+	
+	function justInt() {
+		var txt = document.getElementById('credits_txt');
+		var btn = document.getElementById('credits_btn');
+		if( !isNaN(parseInt(txt.value))){
+			txt.value=parseInt(txt.value);
+			btn.disabled=false;
+		} else {
+			btn.disabled=true;
+		}
+	}
+	
 	</script>
 </head>
 
@@ -37,7 +61,7 @@
 	<div class="container">
 		<div align="center" class="header">
 			<h1>Music Store</h1>
-			<div align="left" style="background:#F93; padding:8px">
+			<div align="left" style="background:#F93; padding:12px">
 				<div>
 					<span width="100" class="link" onClick="goTo('index')">Home</span>
 					<span width="100" class="link" onClick="goTo('top')">Top</span>
@@ -66,15 +90,17 @@
 		<div align="center" class="content">
 			<!-- !LOGGED_IN -->
 			<% if @logged %>
-			<div style="background:#EEE; float:left;width:20%">
+			<div style="background:#EEE; float:left;width:15%">
 				<h3>Welcome <%= session[:id] %>!!</h3>
 				<a class="search" href="/client"> Edit your account</a>
-				<br />
-				<br />
+				<br /><br />
+				<input id="credits_txt" type="text" size="5" style="display:none;" onkeyup="justInt()" /><br />
+				<input id="credits_btn" type="button" value="Buy Credits" onmouseup="credits()">	
+				<br /><br />
 				<a href="/logout">Logout</a>
 			</div>
 			<% else %>
-			<div style="background:#EEE; float:left;width:20%;">
+			<div style="background:#EEE; float:left;width:15%;">
 				<form action="/login?p=<%= request.fullpath %>" method="post" accept-charset="utf-8">
 					<h1>Login</h1>
 					<h3>Username</h3><input type="text" name="username" /><br />
@@ -87,8 +113,9 @@
 			</div>
 			<% end %>
 			<!-- Cenas -->
-			<div align="left" style="background:#CCC; float:left;width:60%;">
+			<div align="left" style="background:#CCC; float:left;width:70%;">
 				<h1 align="center">Recently Added Items</h1>
+				<div style="margin:20px;">
 				<div style="background:#CCC; float:left;width:50%;">
 					<p class="search"> Albums</p>
 					<table >
@@ -147,10 +174,13 @@
 						<% end %>
 					</table>
 				</div>
+				</div>
+				<div>
 				<h1>User Recommendations</h1>
+				</div>
 			</div>
 			<!-- Shopping Cart -->
-			<div style="background:#DDD; float:left;width:20%;">
+			<div style="background:#DDD; float:left;width:15%;">
 				<h1>Shopping Cart</h1>
 				<% if params[:erro] == "f" %>
 					<p>Your order was done sucessfully. Thanks for using our store</p>

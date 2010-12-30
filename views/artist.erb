@@ -31,6 +31,29 @@
 			window.location="/removeorder?id="+id+"&page=<%= request.fullpath %>";
 	}
 	
+	function credits() {
+		var txt = document.getElementById('credits_txt');
+		var btn = document.getElementById('credits_btn');
+		if(txt.style.display=='none'){
+			txt.style.display='';
+			btn.disabled=true;
+		} else {
+			window.location='/addcredits?c='+txt.value+'&page=<%= request.fullpath %>';
+			txt.style.display='none';
+		}
+	}
+	
+	function justInt() {
+		var txt = document.getElementById('credits_txt');
+		var btn = document.getElementById('credits_btn');
+		if( !isNaN(parseInt(txt.value))){
+			txt.value=parseInt(txt.value);
+			btn.disabled=false;
+		} else {
+			btn.disabled=true;
+		}
+	}
+	
 	</script>
 </head>
 
@@ -64,12 +87,18 @@
 		<div align="center" class="content">
 			<!-- !LOGGED_IN -->
 			<% if @logged %>
-			<div style="background:#EEE; float:left;width:20%">
-				<h3>Welcome <%= session[:id] %>!!</h3><br />
+			<div style="background:#EEE; float:left;width:15%">
+				<h3>Welcome <%= session[:id] %>!!</h3>
+				<br />
+				<a class="search" href="/client"> Edit your personal information</a>
+				<br /><br />
+				<input id="credits_txt" type="text" size="5" style="display:none;" onkeyup="justInt()" /><br />
+				<input id="credits_btn" type="button" value="Buy Credits" onmouseup="credits()">	
+				<br /><br />
 				<a href="/logout">Logout</a>
 			</div>
 			<% else %>
-			<div style="background:#EEE; float:left;width:20%;">
+			<div style="background:#EEE; float:left;width:15%;">
 				<form action="/login?p=<%= request.fullpath %>" method="post" accept-charset="utf-8">
 					<h1>Login</h1>
 					<h3>Username</h3><input type="text" name="username" />
@@ -82,11 +111,11 @@
 			</div>
 			<% end %>
 			<!-- Cenas -->
-			<div style="background-color:#CCC; float:left;width:60%">
-				<div style="float:left;margin:10px;">
+			<div style="background-color:#CCC; float:left;width:70%;margin-bottom:10px;">
+				<div style="float:left;margin:20px;">
 					<img src="<%=@image %>" />
 				</div>
-				<div align="left" style="margin: 10px;"><!-- Artist Info -->
+				<div align="left" style="margin: 20px;"><!-- Artist Info -->
 					<p>Artist Name: <%= @artistID %></p>
 					<p>Bio: <%= @bio %> </p>
 					<p>Albums Released:  </p>
@@ -108,7 +137,7 @@
 				</div>
 			</div>
 			<!-- Shopping Cart -->
-			<div style="background:#DDD; float:left;width:20%;">
+			<div style="background:#DDD; float:left;width:15%;">
 				<h1>Shopping Cart</h1>
 				<% if session[:orders]=={}%>
 					<p>No orders</p>

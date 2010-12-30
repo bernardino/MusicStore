@@ -20,9 +20,9 @@ class Manage
 	end
 	
 	
-	def addAlbum(product_id, album_name, album_length, album_label, album_genre)
-		$db.execute("	INSERT INTO album(product_id, album_name, album_length, album_label, album_genre)
-						VALUES(#{product_id}, '#{album_name}', '#{album_length}', '#{album_label}', '#{album_genre}')
+	def addAlbum(product_id, album_name, album_length, album_genre, album_label)
+		$db.execute("	INSERT INTO album(product_id, album_name, album_length, album_genre, album_label)
+						VALUES(#{product_id}, '#{album_name}', '#{album_length}', '#{album_genre}', '#{album_label}')
 					")
 		$db.execute("Commit")
 	end
@@ -76,22 +76,46 @@ class Manage
 	
 	
 	
+	def deleteArtist(artist_id)
+		$db.execute("	DELETE
+						FROM artist
+						WHERE artist_id = '#{artist_id}'
+					")
+		$db.execute("Commit")
+	end
 	
 	
+	def deleteAlbum(product_id)
+		$db.execute("	DELETE
+						FROM album
+						WHERE product_id = '#{product_id}'
+					")
+		$db.execute("Commit")
+	end
 	
 	
+	def deleteSong(product_id)
+		$db.execute("	DELETE
+						FROM song
+						WHERE product_id = '#{product_id}'
+					")
+		$db.execute("Commit")
+	end
 	
 	
+	def deleteMerch(product_id)
+		$db.execute("	DELETE
+						FROM merchandise
+						WHERE product_id = '#{product_id}'
+					")
+		$db.execute("Commit")
+	end
 	
 	
-	
-	
-	
-	
-	def deleteClient(username)
+	def deleteClient(client_id)
 		$db.execute("	DELETE
 						FROM client
-						WHERE client_id = '#{username}'
+						WHERE client_id = '#{client_id}'
 					")
 		$db.execute("Commit")
 	end

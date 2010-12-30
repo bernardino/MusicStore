@@ -107,6 +107,12 @@ get '/logout' do
 	redirect '/'
 end
 
+get '/addcredits' do
+  #$db.execute("update client set credits=#{params[:c]} where client_id='#{session[:id]}'")
+  
+  redirect params[:page]
+end
+
 
 get '/artist/:id' do
 	res = $get.artist(params[:id])
@@ -139,18 +145,6 @@ get '/artist/:name/album/:id' do
 	erb :album
 end
 
-
-get '/insertArtist/:id' do
-	$lf.get_artist(params[:id])
-	i = $lf.get_artist_id(params[:id])
-	res = $get.artist(i)
-	@artistID = res[0]
-	@bio = res[1]
-	@image = res[2]
-	@albums = $get.artist_albums(i)
-	
-	erb :artist
-end
 
 get '/artist/:artist_name/insertAlbum/:album_name' do
 	$lf.create_album(params[:artist_name], params[:album_name])
@@ -303,20 +297,50 @@ end
 
 
 get '/client' do
-	@info = $get.client(session[:id])
-	
+	@info = $get.client(session[:id])	
 	erb :client
+end
+
+
+post '/addArtistManual' do
+	$manage.addArtist(params[:artistName], params[:artistImage], params[:artistBio])
+
+	redirect '/admin'
+end
+
+
+post '/addArtistLastfm' do
+	$lf.addArtist(params[:artistName])
+
+	redirect '/admin'
+end
+
+
+post '/addAlbumManual' do
+	album_id = $db.select("SELECT product_number.nextval FROM DUAL")
+	
+	$manage.addProduct(album_id[0], params[:albumArtist], params[:albumDescription], params[:albumImage], params[:albumDate], params[:albumPrice], params[:albumStock])
+	$manage.addAlbum(album_id[0], params[:albumName], params[:albumLength], params[:albumGenre], params[:albumLabel])
+	
+	redirect '/admin'
+end
+
+
+post '/addAlbumLastfm' do
+	album_id = $db.select("SELECT product_number.nextval FROM DUAL")
+
+	redirect '/admin'
 end
 
 
 post '/addSong' do
 	song_id = $db.select("SELECT product_number.nextval FROM DUAL")
 	
-	$manage.addProduct(song_id[0], params[:addSongArtist], params[:addSongDescription], params[:addSongImage], params[:addSongDate], params[:addSongPrice], '-1')
+	$manage.addProduct(song_id[0], params[:songArtist], params[:songDescription], params[:songImage], params[:songDate], params[:songPrice], '-1')
 	if (params[:addSongAlbum] != '')
-		$manage.addSong(song_id[0], params[:addSongAlbum], params[:addSongName], params[:addSongLength], params[:addSongGenre], params[:addSongNumber])
+		$manage.addSong(song_id[0], params[:songAlbum], params[:songName], params[:songLength], params[:songGenre], params[:songNumber])
 	else
-		$manage.addSong(song_id[0], 'null', params[:addSongName], params[:addSongLength], params[:addSongGenre], 'null')
+		$manage.addSong(song_id[0], 'null', params[:songName], params[:songLength], params[:songGenre], 'null')
 	end
 
 	redirect '/admin'
@@ -326,8 +350,8 @@ end
 post '/addMerch' do
 	merch_id = $db.select("SELECT product_number.nextval FROM DUAL")
 
-	$manage.addProduct(merch_id[0], params[:addMerchArtist], params[:addMerchDescription], params[:addMerchImage], params[:addMerchDate], params[:addMerchPrice], params[:addMerchStock])
-	$manage.addMerch(merch_id[0], params[:addMerchName])
+	$manage.addProduct(merch_id[0], params[:merchArtist], params[:merchDescription], params[:merchImage], params[:merchDate], params[:merchPrice], params[:merchStock])
+	$manage.addMerch(merch_id[0], params[:merchName])
 
 	redirect '/admin'
 end
@@ -382,8 +406,36 @@ post '/editClient' do
 end
 
 
+post '/deleteArtist' do
+	$manage.deleteArtist(params[:ID])
+	
+	redirect '/admin'
+end
+
+
+post '/deleteAlbum' do
+	$manage.deleteAlbum(params[:ID])
+	
+	redirect '/admin'
+end
+
+
+post '/deleteSong' do
+	$manage.deleteSong(params[:ID])
+	
+	redirect '/admin'
+end
+
+
+post '/deleteMerch' do
+	$manage.deleteMerch(params[:ID])
+	
+	redirect '/admin'
+end
+
+
 post '/deleteClient' do
-	$manage.deleteClient(params[:deleteClientUsername])
+	$manage.deleteClient(params[:ID])
 	
 	redirect '/admin'
 end

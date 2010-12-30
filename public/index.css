@@ -1,7 +1,7 @@
 @charset "UTF-8";
 /* CSS Document */
 body {
-  background:#000;
+  background:#FFF;
 }
 
 h1 {
@@ -11,9 +11,9 @@ h1 {
 }
 
 .container {
-	width:80%;
+	/*width:80%;
 	margin-left:10%;
-	margin-right:10%;
+	margin-right:10%;*/
 	background:#FFF;
 	margin: 0 auto;
 }
@@ -23,7 +23,7 @@ h1 {
 }
 
 .content {
-	background:#DED;
+	background:#FFF;
 }
 
 .link {
@@ -69,8 +69,11 @@ h1 {
 	font-size:13px;
 }
 .footer {
+	width:100%;
 	clear:both;
 	font-family:"Palatino Linotype", "Book Antiqua", Palatino, serif;
 	background:#EEE;
 	padding:5px;
+	position:fixed;
+	bottom:0px;
 }
