@@ -28,6 +28,9 @@ end
 class AlbumError < StandardError
 end
 
+class SongError < StandardError
+end
+
 #template(:layout) { :index }
 
 before do
@@ -337,6 +340,8 @@ post '/addAlbumLastfm' do
 		redirect '/admin?error=badartistid'
 	rescue AlbumError
 		redirect '/admin?error=albumnotfound'
+	rescue SongError
+		redirect '/admin?error=badsongdata'
 	end
 	redirect '/admin'
 end
