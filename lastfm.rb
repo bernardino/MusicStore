@@ -123,7 +123,6 @@ class Lastfm
 			puts 'x'+arr[2]+'x'
 			puts 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
 			
-			#we should avoid this by verifying first if last.fm's content isn't null..................
 			begin
 				$manage.addProduct(product_id[0], artist_id, arr[0], arr[1], arr[2], price, stock)
 				$manage.addAlbum(product_id[0], name, length, genre, label)
