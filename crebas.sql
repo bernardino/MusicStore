@@ -116,6 +116,17 @@ BEGIN
 END;
 /
 
+create or replace procedure buy_credits (creditos in client.credits%type, id in client.client_id%type) IS
+old_credits client.credits%type;
+new_credits client.credits%type;
+BEGIN
+	select credits into old_credits from client where client_id = id;
+	new_credits := creditos + old_credits;
+	update client set credits = new_credits where client_id=id;
+	commit;
+END;
+/
+
 
 
 /*==============================================================*/

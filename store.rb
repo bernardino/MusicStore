@@ -117,7 +117,7 @@ get '/logout' do
 end
 
 get '/addcredits' do
-  #$db.execute("update client set credits=#{params[:c]} where client_id='#{session[:id]}'")
+  $db.execute("BEGIN buy_credits(#{params[:c]},'#{session[:id]}'); END;")
   
   redirect params[:page]
 end
@@ -522,7 +522,7 @@ end
 
 get '/addvote' do
   $db.execute("begin voting(#{params[:id]},#{params[:v]}); end;")
-  $db.execute("commit")
+  
   redirect params[:page]
 end
 

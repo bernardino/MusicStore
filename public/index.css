@@ -1,13 +1,14 @@
 @charset "UTF-8";
 /* CSS Document */
 body {
-  background:#FFF;
+  background:#CCC;
 }
 
 h1 {
 	color:#fff;
 	font-weight:bold;
 	font-family:Trebuchet MS, Arial, Helvetica, sans-serif;
+	tex-decoration:none;
 }
 
 info{
@@ -17,20 +18,44 @@ info{
 	color:#000;
 }
 
+logo{
+	color:#fff;
+	font-weight:bold;
+	font-family:Trebuchet MS, Arial, Helvetica, sans-serif;
+	tex-decoration:none;
+}
+
 .container {
 	/*width:80%;
 	margin-left:10%;
 	margin-right:10%;*/
-	background:#FFF;
+	background:#CCC;
 	margin: 0 auto;
 }
 
 .header {
 	background:#000;
+	text-decoration:none;
+	cursor:pointer;
+	-user-select:none;
+	-moz-user-select: none;
+   	-khtml-user-select: none;
 }
 
 .content {
-	background:#FFF;
+	background:#EEE;
+}
+
+.head {
+	font-family:Trebuchet MS, Arial, Helvetica, sans-serif;
+	font-size: 24px;
+	font-weight:bold;
+	text-align:center;
+	text-decoration:none;
+	color:#333333;
+	-user-select:none;
+	-moz-user-select: none;
+   	-khtml-user-select: none;
 }
 
 
@@ -123,12 +148,16 @@ info{
 	color:#000;
 	font-size:13px;
 }
-.footer {
-	width:100%;
+#footer {
+	width:98%;
 	clear:both;
 	font-family:"Palatino Linotype", "Book Antiqua", Palatino, serif;
-	background:#EEE;
+	background:#CCC;
 	padding:5px;
 	position:fixed;
 	bottom:0px;
+	cursor:auto;
+	-user-select:none;
+	-moz-user-select: none;
+   	-khtml-user-select: none;
 }

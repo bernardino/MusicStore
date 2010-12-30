@@ -58,10 +58,22 @@
 </head>
 
 <body>
-	<div class="container">
-		<div align="center" class="header">
-			<h1>Music Store</h1>
-			<div align="left" style="background:#F93; padding:8px">
+	<div class="container" style="overflow:hidden;">
+		<div align="center" class="header" >
+			<table>
+				<tr>
+					<td>
+						<img src="/img/Banana2.png" width="60" height="60"/>
+					</td>
+					<td>
+						<logo href="/"><h1>Banana Store</logo>
+					</td>
+					<td>
+						<img src="/img/Banana.png" width="60" height="60"/>
+					</td>
+				</tr>
+			</table>
+			<div align="left" style="background:#F93; padding:12px">
 				<div>
 					<span width="100" class="link" onClick="goTo('index')">Home</span>
 					<span width="100" class="link" onClick="goTo('top')">Top</span>
@@ -84,115 +96,117 @@
 				</div>
 			</div>
 		</div>
-		<div align="center" class="content">
-			<!-- !LOGGED_IN -->
-			<% if @logged %>
-			<div style="background:#EEE; float:left;width:15%">
-				<h3>Welcome <%= session[:id] %>!!</h3>
-				<br />
-				<a class="search" href="/client"> Edit your personal information</a>
-				<br /><br />
-				<input id="credits_txt" type="text" size="5" style="display:none;" onkeyup="justInt()" /><br />
-				<input id="credits_btn" type="button" value="Buy Credits" onmouseup="credits()">	
-				<br /><br />
-				<a href="/logout">Logout</a>
-			</div>
-			<% else %>
-			<div style="background:#EEE; float:left;width:15%;">
-				<form action="/login?p=<%= request.fullpath %>" method="post" accept-charset="utf-8">
-					<h1>Login</h1>
-					<h3>Username</h3><input type="text" name="username" />
-					<h3>Password</h3><input type="password" name="password"/><br />
-					<input type="submit" value="Login">
-					<br />
-					<a href="/register">Not Registered?</a>
-					<br />
-				</form>
-			</div>
-		<% end %>
-      <!-- Cenas -->
-      <div align="left" style="background-color:#CCC;float:left;width:70%">
-      <h1>Search results for <%= @options %> <%= @searchTerm %></h1>
-		  <table>
-			<% 	
-				i=0
-				if @res == nil || @res.length == 0%>
-					<%= @error %><%
-			
-				elsif @options == 'artist'
-					while i < @res.length %>
-						<tr>
-							<td>
-								<a class="search" href="/artist/<%=@res[i] %>" ><img src="<%= @res[i+2] %>" height="60" width="60" border="2"/></a>
-							</td>
-							<td>
-								<a class="search" href="/artist/<%=@res[i] %>"><%= @res[i+1] %></a>
-							</td>
-						</tr>
-						<% i=i+3 %>
-					<% end %>
-				<% elsif @options == 'album' 
-					while i <@res.length %>
-						<tr>
-							
-							<td>
-								<a class="search" href="/artist/<%= @res[i+3]%>/album/<%=@res[i]%>"><img src="<%= @res[i+4] %>" height="60" width="60" border="2"/></a>
-							</td>
-							<td>
-								<a class="search" href="/artist/<%= @res[i+3]%>/album/<%=@res[i]%>"> <%= @res[i+1] %></a>
-							</td>
-						</tr>
-						<% i=i+5 %>
-					<% end %>
-				<% elsif @options =='song' 
-					while i<@res.length %>
-						<tr>
-							<td>
-								<a class="search" href="/song/<%=@res[i] %>"><img src="<%= @res[i+4] %>"></a>
-							</td>
-							<td>
-								<a class="search" href="/song/<%=@res[i] %>"><%= @res[i+1] %></a>
-							</td>
-						</tr>
-						<% i=i+5 %>
-					<% end %>
-				<% elsif @options =='merch'
-					while i< @res.length %>
-						<tr>
-							<td>
-								<a class="search" href="/song/<%=@res[i] %>"><img src="<%= @res[i+3] %>"></a>
-							</td>
-							<td>
-								<a class="search" href="/merch/<%= @res[i] %>"><%= @res[i+1] %></a>
-							</td>
-						</tr>
-						<% i=i+4 %>
-					<% end %>
-				<% end %>
-			</table>
-      </div>
-		<!-- Shopping Cart -->
-		<div style="background:#DDD; float:left;width:15%;">
-			<h1>Shopping Cart</h1>
-			<% if session[:orders]=={}%>
-				<p>No orders</p>
-			<% else %>
-				<p>You have some orders</p>
-				<% session[:orders].keys.each do |order| %>
-				<p align="left" style="margin:10%">Product: <%= session[:orders][order][1] %> (<%= session[:orders][order][2] %>)<br />Quantity: <%= session[:orders][order][0] %> <img style="cursor:pointer" onmouseup="add(<%= order %>)" src="/img/plus.png">  <img style="cursor:pointer" onmouseup="del(<%= order %>,<%= session[:orders][order][0] %>)" src="/img/minus.png"><br /><img style="cursor:pointer" onmouseup="remove(<%= order %>)" src="/img/cross.png"></p>
-				<% end %>
+			<div align="center" class="content">
+				<!-- !LOGGED_IN -->
 				<% if @logged %>
-					<input type="button" onClick="goTo('checkout')" value="Checkout">
+				<div style="background:#CCC; float:left;width:15%">
+					<h1 class="head"><%= session[:id] %></h1>
+					<a class="search" href="/client"> Edit your account</a>
+					<br />
+					<input id="credits_txt" type="text" size="5" style="display:none;" onkeyup="justInt()" /><br />
+					<input id="credits_btn" type="button" value="Buy Credits" onmouseup="credits()">	
+					<br /><br />
+					<a href="/logout">Logout</a>
+				</div>
 				<% else %>
-					<input type="button" onClick="goTo('checkout')" value="Checkout" disabled="true">
-					<br />You need to be logged in to proceed to checkout! 
+				<div style="background:#CCC; float:left;width:15%;">
+					<form action="/login?p=<%= request.fullpath %>" method="post" accept-charset="utf-8">
+						<h1 class="head">Login</h1>
+						<h3>Username</h3><input type="text" name="username" />
+						<h3>Password</h3><input type="password" name="password"/><br />
+						<input type="submit" value="Login">
+						<br />
+						<a href="/register">Not Registered?</a>
+						<br />
+					</form>
+				</div>
+			<% end %>
+		  <!-- Cenas -->
+		  <div align="left" style="background-color:#EEE;float:left;width:70%">
+		  <h1 class="head">Search results for <%= @options %> <%= @searchTerm %></h1>
+		  <div style="margin:20px;">
+			  <table>
+				<% 	
+					i=0
+					if @res == nil || @res.length == 0%>
+						<%= @error %><%
+				
+					elsif @options == 'artist'
+						while i < @res.length %>
+							<tr>
+								<td>
+									<a class="search" href="/artist/<%=@res[i] %>" ><img src="<%= @res[i+2] %>" height="100" width="100" border="2"/></a>
+								</td>
+								<td>
+									<a class="search" href="/artist/<%=@res[i] %>"><%= @res[i+1] %></a>
+								</td>
+							</tr>
+							<% i=i+3 %>
+						<% end %>
+					<% elsif @options == 'album' 
+						while i <@res.length %>
+							<tr>
+								
+								<td>
+									<a class="search" href="/artist/<%= @res[i+3]%>/album/<%=@res[i]%>"><img src="<%= @res[i+4] %>" height="100" width="100" border="2"/></a>
+								</td>
+								<td>
+									<a class="search" href="/artist/<%= @res[i+3]%>/album/<%=@res[i]%>"><%= @res[i+2] %> -  <%= @res[i+1] %></a>
+								</td>
+							</tr>
+							<% i=i+5 %>
+						<% end %>
+					<% elsif @options =='song' 
+						while i<@res.length %>
+							<tr>
+								<td>
+									<a class="search" href="/song/<%=@res[i] %>"><img src="<%= @res[i+4] %>" height="100" width="100" border="2"/></a>
+								</td>
+								<td>
+									<a class="search" href="/song/<%=@res[i] %>"><%= @res[i+2] %> - <%= @res[i+1] %></a>
+								</td>
+							</tr>
+							<% i=i+5 %>
+						<% end %>
+					<% elsif @options =='merch'
+						while i< @res.length %>
+							<tr>
+								<td>
+									<a class="search" href="/song/<%=@res[i] %>"><img src="<%= @res[i+3] %>" height="100" width="100" border="2"/></a>
+								</td>
+								<td>
+									<a class="search" href="/merch/<%= @res[i] %>"><%= @res[i+2] %> - <%= @res[i+1] %></a>
+								</td>
+							</tr>
+							<% i=i+4 %>
+						<% end %>
+					<% end %>
+				</table>
+				</div>
+		  </div>
+			<!-- Shopping Cart -->
+			<div style="background:#CCC; float:left;width:15%;">
+				<h1 class="head">Shopping Cart</h1>
+				<% if session[:orders]=={}%>
+					<p>No orders</p>
+				<% else %>
+					<p>You have some orders</p>
+					<% session[:orders].keys.each do |order| %>
+					<p align="left" style="margin:10%">Product: <%= session[:orders][order][1] %> (<%= session[:orders][order][2] %>)<br />Quantity: <%= session[:orders][order][0] %> <img style="cursor:pointer" onmouseup="add(<%= order %>)" src="/img/plus.png">  <img style="cursor:pointer" onmouseup="del(<%= order %>,<%= session[:orders][order][0] %>)" src="/img/minus.png"><br /><img style="cursor:pointer" onmouseup="remove(<%= order %>)" src="/img/cross.png"></p>
+					<% end %>
+					<% if @logged %>
+						<input type="button" onClick="goTo('checkout')" value="Checkout">
+					<% else %>
+						<input type="button" onClick="goTo('checkout')" value="Checkout" disabled="true">
+						<br />You need to be logged in to proceed to checkout! 
+					<%end%>
+					<p>(a) - album / (s) - song / (m) - merchandise</p>
 				<%end%>
-				<p>(a) - album / (s) - song / (m) - merchandise</p>
-			<%end%>
+			</div>
 		</div>
-		<div align="center" class="footer">
+	</div>
+	<div align="center" id="footer">
 			Copyright © 2010 - Guilherme Simões, João Penetra, Ricardo Bernardino
-		</div>
 	</div>
 </body>
 </html>

@@ -88,10 +88,22 @@
 </head>
 
 <body onload="emailField();">
-	<div class="container">
+	<div class="container" style="overflow: hidden;">
 		<div align="center" class="header">
-			<h1>Music Store</h1>
-			<div align="left" style="background:#F93; padding:8px">
+			<table>
+				<tr>
+					<td>
+						<img src="/img/Banana2.png" width="60" height="60"/>
+					</td>
+					<td>
+						<logo href="/"><h1>Banana Store</logo>
+					</td>
+					<td>
+						<img src="/img/Banana.png" width="60" height="60"/>
+					</td>
+				</tr>
+			</table>
+			<div align="left" style="background:#F93; padding:12px">
 				<div>
 					<span width="100" class="link" onClick="goTo('index')">Home</span>
 					<span width="100" class="link" onClick="goTo('top')">Top</span>
@@ -117,20 +129,19 @@
 		<div align="center" class="content">
 			<!-- !LOGGED_IN -->
 			<% if @logged %>
-			<div style="background:#EEE; float:left;width:15%">
-				<h3>Welcome <%= session[:id] %>!!</h3>
-				<br />
+			<div style="background:#CCC; float:left;width:15%">
+				<h1 class="head"><%= session[:id] %></h1>
 				<a class="search" href="/client"> Edit your account</a>
-				<br /><br />
+				<br />
 				<input id="credits_txt" type="text" size="5" style="display:none;" onkeyup="justInt()" /><br />
 				<input id="credits_btn" type="button" value="Buy Credits" onmouseup="credits()">	
 				<br /><br />
 				<a href="/logout">Logout</a>
 			</div>
 			<% else %>
-			<div style="background:#EEE; float:left;width:15%;">
+			<div style="background:#CCC; float:left;width:15%;">
 				<form action="/login" method="post" accept-charset="utf-8">
-					<h1>Login</h1>
+					<h1 class="head">Login</h1>
 					<h3>Username</h3><input type="text" name="username" /><br />
 					<h3>Password</h3><input type="password" name="password"/><br /><br />
 					<input type="submit" value="Login">
@@ -141,8 +152,8 @@
 			</div>
 			<% end %>
 			<!-- Cenas -->
-			<div align="left" style="background:#CCC; float:left;width:70%;">
-				<h1> Client </h1>
+			<div align="left" style="background:#EEE; float:left;width:70%;">
+				<h1 class="head">Client </h1>
 				<form name="registerForm" class="registerForm" action="/editClient" method="post">
 					<table onkeyup="emailField()">
 						<tr>
@@ -186,8 +197,8 @@
 					%>
 			</div>
 			<!-- Shopping Cart -->
-			<div style="background:#DDD; float:left;width:15%;">
-				<h1>Shopping Cart</h1>
+			<div style="background:#CCC; float:left;width:15%;">
+				<h1 class="head">Shopping Cart</h1>
 				<% if session[:orders]=={}%>
 					<p>No orders</p>
 				<% else %>
@@ -205,9 +216,9 @@
 				<%end%>
 			</div>
 		</div>
-		<div align="center" class="footer">
+	</div>
+	<div align="center" class="footer">
 			 Copyright © 2010 - Guilherme Simões, João Penetra, Ricardo Bernardino
-		</div>
 	</div>
 </body>
 </html>
