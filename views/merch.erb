@@ -88,9 +88,21 @@
 </head>
 
 <body onload="rating();">
-	<div class="container">
-		<div align="center" class="header">
-			<h1>Music Store</h1>
+	<div class="container" style="overflow: hidden;">
+		<div align="center" class="header" >
+			<table>
+				<tr>
+					<td>
+						<img src="/img/Banana2.png" width="60" height="60"/>
+					</td>
+					<td>
+						<h1>Banana Store</h1>
+					</td>
+					<td>
+						<img src="/img/Banana.png" width="60" height="60"/>
+					</td>
+				</tr>
+			</table>
 			<div align="left" style="background:#F93; padding:8px">
 				<div>
 					<span width="100" class="link" onClick="goTo('index')">Home</span>
@@ -117,20 +129,19 @@
 		<div align="center" class="content">
 			<!-- !LOGGED_IN -->
 			<% if @logged %>
-			<div style="background:#EEE; float:left;width:15%">
-				<h3>Welcome <%= session[:id] %>!!</h3>
+			<div style="background:#CCC; float:left;width:15%">
+				<h1 class="head"><%= session[:id] %>!!</h1>
+				<a class="search" href="/client"> Edit your account</a>
 				<br />
-				<a class="search" href="/client"> Edit your personal information</a>
-				<br /><br />
 				<input id="credits_txt" type="text" size="5" style="display:none;" onkeyup="justInt()" /><br />
 				<input id="credits_btn" type="button" value="Buy Credits" onmouseup="credits()">	
 				<br /><br />
 				<a href="/logout">Logout</a>
 			</div>
 			<% else %>
-			<div style="background:#EEE; float:left;width:15%;">
+			<div style="background:#CCC; float:left;width:15%;">
 				<form action="/login?p=<%= request.fullpath %>" method="post" accept-charset="utf-8">
-					<h1>Login</h1>
+					<h1 class="head">Login</h1>
 					<h3>Username</h3><input type="text" name="username" />
 					<h3>Password</h3><input type="password" name="password"/><br />
 					<input type="submit" value="Login">
@@ -141,17 +152,16 @@
 			</div>
 			<% end %>
 			<!-- Cenas -->
-			<div style="background-color:#CCC; float:left;width:70%">
-				<embed src="http://dl.dropbox.com/u/4898423/Song%20of%20the%20week.mp3" controls="console" type="audio/mpeg autostart="FALSE" height="20" width="100">
+			<div style="background-color:#EEE; float:left;width:70%">
 				<div style="float:right;margin:10px;">
-					<img src="<%= @res[2] %>" />
+					<img src="<%= @res[2] %>" width="150" height="150"/>
 				</div>
 				<div align="left" style="margin: 10px;">
 					<a class="headline" href =""> <%= @res[0] %></a><br/><br/>
 					<a class="subhead">Name: </a> <a class="item"><%= @res[1] %></a><br/>
 					<a class="subhead">Description:</a> <info><%= @res[3] %></info><br/>
 					<a class="subhead">Rating: </a> <img id="star0" onmouseover="imgOver(0)" onmouseout="rating()" onmouseup="vote(1)" src="/img/blank.png"><img id="star1" onmouseover="imgOver(1)" onmouseout="rating()" onmouseup="vote(2)" src="/img/blank.png"><img id="star2" onmouseover="imgOver(2)" onmouseout="rating()" onmouseup="vote(3)" src="/img/blank.png"><img id="star3" onmouseover="imgOver(3)" onmouseout="rating()" onmouseup="vote(4)" src="/img/blank.png"><img id="star4" onmouseup="vote(5)" onmouseover="imgOver(4)" onmouseout="rating()" src="/img/blank.png"></a></br>
-					<a class="subhead">Price: </a> <a class="item"> <%= @res[7] %> euros</a><br/>
+					<a class="subhead">Price: </a> <a class="item"> <%= @res[7] %> €</a><br/>
 					<a class="subhead">Date:</a> <a class="item"> <%= @res[4] %></a><br/>
 					<br/>
 					<a href="/addorder?page=<%= request.fullpath %>&id=<%= params[:id] %>&type=m"><input type="button" value="Buy"></a><br/>
@@ -159,8 +169,8 @@
 			</div>
 		</div>
 		<!-- Shopping Cart -->
-		<div style="background:#DDD; float:left;width:15%;">
-			<h1>Shopping Cart</h1>
+		<div style="background:#CCC; float:left;width:15%;">
+			<h1 class="head">Shopping Cart</h1>
 			<% if session[:orders]=={}%>
 				<p>No orders</p>
 			<% else %>
@@ -177,7 +187,7 @@
 				<p>(a) - album / (s) - song / (m) - merchandise</p>
 			<%end%>
 		</div>
-		<div align="center" class="footer">
+		<div align="center" id="footer">
 			Copyright © 2010 - Guilherme Simões, João Penetra, Ricardo Bernardino
 		</div>
 	</div>

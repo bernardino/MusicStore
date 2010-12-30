@@ -58,7 +58,7 @@
 </head>
 
 <body>
-	<div class="container">
+	<div class="container" style="overflow: hidden;">
 		<div align="center" class="header" >
 			<table>
 				<tr>
@@ -66,7 +66,7 @@
 						<img src="/img/Banana2.png" width="60" height="60"/>
 					</td>
 					<td>
-						<h1>Banana Store</h1>
+						<logo href="/"><h1>Banana Store</logo>
 					</td>
 					<td>
 						<img src="/img/Banana.png" width="60" height="60"/>
@@ -102,9 +102,8 @@
 		<div align="center" class="content">
 			<!-- !LOGGED_IN -->
 			<% if @logged %>
-			<!--<div style="background:#CCC; float:left;width:15%"> -->
-			<div>
-				<h3>Welcome <%= session[:id] %>!!</h3>
+			<div style="background:#CCC; float:left;width:15%">
+				<h1 class="head"><%= session[:id] %></h1>
 				<a class="search" href="/client"> Edit your account</a>
 				<br />
 				<input id="credits_txt" type="text" size="5" style="display:none;" onkeyup="justInt()" /><br />
@@ -115,7 +114,7 @@
 			<% else %>
 			<div style="background:#CCC; float:left;width:15%;">
 				<form action="/login?p=<%= request.fullpath %>" method="post" accept-charset="utf-8">
-					<h1>Login</h1>
+					<h1 class="head">Login</h1>
 					<h3>Username</h3><input type="text" name="username" /><br />
 					<h3>Password</h3><input type="password" name="password"/><br /><br />
 					<input type="submit" value="Login">					
@@ -127,7 +126,7 @@
 			<% end %>
 			<!-- Cenas -->
 			<div align="left" style="background:#EEE; float:left;width:70%;">
-				<h1 align="center">Recently Added Items</h1>
+				<h1 class="head">Recently Added Items</h1>
 				<div style="margin:20px;">
 					<div style="background:#EEE; float:left;width:50%;">
 						<p class="label"> Albums</p>
@@ -194,7 +193,7 @@
 			</div>
 			<!-- Shopping Cart -->
 			<div style="background:#CCC; float:left;width:15%;">
-				<h1>Shopping Cart</h1>
+				<h1 class="head">Shopping Cart</h1>
 				<% if params[:erro] == "f" %>
 					<p>Your order was done sucessfully. Thanks for using our store</p>
 				<% end %>
@@ -215,9 +214,9 @@
 				<%end%>
 			</div>
 		</div>
-		<div align="center" class="footer">
-			Copyright © 2010 - Guilherme Simões, João Penetra, Ricardo Bernardino
-		</div>
+	</div>
+	<div align="center" id="footer">
+				Copyright © 2010 - Guilherme Simões, João Penetra, Ricardo Bernardino
 	</div>
 </body>
 </html>

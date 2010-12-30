@@ -204,9 +204,20 @@
 </head>
 
 <body onLoad="displayError()">
-	<div class="container">
-		<div align="center" class="header">
-			<h1>Music Store</h1>
+	<div align="center" class="header" >
+			<table>
+				<tr>
+					<td>
+						<img src="/img/Banana2.png" width="60" height="60"/>
+					</td>
+					<td>
+						<a href="/"><h1>Banana Store</h1></a>
+					</td>
+					<td>
+						<img src="/img/Banana.png" width="60" height="60"/>
+					</td>
+				</tr>
+			</table>
 			<div align="left" style="background:#F93; padding:8px">
 				<div>
 					<span width="100" class="link" onClick="goTo('index')">Home</span>
@@ -234,8 +245,13 @@
 		<div align="center" class="content">
 			<!-- !LOGGED_IN -->
 			<% if @logged %>
-			<div style="background:#CCC; float:left;width:20%">
-				<h3>Welcome <%= session[:id] %>!!</h3><br />
+			<div style="background:#CCC; float:left;width:15%">
+				<h1 class="head"><%= session[:id] %></h1>
+				<a class="search" href="/client"> Edit your account</a>
+				<br />
+				<input id="credits_txt" type="text" size="5" style="display:none;" onkeyup="justInt()" /><br />
+				<input id="credits_btn" type="button" value="Buy Credits" onmouseup="credits()">	
+				<br /><br />
 				<a href="/logout">Logout</a>
 			</div>
 			<% else %>
@@ -661,7 +677,7 @@
 			</div>
 			
 			<!-- Shopping Cart -->
-			<div style="background:#CCC; float:left;width:20%;">
+			<div style="background:#CCC; float:left;width:15%;">
 				<h1>Shopping Cart</h1>
 				<% if session[:orders]=={}%>
 					<p>No orders</p>
@@ -680,9 +696,9 @@
 				<%end%>
 			</div>
 		</div>
-		<div align="center" class="footer">
-			Copyright © 2010 - Guilherme Simões, João Penetra, Ricardo Bernardino
-		</div>
+	</div>
+	<div align="center" id="footer">
+		Copyright © 2010 - Guilherme Simões, João Penetra, Ricardo Bernardino
 	</div>
 </body>
 </html>
