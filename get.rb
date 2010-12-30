@@ -168,7 +168,7 @@ class Get
 
 	def recentlyAddedAlbums()
 		return $db.select(" SELECT *
-							FROM (	SELECT p.product_id, al.album_name, ar.artist_name, ar.artist_id, p.image
+							FROM (	SELECT p.product_id, al.album_name, ar.artist_name, p.image, ar.artist_id
 									FROM product p, album al, artist ar
 									WHERE p.product_id = al.product_id
 									AND p.artist_id = ar.artist_id
@@ -181,7 +181,7 @@ class Get
 	
 	def recentlyAddedSongs()
 		return $db.select(" SELECT *
-							FROM (	SELECT p.product_id, s.song_name, ar.artist_name, p.image,ar.artist_id
+							FROM (	SELECT p.product_id, s.song_name, ar.artist_name, p.image, ar.artist_id
 									FROM product p, song s, artist ar
 									WHERE p.product_id = s.product_id
 									AND p.artist_id = ar.artist_id
@@ -220,7 +220,7 @@ class Get
 	
 	def topSongs()
 		return $db.select(" SELECT *
-							FROM (	SELECT p.product_id, s.song_name, ar.artist_name,ar.artist_id, p.image
+							FROM (	SELECT p.product_id, s.song_name, ar.artist_name, p.image, ar.artist_id
 									FROM product p, song s, artist ar
 									WHERE p.product_id = s.product_id
 									AND p.artist_id = ar.artist_id
@@ -233,7 +233,7 @@ class Get
 	
 	def topMerch()
 		return $db.select(" SELECT *
-							FROM (	SELECT p.product_id, m.merchandise_name, ar.artist_name,ar.artist_id, p.image
+							FROM (	SELECT p.product_id, m.merchandise_name, ar.artist_name, p.image, ar.artist_id
 									FROM product p, merchandise m, artist ar
 									WHERE p.product_id = m.product_id
 									AND p.artist_id = ar.artist_id
@@ -261,6 +261,17 @@ class Get
 									song_number, song_length, rating, votes, current_price
 							FROM song s, product p
 							WHERE s.product_id = p.product_id
+							AND p.artist_id = #{artist_id}
+							ORDER BY release_date DESC, album_name ASC, song_number ASC
+						")
+	end
+	
+	
+	def artistSingleSongs(artist_id)
+		return $db.select("	SELECT p.product_id, song_name, song_number, song_length, rating, votes, current_price
+							FROM song s, product p
+							WHERE s.product_id = p.product_id
+							AND p.
 							AND p.artist_id = #{artist_id}
 							ORDER BY release_date DESC, album_name ASC, song_number ASC
 						")
