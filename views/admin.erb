@@ -28,6 +28,8 @@
 	
 	function showContent(display, id){
 	
+		<!--alert(displayed.value+"\n"+displayed2.value+"\n"+displayed3.value+"\n\n"+id)-->
+	
 		if (display.value!=""){
 			document.getElementById(display.value+"Button").className='link';
 			document.getElementById(display.value).style.display='none';
@@ -40,6 +42,8 @@
 			document.getElementById(id).style.display='inline';
 			display.value = id;
 		}
+		
+		<!--alert(displayed.value+"\n"+displayed2.value+"\n"+displayed3.value+"\n\n"+id)-->
 	}
 	
 	
@@ -178,6 +182,31 @@
 		}
 		else {
 			addMerchForm.submitButton.disabled=false;
+		}
+	}
+	
+	function disableEdit(){
+		if(editMerchForm.ID.value=="" || isNaN(editMerchForm.ID.value)){
+			editMerchForm.submitButton.disabled=true;
+			editMerchForm.merchName.disabled=true;
+			editMerchForm.merchArtist.disabled=true;
+			editMerchForm.merchDescription.disabled=true;
+			editMerchForm.merchImage.disabled=true;
+			editMerchForm.merchDate.disabled=true;
+			editMerchForm.merchPrice.disabled=true;
+			editMerchForm.merchStock.disabled=true;
+		}
+		else {
+			editMerchForm.submitButton.disabled=false;
+			editMerchForm.merchName.disabled=false;
+			editMerchForm.merchArtist.disabled=false;
+			editMerchForm.merchDescription.disabled=false;
+			editMerchForm.merchImage.disabled=false;
+			editMerchForm.merchDate.disabled=false;
+			editMerchForm.merchPrice.disabled=false;
+			editMerchForm.merchStock.disabled=false;
+			
+			editMerchForm.merchName.value="<%= $get.artistName(editMerchForm.ID.value)[0] %>";
 		}
 	}
 	
@@ -651,59 +680,47 @@
 					</div>
 					<div id="editMerch" align="left" style="background:#EEE; float:left;width:60%; display:none">
 						
-						
-						
-						
-						
 						<form name="editMerchForm" action="/editMerch" method="post">
-							<table onkeyup="disableEditMerchButton()" width="300">
+							<table width="300">
 								<tr>
 									<td class="label" width="130">Name:</td>
-									<td><input type="text" name="merchName"/></td>
+									<td><input type="text" disabled="true" name="merchName"/></td>
 								</tr>
 								<tr>
 									<td class="label">Artist ID:</td>
-									<td><input type="text" name="merchArtist"/></td>
+									<td><input type="text" disabled="true" name="merchArtist"/></td>
 								</tr>
 								<tr>
 									<td class="label">Description:</td>
-									<td><input type="text" name="merchDescription"/></td>
+									<td><input type="text" disabled="true" name="merchDescription"/></td>
 								</tr>
 								<tr>
 									<td class="label">Image:</td>
-									<td><input type="text" name="merchImage"/></td>
+									<td><input type="text" disabled="true" name="merchImage"/></td>
 								</tr>
 								<tr>
 									<td class="label">Release Year:</td>
-									<td><input type="text" name="merchDate"/></td>
+									<td><input type="text" disabled="true" name="merchDate"/></td>
 								</tr>
 								<tr>
 									<td class="label">Price:</td>
-									<td><input type="text" name="merchPrice"/></td>
+									<td><input type="text" disabled="true" name="merchPrice"/></td>
 								</tr>
 								<tr>
 									<td class="label">Stock:</td>
-									<td><input type="text" name="merchStock"/></td>
+									<td><input type="text" disabled="true" name="merchStock"/></td>
 								</tr>
 							</table>
-							<input type="submit" value="Edit" name="submitButton" disabled="true"/>
+							<input type="submit" value="Edit" name="editButton" disabled="true"/>
+							<br/>
+							<br/>
+							<table width="300">
+								<tr>
+									<td width="130"><input type="submit" value="Get" name="submitButton" disabled="true"/></td>
+									<td><input type="text" name="ID" onkeyup="disableEdit()"/></td>
+								</tr>
+							</table>
 						</form>
-						<br/>
-						<br/>
-						
-
-						<table width="300">
-							<tr>
-								<td width="130"><input type="submit" value="Get" name="submitButton" disabled="true"/></td>
-								<td><input type="text" name="name" onkeyup="disableDeleteButton()"/></td>
-							</tr>
-						</table>
-						
-						
-						
-						
-						
-						
 						
 						
 						

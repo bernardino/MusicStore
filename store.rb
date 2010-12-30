@@ -320,6 +320,7 @@ post '/addArtistLastfm' do
 	rescue ArtistError
 		redirect '/admin?error=artistnotfound'
 	end
+	
 	redirect '/admin'
 end
 
