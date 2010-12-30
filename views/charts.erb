@@ -10,27 +10,27 @@
 	<script type="text/javascript">
 	function goTo(page){
 		if (page=='index')
-			window.location='/';
+		window.location='/';
 		else {
 			window.location='/'+page;
 		}
 	}
-	
+
 	function remove(id){
 		window.location="/removeorder?id="+id+"&page=<%= request.fullpath %>";
 	}
-	
+
 	function add(id){
 		window.location="/addorder?id="+id+"&page=<%= request.fullpath %>";
 	}
-	
+
 	function del(id,currQ){
 		if(currQ-1!=0)
-			window.location="/del?id="+id+"&page=<%= request.fullpath %>";
+		window.location="/del?id="+id+"&page=<%= request.fullpath %>";
 		else
-			window.location="/removeorder?id="+id+"&page=<%= request.fullpath %>";
+		window.location="/removeorder?id="+id+"&page=<%= request.fullpath %>";
 	}
-	
+
 	function credits() {
 		var txt = document.getElementById('credits_txt');
 		var btn = document.getElementById('credits_btn');
@@ -42,7 +42,7 @@
 			txt.style.display='none';
 		}
 	}
-	
+
 	function justInt() {
 		var txt = document.getElementById('credits_txt');
 		var btn = document.getElementById('credits_btn');
@@ -53,7 +53,7 @@
 			btn.disabled=true;
 		}
 	}
-	
+
 	</script>
 </head>
 
@@ -113,80 +113,63 @@
 			<!-- Cenas -->
 			<div align="left" style="background:#EEE; float:left;width:70%;">
 				<div style="margin:20px;">
-				<div style="background:#EEE; float:left;width:50%;">
-					<p class="label"> Top Albums</p>
-					<table >
-						<% 
-						i=0
-						while i < @albums.length %>
+					<div style="background:#EEE; float:left;width:50%;">
+						<p class="label"> Top Albums</p>
+						<table >
+							<% 
+							i=0
+							while i < @albums.length %>
 							<tr>
 								<td>
-									<a class="list" href="/artist/<%= @albums[i+3] %>/album/<%= @albums[i] %>"><img src="<%= @albums[i+4] %>" height="40" width="40" border="2"/></a>
+									<a class="search" href="/artist/<%= @albums[i+4] %>/album/<%= @albums[i] %>"><img src="<%= @albums[i+3] %>" height="40" width="40" border="2"/></a>
 								</td>
 								<td>
-									<a class="list" href="/artist/<%= @albums[i+3] %>/album/<%= @albums[i] %>"><%= @albums[i+2] %> - <%= @albums[i+1] %></a>
+									<a class="search" href="/artist/<%= @albums[i+4] %>/album/<%= @albums[i] %>"><%= @albums[i+2] %> - <%= @albums[i+1] %></a>
 								</td>
 							</tr>
 							<% i=i+5 %>
-						<% end %>
-					</table>
-				</div>
-				
-				<div style="background:#CCC; float:right;width:50%;">
-					<p class="search"> Top Songs</p>
-					<table>
-						<%
-						i=0
-						while i< @songs.length %>
-								<tr>
-									<td>
-										<a class="search" href="/artist/<%= @albums[i+4] %>/album/<%= @albums[i] %>"><img src="<%= @albums[i+3] %>" height="40" width="40" border="2"/></a>
-									</td>
-									<td>
-										<a class="search" href="/artist/<%= @albums[i+4] %>/album/<%= @albums[i] %>"><%= @albums[i+2] %> - <%= @albums[i+1] %></a>
-									</td>
-								</tr>
-								<% i=i+5 %>
 							<% end %>
 						</table>
 					</div>
-				
+
 					<div style="background:#EEE; float:right;width:50%;">
 						<p class="label"> Top Songs</p>
 						<table>
 							<%
 							i=0
 							while i< @songs.length %>
-									<tr>
-										<td>
-											<a class="search" href="/artist/<%=@songs[i+4]%>/song/<%= @songs[i] %>"><img src="<%= @songs[i+3] %>" height="40" width="40" border="2"/></a>
-										</td>
-										<td>
-											<a class="search" href="/artist/<%=@songs[i+4]%>/song/<%= @songs[i] %>"><%= @songs[i+2] %> - <%= @songs[i+1] %></a>
-										</td>
-									</tr>
-								<% i=i+5 %>
+							<tr>
+								<td>
+									<a class="search" href="/artist/<%=@songs[i+4]%>/song/<%= @songs[i] %>"><img src="<%= @songs[i+3] %>" height="40" width="40" border="2"/></a>
+								</td>
+								<td>
+									<a class="search" href="/artist/<%=@songs[i+4]%>/song/<%= @songs[i] %>"><%= @songs[i+2] %> - <%= @songs[i+1] %></a>
+								</td>
+							</tr>
+							<% i=i+5 %>
 							<% end %>
-						
+
 						</table>
+						<br/>
+						<br/>
 					</div>
-				
+
 					<div style="background:#EEE; float:left;width:50%;">
 						<p class="label"> Top Merchandising</p>
 						<table>
 							<%
 							i=0
 							while i< @merch.length %>
-									<tr>
-										<td>
-											<a class="search" href="/artist/<%=@songs[i+4]%>/merch/<%= @merch[i] %>"><img src="<%= @merch[i+3] %>" height="40" width="40" border="2"/></a>
-										</td>
-										<td>
-											<a class="search" href="/artist/<%=@songs[i+4]%>/merch/<%= @merch[i] %>"><%= @merch[i+2] %> - <%= @merch[i+1] %></a>
-										</td>
-										
-									</tr>
-								<% i=i+5 %>
+							<tr>
+								<td>
+									<a class="search" href="/artist/<%=@songs[i+4]%>/merch/<%= @merch[i] %>"><img src="<%= @merch[i+3] %>" height="40" width="40" border="2"/></a>
+								</td>
+								<td>
+									<a class="search" href="/artist/<%=@songs[i+4]%>/merch/<%= @merch[i] %>"><%= @merch[i+2] %> - <%= @merch[i+1] %></a>
+								</td>
+
+							</tr>
+							<% i=i+5 %>
 							<% end %>
 						</table>
 						<br/>
@@ -198,24 +181,24 @@
 			<div style="background:#CCC; float:left;width:15%;">
 				<h1>Shopping Cart</h1>
 				<% if session[:orders]=={}%>
-					<p>No orders</p>
+				<p>No orders</p>
 				<% else %>
-					<p>You have some orders</p>
-					<% session[:orders].keys.each do |order| %>
-					<p align="left" style="margin:10%">Product: <%= session[:orders][order][1] %> (<%= session[:orders][order][2] %>)<br />Quantity: <%= session[:orders][order][0] %> <img style="cursor:pointer" onmouseup="add(<%= order %>)" src="/img/plus.png">  <img style="cursor:pointer" onmouseup="del(<%= order %>,<%= session[:orders][order][0] %>)" src="/img/minus.png"><br /><img style="cursor:pointer" onmouseup="remove(<%= order %>)" src="/img/cross.png"></p>
-					<% end %>
-					<% if @logged %>
-						<input type="button" onClick="goTo('checkout')" value="Checkout">
-					<% else %>
-						<input type="button" onClick="goTo('checkout')" value="Checkout" disabled="true">
-						<br />You need to be logged in to proceed to checkout! 
-					<%end%>
-					<p>(a) - album / (s) - song / (m) - merchandise</p>
+				<p>You have some orders</p>
+				<% session[:orders].keys.each do |order| %>
+				<p align="left" style="margin:10%">Product: <%= session[:orders][order][1] %> (<%= session[:orders][order][2] %>)<br />Quantity: <%= session[:orders][order][0] %> <img style="cursor:pointer" onmouseup="add(<%= order %>)" src="/img/plus.png">  <img style="cursor:pointer" onmouseup="del(<%= order %>,<%= session[:orders][order][0] %>)" src="/img/minus.png"><br /><img style="cursor:pointer" onmouseup="remove(<%= order %>)" src="/img/cross.png"></p>
+				<% end %>
+				<% if @logged %>
+				<input type="button" onClick="goTo('checkout')" value="Checkout">
+				<% else %>
+				<input type="button" onClick="goTo('checkout')" value="Checkout" disabled="true">
+				<br />You need to be logged in to proceed to checkout! 
+				<%end%>
+				<p>(a) - album / (s) - song / (m) - merchandise</p>
 				<%end%>
 			</div>
 		</div>
 		<div align="center" class="footer">
-			 Copyright © 2010 - Guilherme Simões, João Penetra, Ricardo Bernardino
+			Copyright © 2010 - Guilherme Simões, João Penetra, Ricardo Bernardino
 		</div>
 	</div>
 </body>
