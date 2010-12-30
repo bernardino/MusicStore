@@ -117,10 +117,10 @@
 		<div align="center" class="content">
 			<!-- !LOGGED_IN -->
 			<% if @logged %>
-			<div style="background:#EEE; float:left;width:15%">
+			<div style="background:#CCC; float:left;width:15%;min-height:100%;">
 				<h3>Welcome <%= session[:id] %>!!</h3>
 				<br />
-				<a class="search" href="/client"> Edit your personal information</a>
+				<a class="search" href="/client"> Edit your account</a>
 				<br /><br />
 				<input id="credits_txt" type="text" size="5" style="display:none;" onkeyup="justInt()" /><br />
 				<input id="credits_btn" type="button" value="Buy Credits" onmouseup="credits()">	
@@ -128,7 +128,7 @@
 				<a href="/logout">Logout</a>
 			</div>
 			<% else %>
-			<div style="background:#EEE; float:left;width:15%;">
+			<div style="background:#CCC; float:left;width:15%;">
 				<form action="/login?p=<%= request.fullpath %>" method="post" accept-charset="utf-8">
 					<h1>Login</h1>
 					<h3>Username</h3><input type="text" name="username" />
@@ -141,45 +141,56 @@
 			</div>
 			<% end %>
 			<!-- Cenas -->
-			<div style="background-color:#CCC; float:left;width:70%">
-				<div style="float:left;margin:30px;">
-					<img src="<%=@res[2] %>" />
+			<div style="background-color:#EEE; float:left;width:70%;">
+				<div style="float:right;margin:30px;">
+					<img src="<%=@res[2] %>" border="2" />
 				</div>
 
 				
 				
 		      	<div align="left" style="margin: 30px;"><!-- Artist Info -->
-					<p>Artist Name: <a class="search" href ="/artist/<%= params[:name] %>"> <%= @res[0] %> </a></p>
-					<p>Album Name: <%= @res[1] %></p>
-					<p>Info: <%= @res[3] %></p>
-					<p>Length: <%= @res[5] %></p>
-					<p>Label: <%= @res[7] %></p>
-					<p>Genre: <%= @res[6] %></p>
-					<p>Release Date: <%= @res[4] %></p> 
-					<p>Rating: <img id="star0" onmouseover="imgOver(0)" onmouseout="rating()" onmouseup="vote(1)" src="/img/blank.png"><img id="star1" onmouseover="imgOver(1)" onmouseout="rating()" onmouseup="vote(2)" src="/img/blank.png"><img id="star2" onmouseover="imgOver(2)" onmouseout="rating()" onmouseup="vote(3)" src="/img/blank.png"><img id="star3" onmouseover="imgOver(3)" onmouseout="rating()" onmouseup="vote(4)" src="/img/blank.png"><img id="star4" onmouseup="vote(5)" onmouseover="imgOver(4)" onmouseout="rating()" src="/img/blank.png"></p>
-					<p>Price: <%= @res[10] %> euros</p>
+					<a class="headlinelink" href ="/artist/<%= params[:name] %>"> <%= @res[0] %> </a>
+					<br/><br/>
+					<a class="subhead"> <%= @res[1] %></a>
+					<br/><br/>
+					<info><%= @res[3] %></info>
+					<br/><br/>
+					<a class="subhead">Length:</a> <a class="item"> <%= @res[5] %></a>
+					<br/>
+					<a class="subhead">Label: </a> <a class="item"> <%= @res[7] %></a>
+					<br/>
+					<a class="subhead">Genre: </a> <a class="item"><%= @res[6] %></a>
+					<br/>
+					<a class="subhead">Release Date: </a> <a class="item"><%= @res[4] %></a> 
+					<br/>
+					<a class="subhead">Rating: </a> <img id="star0" onmouseover="imgOver(0)" onmouseout="rating()" onmouseup="vote(1)" src="/img/blank.png"><img id="star1" onmouseover="imgOver(1)" onmouseout="rating()" onmouseup="vote(2)" src="/img/blank.png"><img id="star2" onmouseover="imgOver(2)" onmouseout="rating()" onmouseup="vote(3)" src="/img/blank.png"><img id="star3" onmouseover="imgOver(3)" onmouseout="rating()" onmouseup="vote(4)" src="/img/blank.png"><img id="star4" onmouseup="vote(5)" onmouseover="imgOver(4)" onmouseout="rating()" src="/img/blank.png"></a>
+					<br/>
+					<a class="subhead">Price: </a> <a class="item"> <%= @res[10] %> euros</a>
+					<br/><br/>
 					<a href="/addorder?page=<%= request.fullpath %>&id=<%= params[:id] %>&type=a"><input type="button" value="Buy"></a>
-					<br />
-					<p>Track Listing: </p>
+					<br/><br/>
+					<a class="subhead">Track List: </a>
 					<table>
 					<% 	tracks = @songs.length
 						i=0
 						while i < tracks %>
 							<tr>
 								<td>
-									<%= @songs[i] %>-
+									<a class="list" href="/artist/<%= params[:name] %>/song/<%=@songs[i] %>"><%= @songs[i+1] %>-</a>
 								</td>
 								<td>
-									<%= @songs[i+1] %>
+									<a class="list" href="/artist/<%= params[:name] %>/song/<%=@songs[i] %>"><%= @songs[i+2] %></a>
 								</td>
 								<td>
-									&nbsp&nbsp <%= @songs[i+2] %>
+									<a class="list" href="/artist/<%= params[:name] %>/song/<%=@songs[i] %>">&nbsp&nbsp <%= @songs[i+3] %></a>
 								</td>
 							</tr>
-						<% i=i+3 %>
+						<% i=i+4 %>
 						<% end  %>
 					</table>
-					<p>More Albuns From this Artist: </p>
+					<br/><br/>
+					<a class="subhead">More Albuns From this Artist: </a>
+					<br/><br/>
 					<table>
 						<% album = @albums.length
 						i=0
@@ -188,7 +199,7 @@
 							if params[:id] != @albums[i].to_s %>
 								<tr>
 									<td>
-										<a class="search" href="/artist/<%=params[:name]%>/album/<%= @albums[i] %>"><img src="<%=@albums[i+2] %>"/></a>
+										<a class="search" href="/artist/<%=params[:name]%>/album/<%= @albums[i] %>"><img src="<%=@albums[i+2] %>" height="120" width="120" border="3"/></a>
 									</td>
 									<td>
 										<a class="search" href="/artist/<%=params[:name]%>/album/<%= @albums[i] %>" ><%=@albums[i+1] %></a>
@@ -201,7 +212,7 @@
 				</div>
 		      </div>
 			<!-- Shopping Cart -->
-			<div style="background:#DDD; float:left;width:15%;">
+			<div style="background:#CCC; float:left;width:15%;">
 				<h1>Shopping Cart</h1>
 				<% if session[:orders]=={}%>
 					<p>No orders</p>
