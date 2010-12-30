@@ -1,10 +1,31 @@
 # encoding = utf-8
 
 require 'hpricot'
+require 'zlib'
+require 'open-uri'
 
 class Lastfm
 	
 	def initialize()
+	end
+	
+	
+	def cenas(name)
+		url = "http://www.discogs.com/release/123?f=xml&api_key=78e3013970"
+		headers = {'Accept-Encoding' => 'gzip', 'User-Agent' => 'MyDiscogsClient/1.0 +http://mydiscogsclient.org'}
+		begin
+			response = open(url, headers)
+			begin
+				data = Zlib::GzipReader.new(response)
+			rescue Zlib::GzipFile::Error
+				response.seek(0)
+				data = response.read
+			end
+		rescue OpenURI::HTTPError => e
+			data = e.io.read
+		end
+		data
+	
 	end
 	
 	
