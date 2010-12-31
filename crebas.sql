@@ -106,13 +106,14 @@ new_rating product.rating%type;
 old_rating product.rating%type;
 
 BEGIN
-	select votes into allvotes from product where product_id=id;
-	select rating into old_rating from product where product_id=id;
+	select votes into allvotes from product where product_id=id for update of votes;
+	select rating into old_rating from product where product_id=id for update of rating;
 
 	new_rating := (old_rating*allvotes + vote) / (allvotes+1);
 	allvotes:=allvotes+1;
 	update product set rating = new_rating where product_id=id;
 	update product set votes = allvotes where product_id=id;
+	commit;
 END;
 /
 
@@ -120,7 +121,7 @@ create or replace procedure buy_credits (creditos in client.credits%type, id in 
 old_credits client.credits%type;
 new_credits client.credits%type;
 BEGIN
-	select credits into old_credits from client where client_id = id;
+	select credits into old_credits from client where client_id = id for update of credits;
 	new_credits := creditos + old_credits;
 	update client set credits = new_credits where client_id=id;
 	commit;
