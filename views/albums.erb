@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+	"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+	<link rel="stylesheet" type="text/css" href="/index.css" />
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Welcome to Music Store</title>
+	<script type="text/javascript">
+	function goTo(page){
+		if (page=='index')
+		window.location='/';
+		else {
+			window.location='/'+page;
+		}
+	}
+
+	function remove(id){
+		window.location="/removeorder?id="+id+"&page=<%= request.fullpath %>";
+	}
+
+	function add(id){
+		window.location="/addorder?id="+id+"&page=<%= request.fullpath %>";
+	}
+
+	function del(id,currQ){
+		if(currQ-1!=0)
+		window.location="/del?id="+id+"&page=<%= request.fullpath %>";
+		else
+		window.location="/removeorder?id="+id+"&page=<%= request.fullpath %>";
+	}
+
+	function credits() {
+		var txt = document.getElementById('credits_txt');
+		var btn = document.getElementById('credits_btn');
+		if(txt.style.display=='none'){
+			txt.style.display='';
+			btn.disabled=true;
+		} else {
+			window.location='/addcredits?c='+txt.value+'&page=<%= request.fullpath %>';
+			txt.style.display='none';
+		}
+	}
+
+	function justInt() {
+		var txt = document.getElementById('credits_txt');
+		var btn = document.getElementById('credits_btn');
+		if( !isNaN(parseInt(txt.value))){
+			txt.value=parseInt(txt.value);
+			btn.disabled=false;
+		} else {
+			btn.disabled=true;
+		}
+	}
+
+	</script>
+</head>
+
+<body>
+	<div class="container" style="overflow: hidden;">
+		<div align="center" class="header" >
+			<table>
+				<tr>
+					<td>
+						<img src="/img/Banana2.png" width="60" height="60"/>
+					</td>
+					<td>
+						<a id="logo" href="/"><h1>Banana Store</a>
+					</td>
+					<td>
+						<img src="/img/Banana.png" width="60" height="60"/>
+					</td>
+				</tr>
+			</table>
+			<div align="left" style="background:#F93; padding:12px">
+				<div>
+					<span width="100" class="link" onClick="goTo('index')">Home</span>
+					<span width="100" class="link" onClick="goTo('top')">Top</span>
+					<span width="100" class="link" onClick="goTo('artists')">Artists</span>
+					<span width="100" class="link" onClick="goTo('albums')">Albums</span>
+					<span width="100" class="link" onClick="goTo('merchandising')">Merchandising</span>
+
+					<div style="float:right">
+						<form name="searchForm" action="/search" method="post">
+							<span> Search </span><input type="text" name="term" style="border-style:double" />
+							<select name="option">
+								<option value="artist">Artists</option>
+								<option value="album">Albums</option>
+								<option value="song">Songs</option>
+								<option value="merch">Merchandising</option>
+							</select>
+							<input type="submit" value="Go">
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div align="center" class="content">
+			<!-- !LOGGED_IN -->
+			<% if @logged %>
+			<div style="background:#CCC; float:left;width:15%">
+				<h1 class="head"><%= session[:id] %></h1>
+				<a class="search" href="/client"> Edit your account</a>
+				<br />
+				<input id="credits_txt" type="text" size="5" style="display:none;" onkeyup="justInt()" /><br />
+				<input id="credits_btn" type="button" value="Buy Credits" onmouseup="credits()">	
+				<br /><br />
+				<a href="/logout">Logout</a>
+			</div>
+			<% else %>
+			<div style="background:#EEE; float:left;width:15%;">
+				<form action="/login?p=<%= request.fullpath %>" method="post" accept-charset="utf-8">
+					<h1 class="head">Login</h1>
+					<h3>Username</h3><input type="text" name="username" /><br />
+					<h3>Password</h3><input type="password" name="password"/><br /><br />
+					<input type="submit" value="Login">
+					<br /><br />
+					<a href="/register">Not Registered?</a>
+					<br />
+				</form>
+			</div>
+			<% end %>
+			<!-- Cenas -->
+			<div align="left" style="background:#EEE; float:left;width:70%;">
+				<div style="margin:20px;">
+					<div style="background:#EEE; float:left;width:50%;">
+						<p class="label"> Albums</p>
+						<table >
+							<% 
+							i=0
+							while i <@albums.length %>
+							<tr>
+								
+								<td>
+									<a class="search" href="/artist/<%= @albums[i+3]%>/album/<%=@albums[i]%>"><img src="<%= @albums[i+4] %>" height="100" width="100" border="2"/></a>
+								</td>
+								<td>
+									<a class="search" href="/artist/<%= @albums[i+3]%>/album/<%=@albums[i]%>"><%= @albums[i+2] %> -  <%= @albums[i+1] %></a>
+								</td>
+							</tr>
+							<% i=i+5 %>
+						<% end %>
+						</table>
+					</div>
+				</div>
+			</div>
+			<!-- Shopping Cart -->
+			<div style="background:#CCC; float:left;width:15%;">
+				<h1 class="head">Shopping Cart</h1>
+				<% if session[:orders]=={}%>
+				<p>No orders</p>
+				<% else %>
+				<p>You have some orders</p>
+				<% session[:orders].keys.each do |order| %>
+				<p align="left" style="margin:10%">Product: <%= session[:orders][order][1] %> (<%= session[:orders][order][2] %>)<br />Quantity: <%= session[:orders][order][0] %> <img style="cursor:pointer" onmouseup="add(<%= order %>)" src="/img/plus.png">  <img style="cursor:pointer" onmouseup="del(<%= order %>,<%= session[:orders][order][0] %>)" src="/img/minus.png"><br /><img style="cursor:pointer" onmouseup="remove(<%= order %>)" src="/img/cross.png"></p>
+				<% end %>
+				<% if @logged %>
+				<input type="button" onClick="goTo('checkout')" value="Checkout">
+				<% else %>
+				<input type="button" onClick="goTo('checkout')" value="Checkout" disabled="true">
+				<br />You need to be logged in to proceed to checkout! 
+				<%end%>
+				<p>(a) - album / (s) - song / (m) - merchandise</p>
+				<%end%>
+			</div>
+		</div>
+	</div>
+	<div align="center" class="footer">
+			Copyright © 2010 - Guilherme Simões, João Penetra, Ricardo Bernardino
+	</div>
+</body>
+</html>

@@ -95,7 +95,7 @@
 						<img src="/img/Banana2.png" width="60" height="60"/>
 					</td>
 					<td>
-						<logo href="/"><h1>Banana Store</logo>
+						<a id="logo" href="/"><h1>Banana Store</a>
 					</td>
 					<td>
 						<img src="/img/Banana.png" width="60" height="60"/>
@@ -159,7 +159,7 @@
 				
 				
 		      	<div align="left" style="margin: 30px;"><!-- Artist Info -->
-					<a class="headlinelink" href ="/artist/<%= params[:name] %>"> <%= @res[0] %> </a>
+					<a class="prepo">by </a><a class="headlinelink" href ="/artist/<%= params[:name] %>"> <%= @res[0] %> </a>
 					<br/><br/>
 					<a class="subhead"> <%= @res[1] %></a>
 					<br/><br/>

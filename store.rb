@@ -169,20 +169,24 @@ end
 
 
 get '/artists' do
-
-
+	@artists = $get.artists()
+	
+	erb :artists
 end
 
 
 get '/albums' do
-
+	@albums = $get.albums()
+	
+	erb :albums
 
 end
 
 
 get '/merchandising' do
-
-
+	@merch = $get.merchandise()
+	
+	erb :merchandise
 end
 
 
@@ -357,18 +361,20 @@ end
 post '/addSong' do
 	song_id = $db.select("SELECT product_number.nextval FROM DUAL")
 	
-	begin
+	#begin
 		$manage.addProduct(song_id[0], params[:songArtist], params[:songDescription], params[:songImage], params[:songDate], params[:songPrice], '-1')
 
 		if (params[:songAlbum] != '')
+			puts 'cenas'
 			$manage.addSong(song_id[0], params[:songAlbum], params[:songName], params[:songLength], params[:songGenre], params[:songNumber])
 		else
+			puts 'cenasdsd'
 			$manage.addSong(song_id[0], 'null', params[:songName], params[:songLength], params[:songGenre], 'null')
 		end
-	rescue
-		$db.execute("Rollback")
-		redirect '/admin?error=badsongdata'
-	end
+	#rescue
+	#	$db.execute("Rollback")
+	#	redirect '/admin?error=badsongdata'
+	#end
 
 	redirect '/admin'
 end

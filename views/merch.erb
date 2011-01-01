@@ -96,7 +96,7 @@
 						<img src="/img/Banana2.png" width="60" height="60"/>
 					</td>
 					<td>
-						<logo href="/"><h1>Banana Store</logo>
+						<a id="logo" href="/"><h1>Banana Store</a>
 					</td>
 					<td>
 						<img src="/img/Banana.png" width="60" height="60"/>
@@ -130,7 +130,7 @@
 			<!-- !LOGGED_IN -->
 			<% if @logged %>
 			<div style="background:#CCC; float:left;width:15%">
-				<h1 class="head"><%= session[:id] %>!!</h1>
+				<h1 class="head"><%= session[:id] %></h1>
 				<a class="search" href="/client"> Edit your account</a>
 				<br />
 				<input id="credits_txt" type="text" size="5" style="display:none;" onkeyup="justInt()" /><br />
