@@ -129,6 +129,7 @@ get '/artist/:id' do
 	@bio = res[1]
 	@image = res[2]
 	@albums = $get.artist_albums(params[:id])
+	@songs = $get.artistSingleSongs(params[:id])
 	
 	erb :artist
 end
@@ -358,7 +359,7 @@ post '/addSong' do
 	begin
 		$manage.addProduct(song_id[0], params[:songArtist], params[:songDescription], params[:songImage], params[:songDate], params[:songPrice], '-1')
 
-		if (params[:addSongAlbum] != '')
+		if (params[:songAlbum] != '')
 			$manage.addSong(song_id[0], params[:songAlbum], params[:songName], params[:songLength], params[:songGenre], params[:songNumber])
 		else
 			$manage.addSong(song_id[0], 'null', params[:songName], params[:songLength], params[:songGenre], 'null')

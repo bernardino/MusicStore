@@ -268,7 +268,7 @@ class Get
 	
 	
 	def artistSingleSongs(artist_id)
-		return $db.select("	SELECT p.product_id, song_name, song_number, song_length, rating, votes, current_price
+		return $db.select("	SELECT p.product_id, song_name, song_length, image
 							FROM song s, product p
 							WHERE s.alb_product_id IS NULL
 							AND s.product_id = p.product_id
