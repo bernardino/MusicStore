@@ -59,10 +59,8 @@ class Lastfm
 				arr[0] = ing.inner_html
 			end
 		end
-		#THIS IS JUST TEMPORARY NEED TO IMPROVE
-		arr[1] = (doc/"lfm/artist/bio/summary").inner_html.gsub(']]>',"").gsub('<![CDATA[',"")
 		
-		arr[1] = getOrclStr(arr[1])
+		arr[1] = getOrclStr((doc/"lfm/artist/bio/summary").inner_html.gsub(']]>',"").gsub('<![CDATA[',""))
 		
 		url = "http://tinyurl.com/api-create.php?url=#{arr[0]}"
     resp = Net::HTTP.get_response(URI.parse(url))
