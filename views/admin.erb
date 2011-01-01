@@ -71,9 +71,9 @@
 			else if (error[1] == "badlastfmsongdata")
 				alert("A Song could not be added to the database using last.fm\nTry adding it manually");
 			else if (error[1] == "badartistdata")
-				alert("The Song details you entered were invalid\nPlease try again");
+			alert("The Artist you entered already exists\nPlease try again");
 			else if (error[1] == "badalbumdata")
-				alert("The Album details you entered were invalid\nPlease try again");
+			alert("The Album you entered already exists\nPlease try again");
 			else if (error[1] == "badsongdata")
 				alert("The Song details you entered were invalid\nPlease try again");
 			else if (error[1] == "badmerchdata")
@@ -87,6 +87,11 @@
 			else if (error[1] == "badmerchid")
 				alert("The Merchandise ID you entered is incorrect");
 			else if (error[1] == "badclientid")
+<<<<<<< HEAD
+			alert("The Username you entered is incorrect");
+			else if (error[1] == "dberror")
+			alert("Database Error! Please try again");
+=======
 				alert("The Username you entered is incorrect");
 			else if (error[1] == "merche"){
 				document.getElementById('merchButton').className='link2';
@@ -100,6 +105,7 @@
 				
 			}
 				
+>>>>>>> 286c2183d83489e62455ec413fecadb1aa582c9e
 		}
 	}
 
@@ -266,7 +272,7 @@
 		<div align="center" class="content">
 			<!-- !LOGGED_IN -->
 			<% if @logged %>
-			<div style="background:#CCC; float:left;width:15%">
+			<div style="background:#FFF; float:left;width:15%">
 				<h1 class="head"><%= session[:id] %></h1>
 				<a class="search" href="/client"> Edit your account</a>
 				<br />
@@ -276,7 +282,7 @@
 				<a href="/logout">Logout</a>
 			</div>
 			<% else %>
-			<div style="background:#CCC; float:left;width:20%;">
+			<div style="background:#FFF; float:left;width:20%;">
 				<form action="/login" method="post" accept-charset="utf-8">
 					<h1>Login</h1>
 					<h3>Username</h3><input type="text" name="username" /><br />
@@ -765,7 +771,7 @@
 			</div>
 
 			<!-- Shopping Cart -->
-			<div style="background:#CCC; float:left;width:15%;">
+			<div style="background:#FFF; float:left;width:15%;">
 				<h1 class="head">Shopping Cart</h1>
 				<% if params[:erro] == "f" %>
 					<p>Your order was done sucessfully. Thanks for using our store</p>

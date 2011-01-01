@@ -129,7 +129,7 @@
 		<div align="center" class="content">
 			<!-- !LOGGED_IN -->
 			<% if @logged %>
-			<div style="background:#CCC; float:left;width:15%">
+			<div style="background:#FFF; float:left;width:15%">
 				<h1 class="head"><%= session[:id] %></h1>
 				<a class="search" href="/client"> Edit your account</a>
 				<br />
@@ -139,13 +139,13 @@
 				<a href="/logout">Logout</a>
 			</div>
 			<% else %>
-			<div style="background:#CCC; float:left;width:15%;">
+			<div style="background:#FFF; float:left;width:15%;">
 				<form action="/login?p=<%= request.fullpath %>" method="post" accept-charset="utf-8">
 					<h1 class="head">Login</h1>
-					<h3>Username</h3><input type="text" name="username" />
-					<h3>Password</h3><input type="password" name="password"/><br />
-					<input type="submit" value="Login">
-					<br />
+					<h3>Username</h3><input type="text" name="username" /><br />
+					<h3>Password</h3><input type="password" name="password"/><br /><br />
+					<input type="submit" value="Login">					
+					<br /><br />
 					<a href="/register">Not Registered?</a>
 					<br />
 				</form>
@@ -169,8 +169,11 @@
 			</div>
 		</div>
 		<!-- Shopping Cart -->
-		<div style="background:#CCC; float:left;width:15%;">
+		<div align="center" style="background:#FFF; float:left;width:15%;">
 			<h1 class="head">Shopping Cart</h1>
+			<% if params[:erro] == "f" %>
+				<p>Your order was done sucessfully. Thanks for using our store</p>
+			<% end %>
 			<% if session[:orders]=={}%>
 				<p>No orders</p>
 			<% else %>

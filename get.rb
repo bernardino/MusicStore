@@ -297,14 +297,14 @@ class Get
 						")
 	end
 	
-	def artists()
+	def allArtists()
 		return $db.select("	SELECT artist_id, artist_name , artist_image
 							FROM artist
 							ORDER BY artist_name
 						")
 	end
 	
-	def albums()
+	def allAlbums()
 		return $db.select("	SELECT al.product_id, album_name, ar.artist_name, p.artist_id, p.image
 							FROM album al, artist ar, product p
 							WHERE ar.artist_id = p.artist_id
@@ -313,8 +313,8 @@ class Get
 						")
 	end
 	
-	def merchandise()
-		return $db.select("	SELECT m.product_id, merchandise_name, artist_name, image
+	def allMerch()
+		return $db.select("	SELECT m.product_id, merchandise_name, p.artist_id, artist_name, image
 							FROM merchandise m, artist a, product p
 							WHERE a.artist_id = p.artist_id
 							AND p.product_id = m.product_id
