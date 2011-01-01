@@ -11,12 +11,12 @@
 	function refString(s){
 		this.value = s;
 	}
-	
+
 	var displayed = new refString("");
 	var displayed2 = new refString("");
 	var displayed3 = new refString("");
-	
-	
+
+
 	function goTo(page){
 		if (page=='index')
 			window.location='/';
@@ -26,10 +26,26 @@
 	}
 	
 	
-	function showContent(display, id){
-	
+	function remove(id){
+		window.location="/removeorder?id="+id+"&page=<%= request.fullpath %>";
+	}
+
+
+	function add(id){
+		window.location="/addorder?id="+id+"&page=<%= request.fullpath %>";
+	}
+
+
+	function del(id,currQ){
+		if(currQ-1!=0)
+		window.location="/del?id="+id+"&page=<%= request.fullpath %>";
+		else
+		window.location="/removeorder?id="+id+"&page=<%= request.fullpath %>";
+	}
+
+
+	function showContent(display, id){	
 		<!--alert(displayed.value+"\n"+displayed2.value+"\n"+displayed3.value+"\n\n"+id)-->
-	
 		if (display.value!=""){
 			document.getElementById(display.value+"Button").className='link';
 			document.getElementById(display.value).style.display='none';
@@ -45,8 +61,8 @@
 		
 		<!--alert(displayed.value+"\n"+displayed2.value+"\n"+displayed3.value+"\n\n"+id)-->
 	}
-	
-	
+
+
 	function displayError(){
 		var error = new RegExp("[\\?&]error=([^&#]*)").exec(window.location.href );
 		if( error != null ){
@@ -74,10 +90,22 @@
 				alert("The Merchandise ID you entered is incorrect");
 			else if (error[1] == "badclientid")
 				alert("The Username you entered is incorrect");
+			else if (error[1] == "merche"){
+				document.getElementById('merchButton').className='link2';
+				document.getElementById('merch').style.display='inline';
+				displayed='merch';
+				document.getElementById('editMerchButton').className='link2';
+				document.getElementById('editMerch').style.display='inline';
+				displayed2='editMerch';
+				
+				
+				
+			}
+				
 		}
 	}
-	
-	
+
+
 	function disableAddArtistManualButton(){
 		if (addArtistManualForm.artistName.value=="" ||
 			addArtistManualForm.artistBio.value=="" ||
@@ -88,8 +116,8 @@
 			addArtistManualForm.submitButton.disabled=false;
 		}
 	}
-	
-	
+
+
 	function disableAddArtistLastfmButton(){
 		if (addArtistLastfmForm.artistName.value==""){
 			addArtistLastfmForm.submitButton.disabled=true;
@@ -98,8 +126,8 @@
 			addArtistLastfmForm.submitButton.disabled=false;
 		}
 	}
-	
-	
+
+
 	function disableAddAlbumManualButton(){
 		if (addAlbumManualForm.albumName.value=="" ||
 			addAlbumManualForm.albumLength.value=="" ||
@@ -121,8 +149,8 @@
 			addAlbumManualForm.submitButton.disabled=false;
 		}
 	}
-	
-	
+
+
 	function disableAddAlbumLastfmButton(){
 		if (addAlbumLastfmForm.albumName.value=="" ||
 			addAlbumLastfmForm.albumLength.value=="" ||
@@ -140,7 +168,7 @@
 			addAlbumLastfmForm.submitButton.disabled=false;
 		}
 	}
-	
+
 
 	function disableAddSongButton(){
 		if (addSongForm.songName.value=="" ||
@@ -164,8 +192,8 @@
 			addSongForm.submitButton.disabled=false;
 		}
 	}
-	
-	
+
+
 	function disableAddMerchButton(){
 		if (addMerchForm.merchName.value=="" ||
 			addMerchForm.merchArtist.value=="" ||
@@ -185,33 +213,8 @@
 		}
 	}
 	
-	function disableEdit(){
-		if(editMerchForm.ID.value=="" || isNaN(editMerchForm.ID.value)){
-			editMerchForm.submitButton.disabled=true;
-			editMerchForm.merchName.disabled=true;
-			editMerchForm.merchArtist.disabled=true;
-			editMerchForm.merchDescription.disabled=true;
-			editMerchForm.merchImage.disabled=true;
-			editMerchForm.merchDate.disabled=true;
-			editMerchForm.merchPrice.disabled=true;
-			editMerchForm.merchStock.disabled=true;
-		}
-		else {
-			editMerchForm.submitButton.disabled=false;
-			editMerchForm.merchName.disabled=false;
-			editMerchForm.merchArtist.disabled=false;
-			editMerchForm.merchDescription.disabled=false;
-			editMerchForm.merchImage.disabled=false;
-			editMerchForm.merchDate.disabled=false;
-			editMerchForm.merchPrice.disabled=false;
-			editMerchForm.merchStock.disabled=false;
-			
-			editMerchForm.merchName.value="<%= $get.artistName(editMerchForm.ID.value)[0] %>";
-		}
-	}
-	
-	
-	function disableDeleteButton(form){
+
+	function disableSubmitButton(form){
 		if(form.ID.value=="" || isNaN(form.ID.value)){
 			form.submitButton.disabled=true;
 		}
@@ -219,29 +222,12 @@
 			form.submitButton.disabled=false;
 		}
 	}
-	
-	
-	function remove(id){
-		window.location="/removeorder?id="+id+"&page=<%= request.fullpath %>";
-	}
-	
-	
-	function add(id){
-		window.location="/addorder?id="+id+"&page=<%= request.fullpath %>";
-	}
-	
-	
-	function del(id,currQ){
-		if(currQ-1!=0)
-			window.location="/del?id="+id+"&page=<%= request.fullpath %>";
-		else
-			window.location="/removeorder?id="+id+"&page=<%= request.fullpath %>";
-	}
 	</script>
 </head>
 
 <body onLoad="displayError()">
-	<div align="center" class="header" >
+	<div class="container" style="overflow: hidden;">
+		<div align="center" class="header" >
 			<table>
 				<tr>
 					<td>
@@ -263,7 +249,7 @@
 					<span width="100" class="link" onClick="goTo('albums')">Albums</span>
 					<span width="100" class="link" onClick="goTo('merchandising')">Merchandising</span>
 					<span width="100" class="link" onClick="goTo('admin')">Manage Store</span>
-					
+
 					<div style="float:right">
 						<form name="searchForm" action="/search" method="post">
 							<span> Search </span><input type="text" name="term" style="border-style:double" />
@@ -304,9 +290,9 @@
 				</form>
 			</div>
 			<% end %>
-			
-			
-			<div id="menu" align="left" style="background:#EEE; float:left;width:60%; display:inline">
+
+
+			<div id="menu" align="left" style="background:#EEE; float:left;width:70%; display:inline">
 				<br/>
 				<span id="artistsButton" width="100" class="link" onClick="	showContent(displayed, 'artists');
 																			displayed2.value = ''
@@ -334,7 +320,7 @@
 																			editSong.style.display='none';
 																			deleteSongButton.className='link';
 																			deleteSong.style.display='none'
-																			">Songs</span>
+																		">Songs</span>
 				<span id="merchButton" width="100" class="link" onClick="	showContent(displayed, 'merch');
 																			displayed2.value = '';
 																			addMerchButton.className='link';
@@ -349,12 +335,12 @@
 																			deleteClientButton.className='link2';
 																			deleteClient.style.display='inline'
 																		">Clients</span>
-			
-			
+
+
 				<!--<button type="button" onclick="showContent('artists')" align="left"><img src="/img/artists.jpg" alt="Artists" title="Artists"/></button>-->
-			
-			
-				<div id="artists" align="left" style="background:#EEE; float:left;width:60%; display:none">
+
+
+				<div id="artists" align="left" style="background:#EEE; float:left;width:70%; display:none">
 					<br/>
 					<span id="addArtistButton" width="100" class="link" onClick="	showContent(displayed2, 'addArtist')
 																					displayed3.value = ''
@@ -373,12 +359,12 @@
 					<span id="deleteArtistButton" width="100" class="link" onClick="showContent(displayed2, 'deleteArtist')">Delete</span>
 					<br/>
 					<br/>
-					<div id="addArtist" align="left" style="background:#EEE; float:left;width:60%; display:none">
+					<div id="addArtist" align="left" style="background:#EEE; float:left;width:70%; display:none">
 						<span id="addArtistManualButton" width="100" class="link" onClick="showContent(displayed3, 'addArtistManual')">Manually</span>
 						<span id="addArtistLastfmButton" width="100" class="link" onClick="showContent(displayed3, 'addArtistLastfm')">Using last.fm</span>
 						<br/>
 						<br/>
-						<div id="addArtistManual" align="left" style="background:#EEE; float:left;width:60%; display:none">
+						<div id="addArtistManual" align="left" style="background:#EEE; float:left;width:70%; display:none">
 							<form name="addArtistManualForm" action="/addArtistManual" method="post">
 								<table onkeyup="disableAddArtistManualButton()" width="300">
 									<tr>
@@ -397,7 +383,7 @@
 								<input type="submit" value="Add" name="submitButton" disabled="true"/>
 							</form>
 						</div>
-						<div id="addArtistLastfm" align="left" style="background:#EEE; float:left;width:60%; display:none">
+						<div id="addArtistLastfm" align="left" style="background:#EEE; float:left;width:70%; display:none">
 							<form name="addArtistLastfmForm" action="/addArtistLastfm" method="post">
 								<table width="300">
 									<tr>
@@ -409,32 +395,32 @@
 							</form>
 						</div>
 					</div>
-					<div id="editArtist" align="left" style="background:#EEE; float:left;width:60%; display:none">
+					<div id="editArtist" align="left" style="background:#EEE; float:left;width:70%; display:none">
 						<span id="editArtistManualButton" width="100" class="link" onClick="showContent(displayed3, 'editArtistManual')">Manually</span>
 						<span id="editArtistLastfmButton" width="100" class="link" onClick="showContent(displayed3, 'editArtistLastfm')">Using last.fm</span>
 						<br/>
 						<br/>
-						<div id="editArtistManual" align="left" style="background:#EEE; float:left;width:60%; display:none">
+						<div id="editArtistManual" align="left" style="background:#EEE; float:left;width:70%; display:none">
 							<h3>Manually</h3>
 						</div>
-						<div id="editArtistLastfm" align="left" style="background:#EEE; float:left;width:60%; display:none">
+						<div id="editArtistLastfm" align="left" style="background:#EEE; float:left;width:70%; display:none">
 							<h3>Using last.fm</h3>
 						</div>
 					</div>
-					<div id="deleteArtist" align="left" style="background:#EEE; float:left;width:60%; display:none">
+					<div id="deleteArtist" align="left" style="background:#EEE; float:left;width:70%; display:none">
 						<form name="deleteArtistForm" action="/deleteArtist" method="post">
 							<table>
 								<tr>
 									<td class="label">Artist ID:</td>
-									<td><input type="text" name="ID" onkeyup="disableDeleteButton(deleteArtistForm)"/></td>
+									<td><input type="text" name="ID" onkeyup="disableSubmitButton(deleteArtistForm)"/></td>
 								</tr>
 							</table>
 							<input type="submit" value="Delete" name="submitButton" disabled="true"/>
 						</form>
 					</div>
 				</div>
-				
-				<div id="albums" align="left" style="background:#EEE; float:left;width:60%; display:none">
+
+				<div id="albums" align="left" style="background:#EEE; float:left;width:70%; display:none">
 					<br/>
 					<span id="addAlbumButton" width="100" class="link" onClick="	showContent(displayed2, 'addAlbum')
 																					displayed3.value = ''
@@ -453,14 +439,14 @@
 					<span id="deleteAlbumButton" width="100" class="link" onClick="showContent(displayed2, 'deleteAlbum')">Delete</span>
 					<br/>
 					<br/>
-					<div id="addAlbum" align="left" style="background:#EEE; float:left;width:60%; display:none">
+					<div id="addAlbum" align="left" style="background:#EEE; float:left;width:70%; display:none">
 						<span id="addAlbumManualButton" width="100" class="link" onClick="showContent(displayed3, 'addAlbumManual')">Manually</span>
 						<span id="addAlbumLastfmButton" width="100" class="link" onClick="showContent(displayed3, 'addAlbumLastfm')">Using last.fm</span>
 						<br/>
 						<br/>
-						<div id="addAlbumManual" align="left" style="background:#EEE; float:left;width:60%; display:none">
+						<div id="addAlbumManual" align="left" style="background:#EEE; float:left;width:70%; display:none">
 							<form name="addAlbumManualForm" action="/addAlbumManual" method="post">
-								<table onkeyup="disableAddAlbumManualButton()" width="300">
+								<table onkeyup="disableAddAlbumManualButton()" width="400">
 									<tr>
 										<td class="label" width="130">Name:</td>
 										<td><input type="text" name="albumName"/></td>
@@ -505,9 +491,9 @@
 								<input type="submit" value="Add" name="submitButton" disabled="true"/>
 							</form>
 						</div>
-						<div id="addAlbumLastfm" align="left" style="background:#EEE; float:left;width:60%; display:none">
+						<div id="addAlbumLastfm" align="left" style="background:#EEE; float:left;width:70%; display:none">
 							<form name="addAlbumLastfmForm" action="/addAlbumLastfm" method="post">
-								<table onkeyup="disableAddAlbumLastfmButton()" width="300">
+								<table onkeyup="disableAddAlbumLastfmButton()" width="400">
 									<tr>
 										<td class="label" width="130">Name:</td>
 										<td><input type="text" name="albumName"/></td>
@@ -541,41 +527,41 @@
 							</form>
 						</div>
 					</div>
-					<div id="editAlbum" align="left" style="background:#EEE; float:left;width:60%; display:none">
+					<div id="editAlbum" align="left" style="background:#EEE; float:left;width:70%; display:none">
 						<span id="editAlbumManualButton" width="100" class="link" onClick="showContent(displayed3, 'editAlbumManual')">Manually</span>
 						<span id="editAlbumLastfmButton" width="100" class="link" onClick="showContent(displayed3, 'editAlbumLastfm')">Using last.fm</span>
 						<br/>
 						<br/>
-						<div id="editAlbumManual" align="left" style="background:#EEE; float:left;width:60%; display:none">
+						<div id="editAlbumManual" align="left" style="background:#EEE; float:left;width:70%; display:none">
 							<h3>Manually</h3>
 						</div>
-						<div id="editAlbumLastfm" align="left" style="background:#EEE; float:left;width:60%; display:none">
+						<div id="editAlbumLastfm" align="left" style="background:#EEE; float:left;width:70%; display:none">
 							<h3>Using last.fm</h3>
 						</div>
 					</div>
-					<div id="deleteAlbum" align="left" style="background:#EEE; float:left;width:60%; display:none">
+					<div id="deleteAlbum" align="left" style="background:#EEE; float:left;width:70%; display:none">
 						<form name="deleteAlbumForm" action="/deleteAlbum" method="post">
 							<table>
 								<tr>
 									<td class="label">Album ID:</td>
-									<td><input type="text" name="ID" onkeyup="disableDeleteButton(deleteAlbumForm)"/></td>
+									<td><input type="text" name="ID" onkeyup="disableSubmitButton(deleteAlbumForm)"/></td>
 								</tr>
 							</table>
 							<input type="submit" value="Delete" name="submitButton" disabled="true"/>
 						</form>
 					</div>
 				</div>
-				
-				<div id="songs" align="left" style="background:#EEE; float:left;width:60%; display:none">
+
+				<div id="songs" align="left" style="background:#EEE; float:left;width:70%; display:none">
 					<br/>
 					<span id="addSongButton" width="100" class="link" onClick="showContent(displayed2, 'addSong')">Add</span>
 					<span id="editSongButton" width="100" class="link" onClick="showContent(displayed2, 'editSong')">Edit</span>
 					<span id="deleteSongButton" width="100" class="link" onClick="showContent(displayed2, 'deleteSong')">Delete</span>
 					<br/>
 					<br/>					
-					<div id="addSong" align="left" style="background:#EEE; float:left;width:60%; display:none">
+					<div id="addSong" align="left" style="background:#EEE; float:left;width:70%; display:none">
 						<form name="addSongForm" action="/addSong" method="post">
-							<table onkeyup="disableAddSongButton()" width="300">
+							<table onkeyup="disableAddSongButton()" width="400">
 								<tr>
 									<td class="label" width="130">Name:</td>
 									<td><input type="text" name="songName"/></td>
@@ -613,39 +599,39 @@
 									<td><input type="text" name="songDate"/></td>
 								</tr>
 								<tr>
-									<td class="label">Current Price:</td>
+									<td class="label">Price:</td>
 									<td><input type="text" name="songPrice"/></td>
 								</tr>
 							</table>
 							<input type="submit" value="Add" name="submitButton" disabled="true"/>
 						</form>
 					</div>
-					<div id="editSong" align="left" style="background:#EEE; float:left;width:60%; display:none">
+					<div id="editSong" align="left" style="background:#EEE; float:left;width:70%; display:none">
 						<h3>Song2</h3>
 					</div>
-					<div id="deleteSong" align="left" style="background:#EEE; float:left;width:60%; display:none">
+					<div id="deleteSong" align="left" style="background:#EEE; float:left;width:70%; display:none">
 						<form name="deleteSongForm" action="/deleteSong" method="post">
 							<table>
 								<tr>
 									<td class="label">Song ID:</td>
-									<td><input type="text" name="ID" onkeyup="disableDeleteButton(deleteSongForm)"/></td>
+									<td><input type="text" name="ID" onkeyup="disableSubmitButton(deleteSongForm)"/></td>
 								</tr>
 							</table>
 							<input type="submit" value="Delete" name="submitButton" disabled="true"/>
 						</form>
 					</div>
 				</div>
-				
-				<div id="merch" align="left" style="background:#EEE; float:left;width:60%; display:none">
+
+				<div id="merch" align="left" style="background:#EEE; float:left;width:70%; display:none">
 					<br/>
 					<span id="addMerchButton" width="100" class="link" onClick="showContent(displayed2, 'addMerch')">Add</span>
 					<span id="editMerchButton" width="100" class="link" onClick="showContent(displayed2, 'editMerch')">Edit</span>
 					<span id="deleteMerchButton" width="100" class="link" onClick="showContent(displayed2, 'deleteMerch')">Delete</span>
 					<br/>
 					<br/>					
-					<div id="addMerch" align="left" style="background:#EEE; float:left;width:60%; display:none">
+					<div id="addMerch" align="left" style="background:#EEE; float:left;width:70%; display:none">
 						<form name="addMerchForm" action="/addMerch" method="post">
-							<table onkeyup="disableAddMerchButton()" width="300">
+							<table onkeyup="disableAddMerchButton()" width="400">
 								<tr>
 									<td class="label" width="130">Name:</td>
 									<td><input type="text" name="merchName"/></td>
@@ -678,10 +664,23 @@
 							<input type="submit" value="Add" name="submitButton" disabled="true"/>
 						</form>
 					</div>
-					<div id="editMerch" align="left" style="background:#EEE; float:left;width:60%; display:none">
-						
+					<div id="editMerch" align="left" style="background:#EEE; float:left;width:70%; display:none">
+
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
 						<form name="editMerchForm" action="/editMerch" method="post">
-							<table width="300">
+							<table width="400">
 								<tr>
 									<td class="label" width="130">Name:</td>
 									<td><input type="text" disabled="true" name="merchName"/></td>
@@ -714,13 +713,20 @@
 							<input type="submit" value="Edit" name="editButton" disabled="true"/>
 							<br/>
 							<br/>
-							<table width="300">
+						</form>
+						<form name="getMerchForm" action="/getMerch" method="post">
+							<table width="400">
 								<tr>
 									<td width="130"><input type="submit" value="Get" name="submitButton" disabled="true"/></td>
-									<td><input type="text" name="ID" onkeyup="disableEdit()"/></td>
+									<td><input type="text" name="ID" onkeyup="disableSubmitButton(getMerchForm)"/></td>
 								</tr>
 							</table>
 						</form>
+
+						
+						
+						
+						
 						
 						
 						
@@ -728,30 +734,30 @@
 						
 						
 					</div>
-					<div id="deleteMerch" align="left" style="background:#EEE; float:left;width:60%; display:none">
+					<div id="deleteMerch" align="left" style="background:#EEE; float:left;width:70%; display:none">
 						<form name="deleteMerchForm" action="/deleteMerch" method="post">
-							<table width="315">
+							<table width="330">
 								<tr>
 									<td class="label">Merchandise ID:</td>
-									<td><input type="text" name="ID" onkeyup="disableDeleteButton(deleteMerchForm)"/></td>
+									<td><input type="text" name="ID" onkeyup="disableSubmitButton(deleteMerchForm)"/></td>
 								</tr>
 							</table>
 							<input type="submit" value="Delete" name="submitButton" disabled="true"/>
 						</form>
 					</div>
 				</div>
-				
-				<div id="clients" align="left" style="background:#EEE; float:left;width:60%; display:none">
+
+				<div id="clients" align="left" style="background:#EEE; float:left;width:70%; display:none">
 					<br/>
 					<span id="deleteClientButton" width="100" class="link2" onClick="showContent(displayed2, 'deleteClient')">Delete</span>
 					<br/>
 					<br/>
-					<div id="deleteClient" align="left" style="background:#EEE; float:left;width:60%; display:inline">
+					<div id="deleteClient" align="left" style="background:#EEE; float:left;width:70%; display:inline">
 						<form name="deleteClientForm" action="/deleteClient" method="post">
 							<table>
 								<tr>
 									<td class="label">Username:</td>
-									<td><input type="text" name="ID" onkeyup="disableDeleteButton(deleteClientForm)"/></td>
+									<td><input type="text" name="ID" onkeyup="disableSubmitButton(deleteClientForm)"/></td>
 								</tr>
 							</table>
 							<input type="submit" value="Delete" name="submitButton" disabled="true"/>
@@ -759,10 +765,13 @@
 					</div>
 				</div>
 			</div>
-			
+
 			<!-- Shopping Cart -->
 			<div style="background:#CCC; float:left;width:15%;">
-				<h1>Shopping Cart</h1>
+				<h1 class="head">Shopping Cart</h1>
+				<% if params[:erro] == "f" %>
+					<p>Your order was done sucessfully. Thanks for using our store</p>
+				<% end %>
 				<% if session[:orders]=={}%>
 					<p>No orders</p>
 				<% else %>
@@ -784,5 +793,6 @@
 	<div align="center" id="footer">
 		Copyright © 2010 - Guilherme Simões, João Penetra, Ricardo Bernardino
 	</div>
+</div>
 </body>
 </html>
