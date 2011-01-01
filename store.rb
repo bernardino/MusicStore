@@ -321,6 +321,7 @@ post '/addArtistLastfm' do
 	rescue ArtistError
 		redirect '/admin?error=artistnotfound'
 	end
+
 	redirect '/admin'
 end
 
@@ -387,6 +388,17 @@ post '/addMerch' do
 	end
 
 	redirect '/admin'
+end
+
+
+post '/getMerch' do
+	@merch = $get.merchandise(params[:ID])
+	
+	if @merch[0]
+		redirect '/admin?error=merche'
+	end
+	
+	redirect '/admin?error=badmerchid'
 end
 
 

@@ -53,10 +53,8 @@ class Lastfm
 				arr[0] = ing.inner_html
 			end
 		end
-		#THIS IS JUST TEMPORARY NEED TO IMPROVE
-		arr[1] = (doc/"lfm/artist/bio/summary").inner_html.gsub(']]>',"").gsub('<![CDATA[',"")
 		
-		arr[1] = getOrclStr(arr[1])
+		arr[1] = getOrclStr((doc/"lfm/artist/bio/summary").inner_html.gsub(']]>',"").gsub('<![CDATA[',""))
 		
 		#we should avoid this by verifying first if last.fm's content isn't null..................
 		begin
@@ -125,6 +123,7 @@ class Lastfm
 			
 			begin
 				$manage.addProduct(product_id[0], artist_id, arr[0], arr[1], arr[2], price, stock)
+				
 				$manage.addAlbum(product_id[0], name, length, genre, label)
 			rescue
 				$db.execute("Rollback")
@@ -137,7 +136,7 @@ class Lastfm
 				
 				begin
 					$manage.addProduct(song_id[0], artist_id, 'N/A', arr[1], arr[2], '0.99', '-1')
-				
+					
 					$manage.addSong(song_id[0], product_id[0], arr[i], '3:00', 'Other', (i-2))
 				rescue
 					$db.execute("Rollback")

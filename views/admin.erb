@@ -19,15 +19,33 @@
 
 	function goTo(page){
 		if (page=='index')
-		window.location='/';
+			window.location='/';
 		else {
 			window.location='/'+page;
 		}
 	}
+	
+	
+	function remove(id){
+		window.location="/removeorder?id="+id+"&page=<%= request.fullpath %>";
+	}
 
 
-	function showContent(display, id){
+	function add(id){
+		window.location="/addorder?id="+id+"&page=<%= request.fullpath %>";
+	}
 
+
+	function del(id,currQ){
+		if(currQ-1!=0)
+		window.location="/del?id="+id+"&page=<%= request.fullpath %>";
+		else
+		window.location="/removeorder?id="+id+"&page=<%= request.fullpath %>";
+	}
+
+
+	function showContent(display, id){	
+		<!--alert(displayed.value+"\n"+displayed2.value+"\n"+displayed3.value+"\n\n"+id)-->
 		if (display.value!=""){
 			document.getElementById(display.value+"Button").className='link';
 			document.getElementById(display.value).style.display='none';
@@ -40,7 +58,6 @@
 			document.getElementById(id).style.display='inline';
 			display.value = id;
 		}
-		
 	}
 
 
@@ -48,37 +65,49 @@
 		var error = new RegExp("[\\?&]error=([^&#]*)").exec(window.location.href );
 		if( error != null ){
 			if (error[1] == "artistnotfound")
-			alert("The Artist you entered does not exist in last.fm\nTry adding it manually");
+				alert("The Artist you entered does not exist in last.fm\nTry adding it manually");
 			else if (error[1] == "albumnotfound")
-			alert("The Album you entered does not exist in last.fm\nTry adding it manually");
+				alert("The Album you entered does not exist in last.fm\nTry adding it manually");
 			else if (error[1] == "badlastfmsongdata")
-			alert("A Song could not be added to the database using last.fm\nTry adding it manually");
+				alert("A Song could not be added to the database using last.fm\nTry adding it manually");
 			else if (error[1] == "badartistdata")
-			alert("The Song details you entered were invalid\nPlease try again");
+				alert("The Song details you entered were invalid\nPlease try again");
 			else if (error[1] == "badalbumdata")
-			alert("The Album details you entered were invalid\nPlease try again");
+				alert("The Album details you entered were invalid\nPlease try again");
 			else if (error[1] == "badsongdata")
-			alert("The Song details you entered were invalid\nPlease try again");
+				alert("The Song details you entered were invalid\nPlease try again");
 			else if (error[1] == "badmerchdata")
-			alert("The Merchandise details you entered were invalid\nPlease try again");
+				alert("The Merchandise details you entered were invalid\nPlease try again");
 			else if (error[1] == "badartistid")
-			alert("The Artist ID you entered is incorrect");
+				alert("The Artist ID you entered is incorrect");
 			else if (error[1] == "badalbumid")
-			alert("The Album ID you entered is incorrect");
+				alert("The Album ID you entered is incorrect");
 			else if (error[1] == "badsongid")
-			alert("The Song ID you entered is incorrect");
+				alert("The Song ID you entered is incorrect");
 			else if (error[1] == "badmerchid")
-			alert("The Merchandise ID you entered is incorrect");
+				alert("The Merchandise ID you entered is incorrect");
 			else if (error[1] == "badclientid")
-			alert("The Username you entered is incorrect");
+				alert("The Username you entered is incorrect");
+			else if (error[1] == "merche"){
+				document.getElementById('merchButton').className='link2';
+				document.getElementById('merch').style.display='inline';
+				displayed='merch';
+				document.getElementById('editMerchButton').className='link2';
+				document.getElementById('editMerch').style.display='inline';
+				displayed2='editMerch';
+				
+				
+				
+			}
+				
 		}
 	}
 
 
 	function disableAddArtistManualButton(){
 		if (addArtistManualForm.artistName.value=="" ||
-		addArtistManualForm.artistBio.value=="" ||
-		addArtistManualForm.artistImage.value==""){
+			addArtistManualForm.artistBio.value=="" ||
+			addArtistManualForm.artistImage.value==""){
 			addArtistManualForm.submitButton.disabled=true;
 		}
 		else {
@@ -99,19 +128,19 @@
 
 	function disableAddAlbumManualButton(){
 		if (addAlbumManualForm.albumName.value=="" ||
-		addAlbumManualForm.albumLength.value=="" ||
-		addAlbumManualForm.albumGenre.value=="" ||
-		addAlbumManualForm.albumLabel.value=="" ||
-		addAlbumManualForm.albumArtist.value=="" ||
-		addAlbumManualForm.albumDescription.value=="" ||
-		addAlbumManualForm.albumImage.value=="" ||
-		addAlbumManualForm.albumDate.value=="" ||
-		addAlbumManualForm.albumPrice.value=="" ||
-		addAlbumManualForm.albumStock.value=="" ||
-		isNaN(addAlbumManualForm.albumArtist.value) ||
-		isNaN(addAlbumManualForm.albumDate.value) ||
-		isNaN(addAlbumManualForm.albumPrice.value) ||
-		isNaN(addAlbumManualForm.albumStock.value)){
+			addAlbumManualForm.albumLength.value=="" ||
+			addAlbumManualForm.albumGenre.value=="" ||
+			addAlbumManualForm.albumLabel.value=="" ||
+			addAlbumManualForm.albumArtist.value=="" ||
+			addAlbumManualForm.albumDescription.value=="" ||
+			addAlbumManualForm.albumImage.value=="" ||
+			addAlbumManualForm.albumDate.value=="" ||
+			addAlbumManualForm.albumPrice.value=="" ||
+			addAlbumManualForm.albumStock.value=="" ||
+			isNaN(addAlbumManualForm.albumArtist.value) ||
+			isNaN(addAlbumManualForm.albumDate.value) ||
+			isNaN(addAlbumManualForm.albumPrice.value) ||
+			isNaN(addAlbumManualForm.albumStock.value)){
 			addAlbumManualForm.submitButton.disabled=true;
 		}
 		else {
@@ -122,15 +151,15 @@
 
 	function disableAddAlbumLastfmButton(){
 		if (addAlbumLastfmForm.albumName.value=="" ||
-		addAlbumLastfmForm.albumLength.value=="" ||
-		addAlbumLastfmForm.albumGenre.value=="" ||
-		addAlbumLastfmForm.albumLabel.value=="" ||
-		addAlbumLastfmForm.albumArtist.value=="" ||
-		addAlbumLastfmForm.albumPrice.value=="" ||
-		addAlbumLastfmForm.albumStock.value=="" ||
-		isNaN(addAlbumLastfmForm.albumArtist.value) ||
-		isNaN(addAlbumManualForm.albumPrice.value) ||
-		isNaN(addAlbumManualForm.albumStock.value)){
+			addAlbumLastfmForm.albumLength.value=="" ||
+			addAlbumLastfmForm.albumGenre.value=="" ||
+			addAlbumLastfmForm.albumLabel.value=="" ||
+			addAlbumLastfmForm.albumArtist.value=="" ||
+			addAlbumLastfmForm.albumPrice.value=="" ||
+			addAlbumLastfmForm.albumStock.value=="" ||
+			isNaN(addAlbumLastfmForm.albumArtist.value) ||
+			isNaN(addAlbumManualForm.albumPrice.value) ||
+			isNaN(addAlbumManualForm.albumStock.value)){
 			addAlbumLastfmForm.submitButton.disabled=true;
 		}
 		else {
@@ -141,20 +170,20 @@
 
 	function disableAddSongButton(){
 		if (addSongForm.songName.value=="" ||
-		addSongForm.songLength.value=="" ||
-		addSongForm.songGenre.value=="" ||
-		addSongForm.songArtist.value=="" ||
-		addSongForm.songDescription.value=="" ||
-		addSongForm.songImage.value=="" ||
-		addSongForm.songDate.value=="" ||
-		addSongForm.songPrice.value=="" ||
-		(addSongForm.songAlbum.value!="" &&	addSongForm.songNumber.value=="") ||
-		(addSongForm.songAlbum.value=="" &&	addSongForm.songNumber.value!="") ||
-		isNaN(addSongForm.songAlbum.value) ||
-		isNaN(addSongForm.songNumber.value) ||
-		isNaN(addSongForm.songArtist.value) ||
-		isNaN(addSongForm.songDate.value) ||
-		isNaN(addSongForm.songPrice.value)){
+			addSongForm.songLength.value=="" ||
+			addSongForm.songGenre.value=="" ||
+			addSongForm.songArtist.value=="" ||
+			addSongForm.songDescription.value=="" ||
+			addSongForm.songImage.value=="" ||
+			addSongForm.songDate.value=="" ||
+			addSongForm.songPrice.value=="" ||
+			(addSongForm.songAlbum.value!="" &&	addSongForm.songNumber.value=="") ||
+			(addSongForm.songAlbum.value=="" &&	addSongForm.songNumber.value!="") ||
+			isNaN(addSongForm.songAlbum.value) ||
+			isNaN(addSongForm.songNumber.value) ||
+			isNaN(addSongForm.songArtist.value) ||
+			isNaN(addSongForm.songDate.value) ||
+			isNaN(addSongForm.songPrice.value)){
 			addSongForm.submitButton.disabled=true;
 		}
 		else {
@@ -165,49 +194,31 @@
 
 	function disableAddMerchButton(){
 		if (addMerchForm.merchName.value=="" ||
-		addMerchForm.merchArtist.value=="" ||
-		addMerchForm.merchDescription.value=="" ||
-		addMerchForm.merchImage.value=="" ||
-		addMerchForm.merchDate.value=="" ||
-		addMerchForm.merchPrice.value=="" ||
-		addMerchForm.merchStock.value=="" ||
-		isNaN(addMerchForm.merchArtist.value) ||
-		isNaN(addMerchForm.merchDate.value) ||
-		isNaN(addMerchForm.merchPrice.value) ||
-		isNaN(addMerchForm.merchStock.value)){
+			addMerchForm.merchArtist.value=="" ||
+			addMerchForm.merchDescription.value=="" ||
+			addMerchForm.merchImage.value=="" ||
+			addMerchForm.merchDate.value=="" ||
+			addMerchForm.merchPrice.value=="" ||
+			addMerchForm.merchStock.value=="" ||
+			isNaN(addMerchForm.merchArtist.value) ||
+			isNaN(addMerchForm.merchDate.value) ||
+			isNaN(addMerchForm.merchPrice.value) ||
+			isNaN(addMerchForm.merchStock.value)){
 			addMerchForm.submitButton.disabled=true;
 		}
 		else {
 			addMerchForm.submitButton.disabled=false;
 		}
 	}
+	
 
-
-	function disableDeleteButton(form){
+	function disableSubmitButton(form){
 		if(form.ID.value=="" || isNaN(form.ID.value)){
 			form.submitButton.disabled=true;
 		}
 		else {
 			form.submitButton.disabled=false;
 		}
-	}
-
-
-	function remove(id){
-		window.location="/removeorder?id="+id+"&page=<%= request.fullpath %>";
-	}
-
-
-	function add(id){
-		window.location="/addorder?id="+id+"&page=<%= request.fullpath %>";
-	}
-
-
-	function del(id,currQ){
-		if(currQ-1!=0)
-		window.location="/del?id="+id+"&page=<%= request.fullpath %>";
-		else
-		window.location="/removeorder?id="+id+"&page=<%= request.fullpath %>";
 	}
 	</script>
 </head>
@@ -282,46 +293,46 @@
 			<div id="menu" align="left" style="background:#EEE; float:left;width:70%; display:inline">
 				<br/>
 				<span id="artistsButton" width="100" class="link" onClick="	showContent(displayed, 'artists');
-				displayed2.value = ''
-				addArtistButton.className='link';
-				addArtist.style.display='none';
-				editArtistButton.className='link';
-				editArtist.style.display='none';
-				deleteArtistButton.className='link';
-				deleteArtist.style.display='none'
-				">Artists</span>
+																			displayed2.value = ''
+																			addArtistButton.className='link';
+																			addArtist.style.display='none';
+																			editArtistButton.className='link';
+																			editArtist.style.display='none';
+																			deleteArtistButton.className='link';
+																			deleteArtist.style.display='none'
+																		">Artists</span>
 				<span id="albumsButton" width="100" class="link" onClick="	showContent(displayed, 'albums');
-				displayed2.value = ''
-				addAlbumButton.className='link';
-				addAlbum.style.display='none';
-				editAlbumButton.className='link';
-				editAlbum.style.display='none';
-				deleteAlbumButton.className='link';
-				deleteAlbum.style.display='none'
-				">Albums</span>
+																			displayed2.value = ''
+																			addAlbumButton.className='link';
+																			addAlbum.style.display='none';
+																			editAlbumButton.className='link';
+																			editAlbum.style.display='none';
+																			deleteAlbumButton.className='link';
+																			deleteAlbum.style.display='none'
+																		">Albums</span>
 				<span id="songsButton" width="100" class="link" onClick="	showContent(displayed, 'songs');
-				displayed2.value = ''
-				addSongButton.className='link';
-				addSong.style.display='none';
-				editSongButton.className='link';
-				editSong.style.display='none';
-				deleteSongButton.className='link';
-				deleteSong.style.display='none'
-				">Songs</span>
+																			displayed2.value = ''
+																			addSongButton.className='link';
+																			addSong.style.display='none';
+																			editSongButton.className='link';
+																			editSong.style.display='none';
+																			deleteSongButton.className='link';
+																			deleteSong.style.display='none'
+																		">Songs</span>
 				<span id="merchButton" width="100" class="link" onClick="	showContent(displayed, 'merch');
-				displayed2.value = '';
-				addMerchButton.className='link';
-				addMerch.style.display='none';
-				editMerchButton.className='link';
-				editMerch.style.display='none';
-				deleteMerchButton.className='link';
-				deleteMerch.style.display='none'
-				">Merchandising</span>
+																			displayed2.value = '';
+																			addMerchButton.className='link';
+																			addMerch.style.display='none';
+																			editMerchButton.className='link';
+																			editMerch.style.display='none';
+																			deleteMerchButton.className='link';
+																			deleteMerch.style.display='none'
+																		">Merchandising</span>
 				<span id="clientsButton" width="100" class="link" onClick="	showContent(displayed, 'clients');
-				displayed2.value = 'deleteClient';
-				deleteClientButton.className='link2';
-				deleteClient.style.display='inline'
-				">Clients</span>
+																			displayed2.value = 'deleteClient';
+																			deleteClientButton.className='link2';
+																			deleteClient.style.display='inline'
+																		">Clients</span>
 
 
 				<!--<button type="button" onclick="showContent('artists')" align="left"><img src="/img/artists.jpg" alt="Artists" title="Artists"/></button>-->
@@ -330,19 +341,19 @@
 				<div id="artists" align="left" style="background:#EEE; float:left;width:70%; display:none">
 					<br/>
 					<span id="addArtistButton" width="100" class="link" onClick="	showContent(displayed2, 'addArtist')
-					displayed3.value = ''
-					addArtistManualButton.className='link';
-					addArtistManual.style.display='none';
-					addArtistLastfmButton.className='link';
-					addArtistLastfm.style.display='none';
-					">Add</span>
+																					displayed3.value = ''
+																					addArtistManualButton.className='link';
+																					addArtistManual.style.display='none';
+																					addArtistLastfmButton.className='link';
+																					addArtistLastfm.style.display='none';
+																				">Add</span>
 					<span id="editArtistButton" width="100" class="link" onClick="	showContent(displayed2, 'editArtist')
-					displayed3.value = ''
-					editArtistManualButton.className='link';
-					editArtistManual.style.display='none';
-					editArtistLastfmButton.className='link';
-					editArtistLastfm.style.display='none';
-					">Edit</span>
+																					displayed3.value = ''
+																					editArtistManualButton.className='link';
+																					editArtistManual.style.display='none';
+																					editArtistLastfmButton.className='link';
+																					editArtistLastfm.style.display='none';
+																				">Edit</span>
 					<span id="deleteArtistButton" width="100" class="link" onClick="showContent(displayed2, 'deleteArtist')">Delete</span>
 					<br/>
 					<br/>
@@ -399,7 +410,7 @@
 							<table>
 								<tr>
 									<td class="label">Artist ID:</td>
-									<td><input type="text" name="ID" onkeyup="disableDeleteButton(deleteArtistForm)"/></td>
+									<td><input type="text" name="ID" onkeyup="disableSubmitButton(deleteArtistForm)"/></td>
 								</tr>
 							</table>
 							<input type="submit" value="Delete" name="submitButton" disabled="true"/>
@@ -410,19 +421,19 @@
 				<div id="albums" align="left" style="background:#EEE; float:left;width:70%; display:none">
 					<br/>
 					<span id="addAlbumButton" width="100" class="link" onClick="	showContent(displayed2, 'addAlbum')
-					displayed3.value = ''
-					addAlbumManualButton.className='link';
-					addAlbumManual.style.display='none';
-					addAlbumLastfmButton.className='link';
-					addAlbumLastfm.style.display='none';
-					">Add</span>
+																					displayed3.value = ''
+																					addAlbumManualButton.className='link';
+																					addAlbumManual.style.display='none';
+																					addAlbumLastfmButton.className='link';
+																					addAlbumLastfm.style.display='none';
+																				">Add</span>
 					<span id="editAlbumButton" width="100" class="link" onClick=	"showContent(displayed2, 'editAlbum')
-					displayed3.value = ''
-					editAlbumManualButton.className='link';
-					editAlbumManual.style.display='none';
-					editAlbumLastfmButton.className='link';
-					editAlbumLastfm.style.display='none';
-					">Edit</span>
+																					displayed3.value = ''
+																					editAlbumManualButton.className='link';
+																					editAlbumManual.style.display='none';
+																					editAlbumLastfmButton.className='link';
+																					editAlbumLastfm.style.display='none';
+																				">Edit</span>
 					<span id="deleteAlbumButton" width="100" class="link" onClick="showContent(displayed2, 'deleteAlbum')">Delete</span>
 					<br/>
 					<br/>
@@ -433,7 +444,7 @@
 						<br/>
 						<div id="addAlbumManual" align="left" style="background:#EEE; float:left;width:70%; display:none">
 							<form name="addAlbumManualForm" action="/addAlbumManual" method="post">
-								<table onkeyup="disableAddAlbumManualButton()" width="300">
+								<table onkeyup="disableAddAlbumManualButton()" width="400">
 									<tr>
 										<td class="label" width="130">Name:</td>
 										<td><input type="text" name="albumName"/></td>
@@ -480,7 +491,7 @@
 						</div>
 						<div id="addAlbumLastfm" align="left" style="background:#EEE; float:left;width:70%; display:none">
 							<form name="addAlbumLastfmForm" action="/addAlbumLastfm" method="post">
-								<table onkeyup="disableAddAlbumLastfmButton()" width="300">
+								<table onkeyup="disableAddAlbumLastfmButton()" width="400">
 									<tr>
 										<td class="label" width="130">Name:</td>
 										<td><input type="text" name="albumName"/></td>
@@ -531,7 +542,7 @@
 							<table>
 								<tr>
 									<td class="label">Album ID:</td>
-									<td><input type="text" name="ID" onkeyup="disableDeleteButton(deleteAlbumForm)"/></td>
+									<td><input type="text" name="ID" onkeyup="disableSubmitButton(deleteAlbumForm)"/></td>
 								</tr>
 							</table>
 							<input type="submit" value="Delete" name="submitButton" disabled="true"/>
@@ -548,7 +559,7 @@
 					<br/>					
 					<div id="addSong" align="left" style="background:#EEE; float:left;width:70%; display:none">
 						<form name="addSongForm" action="/addSong" method="post">
-							<table onkeyup="disableAddSongButton()" width="300">
+							<table onkeyup="disableAddSongButton()" width="400">
 								<tr>
 									<td class="label" width="130">Name:</td>
 									<td><input type="text" name="songName"/></td>
@@ -586,7 +597,7 @@
 									<td><input type="text" name="songDate"/></td>
 								</tr>
 								<tr>
-									<td class="label">Current Price:</td>
+									<td class="label">Price:</td>
 									<td><input type="text" name="songPrice"/></td>
 								</tr>
 							</table>
@@ -601,7 +612,7 @@
 							<table>
 								<tr>
 									<td class="label">Song ID:</td>
-									<td><input type="text" name="ID" onkeyup="disableDeleteButton(deleteSongForm)"/></td>
+									<td><input type="text" name="ID" onkeyup="disableSubmitButton(deleteSongForm)"/></td>
 								</tr>
 							</table>
 							<input type="submit" value="Delete" name="submitButton" disabled="true"/>
@@ -618,7 +629,7 @@
 					<br/>					
 					<div id="addMerch" align="left" style="background:#EEE; float:left;width:70%; display:none">
 						<form name="addMerchForm" action="/addMerch" method="post">
-							<table onkeyup="disableAddMerchButton()" width="300">
+							<table onkeyup="disableAddMerchButton()" width="400">
 								<tr>
 									<td class="label" width="130">Name:</td>
 									<td><input type="text" name="merchName"/></td>
@@ -653,72 +664,80 @@
 					</div>
 					<div id="editMerch" align="left" style="background:#EEE; float:left;width:70%; display:none">
 
-
-
-
-
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
+					
 						<form name="editMerchForm" action="/editMerch" method="post">
-							<table onkeyup="disableEditMerchButton()" width="300">
+							<table width="400">
 								<tr>
 									<td class="label" width="130">Name:</td>
-									<td><input type="text" name="merchName"/></td>
+									<td><input type="text" disabled="true" name="merchName"/></td>
 								</tr>
 								<tr>
 									<td class="label">Artist ID:</td>
-									<td><input type="text" name="merchArtist"/></td>
+									<td><input type="text" disabled="true" name="merchArtist"/></td>
 								</tr>
 								<tr>
 									<td class="label">Description:</td>
-									<td><input type="text" name="merchDescription"/></td>
+									<td><input type="text" disabled="true" name="merchDescription"/></td>
 								</tr>
 								<tr>
 									<td class="label">Image:</td>
-									<td><input type="text" name="merchImage"/></td>
+									<td><input type="text" disabled="true" name="merchImage"/></td>
 								</tr>
 								<tr>
 									<td class="label">Release Year:</td>
-									<td><input type="text" name="merchDate"/></td>
+									<td><input type="text" disabled="true" name="merchDate"/></td>
 								</tr>
 								<tr>
 									<td class="label">Price:</td>
-									<td><input type="text" name="merchPrice"/></td>
+									<td><input type="text" disabled="true" name="merchPrice"/></td>
 								</tr>
 								<tr>
 									<td class="label">Stock:</td>
-									<td><input type="text" name="merchStock"/></td>
+									<td><input type="text" disabled="true" name="merchStock"/></td>
 								</tr>
 							</table>
-							<input type="submit" value="Edit" name="submitButton" disabled="true"/>
+							<input type="submit" value="Edit" name="editButton" disabled="true"/>
+							<br/>
+							<br/>
 						</form>
-						<br/>
-						<br/>
+						<form name="getMerchForm" action="/getMerch" method="post">
+							<table width="400">
+								<tr>
+									<td width="130"><input type="submit" value="Get" name="submitButton" disabled="true"/></td>
+									<td><input type="text" name="ID" onkeyup="disableSubmitButton(getMerchForm)"/></td>
+								</tr>
+							</table>
+						</form>
 
-
-						<table width="300">
-							<tr>
-								<td width="130"><input type="submit" value="Get" name="submitButton" disabled="true"/></td>
-								<td><input type="text" name="name" onkeyup="disableDeleteButton()"/></td>
-							</tr>
-						</table>
-
-
-
-
-
-
-
-
-
-
-
-
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
 					</div>
 					<div id="deleteMerch" align="left" style="background:#EEE; float:left;width:70%; display:none">
 						<form name="deleteMerchForm" action="/deleteMerch" method="post">
-							<table width="315">
+							<table width="330">
 								<tr>
 									<td class="label">Merchandise ID:</td>
-									<td><input type="text" name="ID" onkeyup="disableDeleteButton(deleteMerchForm)"/></td>
+									<td><input type="text" name="ID" onkeyup="disableSubmitButton(deleteMerchForm)"/></td>
 								</tr>
 							</table>
 							<input type="submit" value="Delete" name="submitButton" disabled="true"/>
@@ -736,7 +755,7 @@
 							<table>
 								<tr>
 									<td class="label">Username:</td>
-									<td><input type="text" name="ID" onkeyup="disableDeleteButton(deleteClientForm)"/></td>
+									<td><input type="text" name="ID" onkeyup="disableSubmitButton(deleteClientForm)"/></td>
 								</tr>
 							</table>
 							<input type="submit" value="Delete" name="submitButton" disabled="true"/>
