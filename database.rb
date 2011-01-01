@@ -1,7 +1,8 @@
 require 'oci8'
 
 class Database
-
+  attr_reader :conn
+  
 	def initialize()
 		@conn = OCI8.new('bd1','bd1','ORCL')
 	end

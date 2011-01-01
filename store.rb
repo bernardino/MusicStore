@@ -86,15 +86,18 @@ end
 
 
 post '/register' do
-	res = $get.checkClient(params[:username])
-	unless res[0]
-		passcode = Digest::SHA1.hexdigest(params[:passcode])
-		$manage.addClient(params[:username], passcode, params[:name], params[:address], params[:phone], params[:email])
-		session[:id] = params[:username]
+  passcode = Digest::SHA1.hexdigest(params[:passcode])
+	
+	cursor = $db.conn.parse("BEGIN addClient('#{params[:username]}','#{params[:address]}','#{params[:phone]}','#{params[:name]}','#{passcode}','#{params[:email]}',:b1); END;")
+  cursor.bind_param(0, -1, Integer)
+  cursor.exec()
+  
+  if cursor[0]==0 #client successfully added
+    session[:id] = params[:username]
 		redirect '/'
-	else
-		redirect '/register?message=error'
-	end
+  else
+    redirect '/register?message=error'
+  end
 end
 
 
@@ -117,7 +120,9 @@ get '/logout' do
 end
 
 get '/addcredits' do
-  $db.execute("BEGIN buy_credits(#{params[:c]},'#{session[:id]}'); END;")
+  cursor = $db.conn.parse("BEGIN buy_credits(#{params[:c]},'#{session[:id]}',:b1); END;")
+  cursor.bind_param(0, -1, Integer)
+  cursor.exec()
   
   redirect params[:page]
 end
@@ -304,51 +309,90 @@ end
 
 
 post '/addArtistManual' do
-	begin
-		$manage.addArtist(params[:artistName], params[:artistImage], params[:artistBio])
-	rescue
-		redirect '/admin?error=badartistdata'
-	end
-
-	redirect '/admin'
+  url = "http://tinyurl.com/api-create.php?url=#{params[:artistImage]}"
+  resp = Net::HTTP.get_response(URI.parse(url))
+  image=resp.body
+  
+	result = $manage.addArtist(params[:artistName], image, params[:artistBio])
+  
+  if result == 0
+    redirect '/admin'
+  elsif result == -1
+    redirect '/admin?error=badartistdata'
+  else
+    redirect '/admin?error=dberror'
+  end
 end
 
 
 post '/addArtistLastfm' do
-	begin
-		$lf.addArtist(params[:artistName])
-	rescue ArtistError
+	result = $lf.addArtist(params[:artistName])
+	if result == 0
+	  redirect '/admin'
+	elsif result == -1
+	  redirect '/admin?error=badartistdata'
+	elsif result == -3
 		redirect '/admin?error=artistnotfound'
-	end
-	redirect '/admin'
+  else
+    redirect '/admin?error=dberror'
+  end	
 end
 
 
 post '/addAlbumManual' do
-	album_id = $db.select("SELECT product_number.nextval FROM DUAL")
+	#album_id = $db.select("SELECT product_number.nextval FROM DUAL")
+	#
+	#begin
+	#	$manage.addProduct(album_id[0], params[:albumArtist], params[:albumDescription], params[:albumImage], params[:albumDate], params[:albumPrice], params[:albumStock])
+	#	$manage.addAlbum(album_id[0], params[:albumName], params[:albumLength], params[:albumGenre], params[:albumLabel])
+	#rescue
+	#	$db.execute("Rollback")
+	#	redirect '/admin?error=badalbumdata'
+	#end
+	#redirect '/admin'
 	
-	begin
-		$manage.addProduct(album_id[0], params[:albumArtist], params[:albumDescription], params[:albumImage], params[:albumDate], params[:albumPrice], params[:albumStock])
-		$manage.addAlbum(album_id[0], params[:albumName], params[:albumLength], params[:albumGenre], params[:albumLabel])
-	rescue
-		$db.execute("Rollback")
-		redirect '/admin?error=badalbumdata'
-	end
-	redirect '/admin'
+	result = $manage.addAlbum(params[:albumName], params[:albumLength], params[:albumGenre], params[:albumLabel],
+	params[:albumArtist], params[:albumDescription], params[:albumImage], params[:albumDate], Float(params[:albumPrice]), params[:albumStock].to_i)
+	
+	if result.first ==0
+	  redirect '/admin'
+  elsif result.first == -1
+    redirect '/admin?error=badalbumdata'
+  elsif result.first == -3
+    redirect '/admin?error=albumnotfound'
+  else
+    redirect '/admin?error=dberror'
+  end
+	
 end
 
 
 post '/addAlbumLastfm' do
-	begin
-		$lf.addAlbum(params[:albumName], params[:albumLength], params[:albumGenre], params[:albumLabel], params[:albumArtist], params[:albumPrice], params[:albumStock])
-	rescue ArtistError
-		redirect '/admin?error=badartistid'
-	rescue AlbumError
-		redirect '/admin?error=albumnotfound'
-	rescue SongError
-		redirect '/admin?error=badlastfmsongdata'
-	end
-	redirect '/admin'
+	#begin
+	result = $lf.addAlbum(params[:albumName], params[:albumLength], params[:albumGenre], params[:albumLabel], params[:albumArtist], params[:albumPrice], params[:albumStock])
+	#rescue ArtistError
+	#	redirect '/admin?error=badartistid'
+	#rescue AlbumError
+	#	redirect '/admin?error=albumnotfound'
+	#rescue SongError
+	#	redirect '/admin?error=badlastfmsongdata'
+	#end
+	#redirect '/admin'
+	
+	if result.first ==0
+	  redirect '/admin'
+  elsif result.first == -1
+    redirect '/admin?error=badalbumdata'
+  elsif result.first == -3
+    redirect '/admin?error=albumnotfound'
+  elsif result.first == -4
+    redirect '/admin?error=badartistid'
+  elsif result.first == -5
+    redirect '/admin?error=badlastfmsongdata'
+  else
+    redirect '/admin?error=dberror'
+  end
+	
 end
 
 
@@ -373,19 +417,18 @@ end
 
 
 post '/addMerch' do
-	merch_id = $db.select("SELECT product_number.nextval FROM DUAL")
   url = "http://tinyurl.com/api-create.php?url=#{params[:merchImage]}"
   resp = Net::HTTP.get_response(URI.parse(url))
   image=resp.body
-	begin
-		$manage.addProduct(merch_id[0], params[:merchArtist], params[:merchDescription], image, params[:merchDate], params[:merchPrice], params[:merchStock])
-		$manage.addMerch(merch_id[0], params[:merchName])
-	rescue
-		$db.execute("Rollback")
-		redirect '/admin?error=badmerchdata'
-	end
-
-	redirect '/admin'
+  
+	result = $manage.addMerch(params[:merchName], params[:merchArtist], params[:merchDescription], image, params[:merchDate], params[:merchPrice], params[:merchStock])
+	if result == 0
+	  redirect '/admin'
+	elsif result == -1    
+	  redirect '/admin?error=badmerchdata'
+  else
+    redirect '/admin?error=dberror'
+  end
 end
 
 

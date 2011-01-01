@@ -1,4 +1,4 @@
-
+require 'oci8'
 class Manage
 	
 	def initialize()
@@ -6,10 +6,11 @@ class Manage
 	
 	
 	def addArtist(artist_name, artist_image, artist_bio)
-		$db.execute("	INSERT INTO artist(artist_id, artist_name, artist_image, artist_bio)
-						VALUES(artist_number.nextval, '#{artist_name}', '#{artist_image}', '#{artist_bio}')
-					")
-		$db.execute("Commit")
+		cursor = $db.conn.parse("BEGIN addArtist('#{artist_name}','#{artist_bio}','#{artist_image}',:b1); END;")
+    cursor.bind_param(0, -1, Integer)
+    cursor.exec()
+    
+    cursor[0] # :b1 result of the procedure
 	end
 	
 	
@@ -17,14 +18,22 @@ class Manage
 		$db.execute("	INSERT INTO product(product_id, artist_id, description, image, release_date, rating, votes, added_date, current_price, stock, num_sells)
 						VALUES(#{product_id}, #{artist_id}, '#{description}', '#{image}', #{release_date}, 0, 0, sysdate, "+current_price+", "+stock+", 0)
 					")
+		$db.execute("Commit")
 	end
 	
 	
-	def addAlbum(product_id, album_name, album_length, album_genre, album_label)
-		$db.execute("	INSERT INTO album(product_id, album_name, album_length, album_genre, album_label)
-						VALUES(#{product_id}, '#{album_name}', '#{album_length}', '#{album_genre}', '#{album_label}')
-					")
-		$db.execute("Commit")
+	def addAlbum(album_name, album_length, album_genre, album_label, artist_id, description, image, release_date, current_price, stock)
+		cursor = $db.conn.parse("BEGIN addAlbum('#{album_name}','#{album_length}','#{album_genre}','#{album_label}','#{artist_id}','#{description}','#{image}',#{release_date},#{current_price},#{stock},:b1,:b2); END;")
+    cursor.bind_param(':b1', -1, Integer)
+    cursor.bind_param(':b2', -1, Integer)
+    
+    cursor.exec()
+    
+    arr = Array.new
+    
+    arr << cursor[':b1']
+    arr << cursor[':b2']
+    arr # :b1 result of the procedure
 	end
 	
 	
@@ -36,11 +45,12 @@ class Manage
 	end
 	
 	
-	def addMerch(product_id, merchandise_name)
-		$db.execute("	INSERT INTO merchandise(product_id, merchandise_name)
-						VALUES(#{product_id}, '#{merchandise_name}')
-					")
-		$db.execute("Commit")
+	def addMerch(merchandise_name, artist_id, description, image, release_date, current_price, stock)
+		cursor = $db.conn.parse("BEGIN addMerch('#{merchandise_name}',#{artist_id},'#{description}','#{image}', #{release_date}, #{current_price}, #{stock},:b1); END;")
+    cursor.bind_param(0, -1, Integer)
+    cursor.exec()
+    
+    cursor[0] # :b1 result of the procedure
 	end
 	
 	

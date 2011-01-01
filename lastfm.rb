@@ -48,6 +48,12 @@ class Lastfm
 
 		doc = Hpricot resp.body
 		
+		(doc/"lfm").each do |err|
+		  if err.attributes["status"] == 'failed'
+		    return -3
+	    end
+	  end
+	  
 		(doc/"lfm/artist/image").each do |ing|
 			if ing.attributes["size"] == 'large'
 				arr[0] = ing.inner_html
@@ -58,12 +64,12 @@ class Lastfm
 		
 		arr[1] = getOrclStr(arr[1])
 		
-		#we should avoid this by verifying first if last.fm's content isn't null..................
-		begin
-			$manage.addArtist(name, arr[0], arr[1])
-		rescue
-			raise ArtistError
-		end
+		url = "http://tinyurl.com/api-create.php?url=#{arr[0]}"
+    resp = Net::HTTP.get_response(URI.parse(url))
+    image=resp.body
+		
+		result = $manage.addArtist(name, image, arr[1])
+		result
 	end	
 	
 	
@@ -79,6 +85,13 @@ class Lastfm
 			date = String.new
 			
 			doc = Hpricot resp
+			
+			(doc/"lfm").each do |err|
+  		  if err.attributes["status"] == 'failed'
+  		    arr << -3
+  		    return arr
+  	    end
+  	  end
 			
 			arr[0] = getOrclStr((doc/"lfm/album/wiki/summary").inner_html.gsub(']]>','').gsub('<![CDATA[',''))
 			
@@ -112,24 +125,12 @@ class Lastfm
 				i=i+1
 			end
 			
-			product_id = $db.select("SELECT product_number.nextval FROM dual")	
-
+			result = Array.new
+			result = $manage.addAlbum(name, length, genre, label, artist_id, arr[0], arr[1], arr[2], price, stock)
 			
-			puts 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
-			puts 'x'+arr[0]+'x'
-			puts 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
-			puts 'x'+arr[1]+'x'
-			puts 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
-			puts 'x'+arr[2]+'x'
-			puts 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
-			
-			begin
-				$manage.addProduct(product_id[0], artist_id, arr[0], arr[1], arr[2], price, stock)
-				$manage.addAlbum(product_id[0], name, length, genre, label)
-			rescue
-				$db.execute("Rollback")
-				raise AlbumError
-			end
+			unless result.first == 0
+			  return result
+		  end
 			
 			i = 3		
 			while i < arr.length
@@ -138,7 +139,7 @@ class Lastfm
 				begin
 					$manage.addProduct(song_id[0], artist_id, 'N/A', arr[1], arr[2], '0.99', '-1')
 				
-					$manage.addSong(song_id[0], product_id[0], arr[i], '3:00', 'Other', (i-2))
+					$manage.addSong(song_id[0], result[1], arr[i], '3:00', 'Other', (i-2))
 				rescue
 					$db.execute("Rollback")
 					bool=1
@@ -147,12 +148,17 @@ class Lastfm
 				i=i+1
 			end
 		else
-			raise ArtistError
+		  result = Array.new
+		  result << -4
+			return result
 		end
 		
 		if bool
-			raise SongError
+			resultt = Array.new
+		  resultt << -5
+			return resultt
 		end
+		result
 	end
 	
 	

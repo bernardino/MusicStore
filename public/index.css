@@ -1,7 +1,7 @@
 @charset "UTF-8";
 /* CSS Document */
 body {
-  background:#CCC;
+  background:#FFF;
 }
 
 h1 {
@@ -29,7 +29,7 @@ logo{
 	/*width:80%;
 	margin-left:10%;
 	margin-right:10%;*/
-	background:#CCC;
+	background:#FFF;
 	margin: 0 auto;
 }
 
@@ -43,7 +43,7 @@ logo{
 }
 
 .content {
-	background:#EEE;
+	background:#1299aa;
 }
 
 .head {
@@ -107,7 +107,16 @@ logo{
 .link {
 	font-family:Arial, Helvetica, sans-serif;
 	font-size:15px;
-	background:#EEE;
+	background:#F93;
+	color:#FFF;
+	padding:5px;
+	cursor:pointer;
+}
+
+.link:hover {
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:15px;
+	background:#FFF;
 	color:#000;
 	padding:5px;
 	cursor:pointer;
@@ -138,7 +147,7 @@ logo{
 	font-size:15px;
 }
 .search:hover{
-	color:#fff;
+	color:#F93;
 }
 
 
@@ -149,13 +158,14 @@ logo{
 	font-size:13px;
 }
 #footer {
-	width:98%;
+	width:100%;
 	clear:both;
 	font-family:"Palatino Linotype", "Book Antiqua", Palatino, serif;
-	background:#CCC;
-	padding:5px;
-	position:fixed;
-	bottom:0px;
+	background:#ccc;
+	color:#333;
+	padding:1px;
+	/*position:fixed;
+	bottom:0px;*/
 	cursor:auto;
 	-user-select:none;
 	-moz-user-select: none;
