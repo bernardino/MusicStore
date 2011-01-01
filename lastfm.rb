@@ -222,6 +222,11 @@ class Lastfm
 		
 		api_sig = Digest::MD5.hexdigest("api_key8ea76991c5d4936f71710eb66b2e63acmethodauth.getSessiontoken#{token}ec28bf8d372e5c1f1531603ba606a561")
 		
+		#api_key8ea76991c5d4936f71710eb66b2e63acmethodauth.getSessiontokenada733945e8a06a5eff32814244de55bec28bf8d372e5c1f1531603ba606a561
+		
+		
+		
+		
 		url = "http://ws.audioscrobbler.com/2.0/?method=auth.getSession&api_key=8ea76991c5d4936f71710eb66b2e63ac&api_sig=#{api_sig}&token=#{token}"
 		resp = Net::HTTP.get_response(URI.parse(url)).body
 		doc = Hpricot resp

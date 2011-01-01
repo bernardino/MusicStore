@@ -70,12 +70,13 @@
 			<p><%= res[0]%> </p>
 		</div>
 		<% if session[:orders] == {} %>
-		<p><input id="order_btn" type="button" value="Add Order" disabled="true"><input type="button" value="Home" onmouseup="window.location='/'"></p></p>
+			<p><input id="order_btn" type="button" value="Add Order" disabled="true"><input type="button" value="Home" onmouseup="window.location='/'"></p></p>
 		<% else 			
 			if Float(session[:total]) > Float(res[1]) %>
 				<p>You do not have enough credits</p>
 				<p><input id="order_btn" type="button" value="Add Order" disabled="true"><input type="button" value="Home" onmouseup="window.location='/'"></p></p>
 			<% elsif (params[:erro] != nil) %>
+				
 				<p><input id="order_btn" type="button" value="Add Order" disabled="true"><input type="button" value="Home" onmouseup="window.location='/'"></p></p>
 				<p> The products: <%
 					ids = params[:erro].split(":")
@@ -86,7 +87,10 @@
 						<% end %>
 					<% end %>
 					are not available, please try again another time</p>
-			<% else  %>
+			<% else  
+				puts "cenasss3"
+				%>
+				
 				<p><input id="order_btn" type="button" value="Add Order" onmouseup="window.location='/final'"><input type="button" value="Home" onmouseup="window.location='/'"></p>
 			<% end %>
 		<% end %>
