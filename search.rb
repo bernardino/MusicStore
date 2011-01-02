@@ -51,20 +51,21 @@ class Search
 	end
 	
 	def album_genre(genre)
-		return $db.select("	SELECT al.product_id, al.album_name, a.artist_name, p.image
+		return $db.select("	SELECT al.product_id, a.artist_id, al.album_name, a.artist_name, p.image
 							FROM album al, artist a, product p
 							WHERE a.artist_id = p.artist_id
 							AND p.product_id = al.product_id
-							AND upper(al.album_genre) like upper('rock')
+							AND upper(al.album_genre) like upper('%#{genre}%')
 							ORDER BY al.album_name, a.artist_name
 						")
-						
+	end
+		
 	def song_genre(genre)
-		return $db.select("	SELECT s.product_id, s.song_name, a.artist_name, p.image
+		return $db.select("	SELECT s.product_id,a.artist_id, s.song_name, a.artist_name, p.image
 							FROM song s, artist a, product p
 							WHERE a.artist_id = p.artist_id
 							AND p.product_id = s.product_id
-							AND upper(s.song_genre) like upper('rock')
+							AND upper(s.song_genre) like upper('%#{genre}%')
 							ORDER BY s.song_name, a.artist_name
 						")
 	

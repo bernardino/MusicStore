@@ -89,6 +89,7 @@
 								<option value="album">Albums</option>
 								<option value="song">Songs</option>
 								<option value="merch">Merchandising</option>
+								<option value="genre">Genre</option>
 							</select>
 							<input type="submit" value="Go">
 						</form>
@@ -128,7 +129,7 @@
 			  <table>
 				<% 	
 					i=0
-					if @res == nil || @res.length == 0%>
+					if (@res == nil && @res.length == 0 && @res_song.length ==0) %>
 						<%= @error %><%
 				
 					elsif @options == 'artist'
@@ -172,13 +173,37 @@
 						while i< @res.length %>
 							<tr>
 								<td>
-									<a class="search" href="/song/<%=@res[i] %>"><img src="<%= @res[i+3] %>" height="100" width="100" border="2"/></a>
+									<a class="search" href="/merch/<%=@res[i] %>"><img src="<%= @res[i+3] %>" height="100" width="100" border="2"/></a>
 								</td>
 								<td>
 									<a class="search" href="/merch/<%= @res[i] %>"><%= @res[i+2] %> - <%= @res[i+1] %></a>
 								</td>
 							</tr>
 							<% i=i+4 %>
+						<% end %>
+					<% elsif @options == 'genre'
+						while i < @res.length %>
+							<tr>
+								<td>
+									<a class="search" href="/artist/<%=@res[i+1]%>/album/<%=@res[i]%>"><img src="<%= @res[i+4] %>" height="100" width="100" border="2"/></a>
+								</td>
+								<td>
+									<a class="search" href="/artist/<%=@res[i+1]%>/album/<%=@res[i]%>"><%= @res[i+3] %> - <%= @res[i+2] %></a>
+								</td>
+							</tr>
+						<% i=i+5 %>
+						<% end %>
+						<% i=0
+						while i <@res_song.length %>
+							<tr>
+								<td>
+									<a class="search" href="/artist/<%=@res_song[i+1]%>/song/<%=@res_song[i]%>"><img src="<%= @res_song[i+4] %>" height="100" width="100" border="2"/></a>
+								</td>
+								<td>
+									<a class="search" href="/artist/<%=@res_song[i+1]%>/song/<%=@res_song[i]%>"><%= @res_song[i+3] %> - <%= @res_song[i+2] %></a>
+								</td>
+							</tr>
+						<% i=i+5 %>
 						<% end %>
 					<% end %>
 				</table>

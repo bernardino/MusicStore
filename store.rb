@@ -220,7 +220,7 @@ post '/search' do
 			@res = $search.merchandise(@searchTerm)
 		elsif @options == 'genre'
 			@res = $search.album_genre(@searchTerm)
-			@res << $search.song_genre(@searchTerm)
+			@res_song = $search.song_genre(@searchTerm)
 		end
 		
 		if @res.length == 0
@@ -386,7 +386,6 @@ end
 
 
 post '/addSong' do
-  
 	if (params[:songAlbum] != '')
 		result = $manage.addSong(params[:songAlbum], params[:songName], params[:songLength], params[:songGenre], params[:songNumber], params[:songArtist], params[:songDescription], params[:songImage], params[:songDate], params[:songPrice], '-1')
 	else
