@@ -389,7 +389,7 @@ post '/addSong' do
 	else
 		result = $manage.addSong('null', params[:songName], params[:songLength], params[:songGenre], 'null', params[:songArtist], params[:songDescription], params[:songImage], params[:songDate], params[:songPrice], '-1')
 	end
-  
+  $db.execute("commit");
   if result == 0
 	  redirect '/admin'
 	elsif result == -1
