@@ -37,11 +37,12 @@ class Manage
 	end
 	
 	
-	def addSong(product_id, alb_product_id, song_name, song_length, song_genre, song_number)
-		$db.execute("	INSERT INTO song(product_id, alb_product_id, song_name, song_length, song_genre, song_number)
-						VALUES(#{product_id}, #{alb_product_id}, '#{song_name}', '#{song_length}', '#{song_genre}', #{song_number})
-					")
-		$db.execute("Commit")
+	def addSong(alb_product_id, song_name, song_length, song_genre, song_number, artist_id, description, image, release_date, current_price, stock)
+		cursor = $db.conn.parse("BEGIN addSong(#{alb_product_id},'#{song_name}','#{song_length}','#{song_genre}',#{song_number}, #{artist_id},'#{description}','#{image}',#{release_date},#{current_price},#{stock},:b1); END;")
+    cursor.bind_param(0, -1, Integer)
+    
+    cursor.exec()
+		cursor[0]
 	end
 	
 	

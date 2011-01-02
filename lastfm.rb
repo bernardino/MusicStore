@@ -131,18 +131,14 @@ class Lastfm
 		  end
 			
 			i = 3		
-			while i < arr.length
-				song_id = $db.select("SELECT product_number.nextval FROM DUAL")
+			while i < arr.length			
+				res = $manage.addSong(result[1], arr[i], '3:00', 'Other', (i-2), artist_id, 'N/A', arr[1], arr[2], '0.99', '-1')
 				
-				begin
-					$manage.addProduct(song_id[0], artist_id, 'N/A', arr[1], arr[2], '0.99', '-1')
-				
-					$manage.addSong(song_id[0], result[1], arr[i], '3:00', 'Other', (i-2))
-				rescue
-					$db.execute("Rollback")
-					bool=1
-				end
-				
+				unless res == 0
+				  result[0] = -5
+				  return result;
+			  end
+			  
 				i=i+1
 			end
 		else
@@ -151,11 +147,6 @@ class Lastfm
 			return result
 		end
 		
-		if bool
-			resultt = Array.new
-		  resultt << -5
-			return resultt
-		end
 		result
 	end
 	

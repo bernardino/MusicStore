@@ -262,6 +262,49 @@ EXCEPTION
 END;
 /
 
+/* ADD SONG */
+create or replace procedure addSong (
+	alb_product_id in song.alb_product_id%type,
+	song_name in song.song_name%type,
+	song_length in song.song_length%type,
+	song_genre in song.song_genre%type, 
+	song_number in song.song_number%type,
+	artistID in product.artist_id%type,
+	description in product.description%type,
+	image in product.image%type,
+	release_date in product.release_date%type,
+	price in product.current_price%type,
+	stock in product.stock%type,
+	result out integer) IS
+	
+	product_id product.product_id%type;
+	aux_song song.song_name%type;
+	aux_id song.alb_product_id%type;
+BEGIN
+	select s.song_name, s.alb_product_id into aux_song, aux_id
+	from song s
+	where s.song_name = song_name and
+	s.alb_product_id = alb_product_id;
+	result:=-1;
+	
+EXCEPTION
+	when no_data_found then
+		select product_number.nextval into product_id from dual;
+	
+		INSERT INTO product(product_id, artist_id, description, image, release_date, rating, votes, added_date, current_price, stock, num_sells)
+		VALUES(product_id, artistID, description, image, release_date, 0, 0, sysdate, price, stock, 0);
+		result:=0;
+		
+		INSERT INTO song(product_id, alb_product_id, song_name, song_length, song_genre, song_number)
+		VALUES(product_id, alb_product_id, song_name, song_length, song_genre, song_number);
+		result := 0;
+		
+		commit;
+	when others then
+		result :=2;
+END;
+/
+
 
 
 /*==============================================================*/
