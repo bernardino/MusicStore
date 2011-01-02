@@ -197,27 +197,29 @@
 						<% i=i+4 %>
 						<% end  %>
 					</table>
-					<br/><br/>
-					<a class="subhead">More Albuns From this Artist: </a>
-					<br/><br/>
-					<table>
-						<% album = @albums.length
-						i=0
-						
-						while i < album
-							if params[:id] != @albums[i].to_s %>
-								<tr>
-									<td>
-										<a class="search" href="/artist/<%=params[:name]%>/album/<%= @albums[i] %>"><img src="<%=@albums[i+2] %>" height="120" width="120" border="3"/></a>
-									</td>
-									<td>
-										<a class="search" href="/artist/<%=params[:name]%>/album/<%= @albums[i] %>" ><%=@albums[i+1] %></a>
-									</td>
-								</tr>
+					<% if @albums.length > 0 %>
+						<br/><br/>
+						<a class="subhead">More Albuns From this Artist: </a>
+						<br/><br/>
+						<table>
+							<% album = @albums.length
+							i=0
+							
+							while i < album
+								if params[:id] != @albums[i].to_s %>
+									<tr>
+										<td>
+											<a class="search" href="/artist/<%=params[:name]%>/album/<%= @albums[i] %>"><img src="<%=@albums[i+2] %>" height="120" width="120" border="3"/></a>
+										</td>
+										<td>
+											<a class="search" href="/artist/<%=params[:name]%>/album/<%= @albums[i] %>" ><%=@albums[i+1] %></a>
+										</td>
+									</tr>
+								<% end %>
+								<% i=i+3 %>
 							<% end %>
-							<% i=i+3 %>
-						<% end %>
-					</table>
+						</table>
+					<% end %>
 				</div>
 		      </div>
 			<!-- Shopping Cart -->

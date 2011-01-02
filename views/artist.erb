@@ -133,43 +133,70 @@
 						<info><%= @bio %> </info> 
 					</table>
 					<br/><br/>
-					<a class="subhead">Albums Released:</a>
-					<br/>
-					<br/>
-					<table>
-						<% i=0
-						while i < @albums.length %>
-						<tr>
+					<% if @albums.length > 0 %>
+						<a class="subhead">Albums Released:</a>
+						<br/>
+						<br/>
+						<table>
+							<% i=0
+							while i < @albums.length %>
+							<tr>
 
-							<td>
-								<a class="search" href ="<%= request.path_info %>/album/<%= @albums[i] %>"><img src="<%= @albums[i+2] %>" height="120" width="120" border="3" /></a>
-							</td>
-							<td>
-								<a class="search" href="<%= request.path_info %>/album/<%= @albums[i] %>" >   <%=@albums[i+1] %></a>
-							</td>
-						</tr>
-						<% i=i+3 %>
-						<% end %>
-					</table>
-					<br/>
-					<a class="subhead">Individual songs available:</a>
-					<br/>
-					<br/>
-					<table>
-						<% i=0
-						while i < @songs.length %>
-						<tr>
+								<td>
+									<a class="search" href ="<%= request.path_info %>/album/<%= @albums[i] %>"><img src="<%= @albums[i+2] %>" height="120" width="120" border="3" /></a>
+								</td>
+								<td>
+									<a class="search" href="<%= request.path_info %>/album/<%= @albums[i] %>" >   <%=@albums[i+1] %></a>
+								</td>
+							</tr>
+							<% i=i+3 %>
+							<% end %>
+						</table>
+						<br/>
+					<% end %>
+					<% if @songs.length > 0 %>
+						<a class="subhead">Individual songs available:</a>
+						<br/>
+						<br/>
+						<table>
+							<% i=0
+							while i < @songs.length %>
+							<tr>
 
-							<td>
-								<a class="search" href ="<%= request.path_info %>/song/<%= @songs[i] %>"><img src="<%= @songs[i+3] %>" height="120" width="120" border="3" /></a>
-							</td>
-							<td>
-								<a class="search" href="<%= request.path_info %>/song/<%= @songs[i] %>"><%=@songs[i+1] %></a>
-							</td>
-						</tr>
-						<% i=i+4 %>
-						<% end %>
-					</table>
+								<td>
+									<a class="search" href ="<%= request.path_info %>/song/<%= @songs[i] %>"><img src="<%= @songs[i+3] %>" height="120" width="120" border="3" /></a>
+								</td>
+								<td>
+									<a class="search" href="<%= request.path_info %>/song/<%= @songs[i] %>"><%=@songs[i+1] %></a>
+								</td>
+							</tr>
+							<% i=i+4 %>
+							<% end %>
+						</table>
+					<% end %>
+					
+					<% if @merch.length > 0 %>
+						<a class="subhead">Merchandising available:</a>
+						<br/>
+						<br/>
+						<table>
+							<% i=0
+							#p.product_id, merchandise_name, image
+							while i < @merch.length %>
+							<tr>
+
+								<td>
+									<a class="search" href ="<%= request.path_info %>/merch/<%= @merch[i] %>"><img src="<%= @merch[i+2] %>" height="120" width="120" border="3" /></a>
+								</td>
+								<td>
+									<a class="search" href="<%= request.path_info %>/merch/<%= @merch[i] %>"><%=@merch[i+1] %></a>
+								</td>
+							</tr>
+							<% i=i+7 %>
+							<% end %>
+						</table>
+					
+					<% end %>
 					
 					
 				</div>

@@ -283,7 +283,7 @@ class Get
 							FROM merchandise m, product p
 							WHERE m.product_id = p.product_id
 							AND p.artist_id = #{artist_id}
-							ORDER BY release_date;
+							ORDER BY release_date
 						")
 	end
 	

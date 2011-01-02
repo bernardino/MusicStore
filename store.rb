@@ -135,6 +135,7 @@ get '/artist/:id' do
 	@image = res[2]
 	@albums = $get.artist_albums(params[:id])
 	@songs = $get.artistSingleSongs(params[:id])
+	@merch = $get.artistMerch(params[:id])
 	
 	erb :artist
 end
