@@ -218,6 +218,9 @@ post '/search' do
 			@res = $search.song(@searchTerm)
 		elsif @options == 'merch'
 			@res = $search.merchandise(@searchTerm)
+		elsif @options == 'genre'
+			@res = $search.album_genre(@searchTerm)
+			@res << $search.song_genre(@searchTerm)
 		end
 		
 		if @res.length == 0
