@@ -264,8 +264,8 @@ END;
 
 /* ADD SONG */
 create or replace procedure addSong (
-	alb_product_id in song.alb_product_id%type,
-	song_name in song.song_name%type,
+	albproduct_id in song.alb_product_id%type,
+	name in song.song_name%type,
 	song_length in song.song_length%type,
 	song_genre in song.song_genre%type, 
 	song_number in song.song_number%type,
@@ -283,8 +283,8 @@ create or replace procedure addSong (
 BEGIN
 	select s.song_name, s.alb_product_id into aux_song, aux_id
 	from song s
-	where s.song_name = song_name and
-	s.alb_product_id = alb_product_id;
+	where s.song_name = name and
+	s.alb_product_id = albproduct_id;
 	result:=-1;
 	
 EXCEPTION
@@ -296,10 +296,9 @@ EXCEPTION
 		result:=0;
 		
 		INSERT INTO song(product_id, alb_product_id, song_name, song_length, song_genre, song_number)
-		VALUES(product_id, alb_product_id, song_name, song_length, song_genre, song_number);
+		VALUES(product_id, albproduct_id, name, song_length, song_genre, song_number);
 		result := 0;
 		
-		commit;
 	when others then
 		result :=2;
 END;
