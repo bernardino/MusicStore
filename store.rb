@@ -346,17 +346,6 @@ end
 
 
 post '/addAlbumManual' do
-	#album_id = $db.select("SELECT product_number.nextval FROM DUAL")
-	#
-	#begin
-	#	$manage.addProduct(album_id[0], params[:albumArtist], params[:albumDescription], params[:albumImage], params[:albumDate], params[:albumPrice], params[:albumStock])
-	#	$manage.addAlbum(album_id[0], params[:albumName], params[:albumLength], params[:albumGenre], params[:albumLabel])
-	#rescue
-	#	$db.execute("Rollback")
-	#	redirect '/admin?error=badalbumdata'
-	#end
-	#redirect '/admin'
-	
 	result = $manage.addAlbum(params[:albumName], params[:albumLength], params[:albumGenre], params[:albumLabel],
 	params[:albumArtist], params[:albumDescription], params[:albumImage], params[:albumDate], Float(params[:albumPrice]), params[:albumStock].to_i)
 	
@@ -374,16 +363,7 @@ end
 
 
 post '/addAlbumLastfm' do
-	#begin
 	result = $lf.addAlbum(params[:albumName], params[:albumLength], params[:albumGenre], params[:albumLabel], params[:albumArtist], params[:albumPrice], params[:albumStock])
-	#rescue ArtistError
-	#	redirect '/admin?error=badartistid'
-	#rescue AlbumError
-	#	redirect '/admin?error=albumnotfound'
-	#rescue SongError
-	#	redirect '/admin?error=badlastfmsongdata'
-	#end
-	#redirect '/admin'
 	
 	if result.first ==0
 	  redirect '/admin'
@@ -403,24 +383,20 @@ end
 
 
 post '/addSong' do
-	song_id = $db.select("SELECT product_number.nextval FROM DUAL")
-	
-	#begin
-		$manage.addProduct(song_id[0], params[:songArtist], params[:songDescription], params[:songImage], params[:songDate], params[:songPrice], '-1')
-
-		if (params[:songAlbum] != '')
-			puts 'cenas'
-			$manage.addSong(song_id[0], params[:songAlbum], params[:songName], params[:songLength], params[:songGenre], params[:songNumber])
-		else
-			puts 'cenasdsd'
-			$manage.addSong(song_id[0], 'null', params[:songName], params[:songLength], params[:songGenre], 'null')
-		end
-	#rescue
-	#	$db.execute("Rollback")
-	#	redirect '/admin?error=badsongdata'
-	#end
-
-	redirect '/admin'
+  
+	if (params[:songAlbum] != '')
+		result = $manage.addSong(params[:songAlbum], params[:songName], params[:songLength], params[:songGenre], params[:songNumber], params[:songArtist], params[:songDescription], params[:songImage], params[:songDate], params[:songPrice], '-1')
+	else
+		result = $manage.addSong('null', params[:songName], params[:songLength], params[:songGenre], 'null', params[:songArtist], params[:songDescription], params[:songImage], params[:songDate], params[:songPrice], '-1')
+	end
+  
+  if result == 0
+	  redirect '/admin'
+	elsif result == -1
+	  redirect '/admin?error=badsongdata'
+  else
+    redirect '/admin?error=dberror'
+  end
 end
 
 
