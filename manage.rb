@@ -95,13 +95,31 @@ class Manage
 	
 	
 	
-	
+	def editSong(song_name, song_length, song_genre, song_number, album_id, artist_id, description, image, release_date, current_price, product_id)
+		$db.execute("	UPDATE song
+						SET song_name = '#{song_name}',
+							song_length = '#{song_length}',
+							song_genre = '#{song_genre}',
+							song_number = #{song_number},
+							alb_product_id = #{album_id}
+						WHERE product_id = #{product_id}
+					")
+		$db.execute("	UPDATE product
+						SET artist_id = #{artist_id},
+							description = '#{description}',
+							image = '#{image}',
+							release_date = #{release_date},
+							current_price = #{current_price}
+						WHERE product_id = #{product_id}
+					")
+		$db.execute("Commit")
+	end
 	
 	
 	def editMerch(merchandise_name, artist_id, description, image, release_date, current_price, stock, product_id)
 		$db.execute("	UPDATE merchandise
 						SET merchandise_name = '#{merchandise_name}'
-						WHERE product_id = '#{product_id}'
+						WHERE product_id = #{product_id}
 					")
 		$db.execute("	UPDATE product
 						SET artist_id = #{artist_id},
@@ -110,7 +128,7 @@ class Manage
 							release_date = #{release_date},
 							current_price = #{current_price},
 							stock = #{stock}
-						WHERE product_id = '#{product_id}'
+						WHERE product_id = #{product_id}
 					")
 		$db.execute("Commit")
 	end
@@ -119,7 +137,7 @@ class Manage
 	def deleteArtist(artist_id)
 		$db.execute("	DELETE
 						FROM artist
-						WHERE artist_id = '#{artist_id}'
+						WHERE artist_id = #{artist_id}
 					")
 		$db.execute("Commit")
 	end
@@ -128,7 +146,7 @@ class Manage
 	def deleteAlbum(product_id)
 		$db.execute("	DELETE
 						FROM album
-						WHERE product_id = '#{product_id}'
+						WHERE product_id = #{product_id}
 					")
 		$db.execute("Commit")
 	end
@@ -137,7 +155,7 @@ class Manage
 	def deleteSong(product_id)
 		$db.execute("	DELETE
 						FROM song
-						WHERE product_id = '#{product_id}'
+						WHERE product_id = #{product_id}
 					")
 		$db.execute("Commit")
 	end
@@ -146,7 +164,7 @@ class Manage
 	def deleteMerch(product_id)
 		$db.execute("	DELETE
 						FROM merchandise
-						WHERE product_id = '#{product_id}'
+						WHERE product_id = #{product_id}
 					")
 		$db.execute("Commit")
 	end
@@ -155,7 +173,7 @@ class Manage
 	def deleteClient(client_id)
 		$db.execute("	DELETE
 						FROM client
-						WHERE client_id = '#{client_id}'
+						WHERE client_id = #{client_id}
 					")
 		$db.execute("Commit")
 	end

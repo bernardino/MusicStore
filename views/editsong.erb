@@ -37,21 +37,25 @@
 	
 	
 	function disableButton(){
-		if (merchForm.merchName.value=="" ||
-			merchForm.merchArtist.value=="" ||
-			merchForm.merchDescription.value=="" ||
-			merchForm.merchImage.value=="" ||
-			merchForm.merchDate.value=="" ||
-			merchForm.merchPrice.value=="" ||
-			merchForm.merchStock.value=="" ||
-			isNaN(merchForm.merchArtist.value) ||
-			isNaN(merchForm.merchDate.value) ||
-			isNaN(merchForm.merchPrice.value) ||
-			isNaN(merchForm.merchStock.value)){
-			merchForm.editButton.disabled=true;
+		if (songForm.songName.value=="" ||
+			songForm.songLength.value=="" ||
+			songForm.songGenre.value=="" ||
+			songForm.songArtist.value=="" ||
+			songForm.songDescription.value=="" ||
+			songForm.songImage.value=="" ||
+			songForm.songDate.value=="" ||
+			songForm.songPrice.value=="" ||
+			(songForm.songAlbum.value!="" && songForm.songNumber.value=="") ||
+			(songForm.songAlbum.value=="" && songForm.songNumber.value!="") ||
+			isNaN(songForm.songAlbum.value) ||
+			isNaN(songForm.songNumber.value) ||
+			isNaN(songForm.songArtist.value) ||
+			isNaN(songForm.songDate.value) ||
+			isNaN(songForm.songPrice.value)){
+			songForm.editButton.disabled=true;
 		}
 		else {
-			merchForm.editButton.disabled=false;
+			songForm.editButton.disabled=false;
 		}
 	}
 
@@ -125,7 +129,7 @@
 			<% end %>
 
 
-			<div id="menu" align="left" style="background:#EEE; float:left;width:70%">
+			<div id="menu" align="left" style="background:#EEE; float:left;width:70%>
 				<br/>
 				<span id="artistsButton" width="100" class="link">Artists</span>
 				<span id="albumsButton" width="100" class="link">Albums</span>
@@ -134,55 +138,67 @@
 				<span id="clientsButton" width="100" class="link">Clients</span>
 
 
-				<div id="merch" align="left" style="background:#EEE; float:left;width:70%">
+				<div id="songs" align="left" style="background:#EEE; float:left;width:70%">
 					<br/>
-					<span id="addMerchButton" width="100" class="link">Add</span>
-					<span id="editMerchButton" width="100" class="link">Edit</span>
-					<span id="deleteMerchButton" width="100" class="link">Delete</span>
+					<span id="addSongButton" width="100" class="link">Add</span>
+					<span id="editSongButton" width="100" class="link">Edit</span>
+					<span id="deleteSongButton" width="100" class="link">Delete</span>
 					<br/>
 					<br/>					
-					<div id="editMerch" align="left" style="background:#EEE; float:left;width:70%">
-						<form name="merchForm" action="/editMerch" method="post">
+					<div id="editSong" align="left" style="background:#EEE; float:left;width:70%">
+						<form name="songForm" action="/editSong" method="post">
 							<table width="400" onkeyup="disableButton()">
 								<tr>
 									<td class="label" width="130">Name:</td>
-									<td><input type="text" name="merchName" value="<%=@merch[0]%>"/></td>
+									<td><input type="text" name="songName" value="<%=@song[0]%>"/></td>
+								</tr>
+								<tr>
+									<td class="label">Length:</td>
+									<td><input type="text" name="songLength" value="<%=@song[1]%>"/></td>
+								</tr>
+								<tr>
+									<td class="label">Genre:</td>
+									<td><input type="text" name="songGenre" value="<%=@song[2]%>"/></td>
+								</tr>
+								<tr>
+									<td class="label">Number:</td>
+									<td><input type="text" name="songNumber" value="<%=@song[3]%>"/></td>
+								</tr>
+								<tr>
+									<td class="label">Album ID:</td>
+									<td><input type="text" name="songAlbum" value="<%=@song[4]%>"/></td>
 								</tr>
 								<tr>
 									<td class="label">Artist ID:</td>
-									<td><input type="text" name="merchArtist" value="<%=@merch[1]%>"/></td>
+									<td><input type="text" name="songArtist" value="<%=@song[5]%>"/></td>
 								</tr>
 								<tr>
 									<td class="label">Description:</td>
-									<td><input type="text" name="merchDescription" value="<%=@merch[2]%>"/></td>
+									<td><input type="text" name="songDescription" value="<%=@song[6]%>"/></td>
 								</tr>
 								<tr>
 									<td class="label">Image:</td>
-									<td><input type="text" name="merchImage" value="<%=@merch[3]%>"/></td>
+									<td><input type="text" name="songImage" value="<%=@song[7]%>"/></td>
 								</tr>
 								<tr>
 									<td class="label">Release Year:</td>
-									<td><input type="text" name="merchDate" value="<%=@merch[4]%>"/></td>
+									<td><input type="text" name="songDate" value="<%=@song[8]%>"/></td>
 								</tr>
 								<tr>
 									<td class="label">Price:</td>
-									<td><input type="text" name="merchPrice" value="<%=@merch[5]%>"/></td>
+									<td><input type="text" name="songPrice" value="<%=@song[9]%>"/></td>
 								</tr>
 								<tr>
-									<td class="label">Stock:</td>
-									<td><input type="text" name="merchStock" value="<%=@merch[6]%>"/></td>
-								</tr>
-								<tr>
-									<td><input type="hidden" name="merchID" value="<%=@merch[7]%>" /></td>
+									<td><input type="hidden" name="songID" value="<%=@song[10]%>"/></td>
 								</tr>
 							</table>
-							<input type="submit" value="Edit" name="editButton"/>
-							<br/>
-							<br/>
+							<input type="submit" value="Edit" name="editButton" disabled="true"/>
 						</form>
 					</div>
 				</div>
-			</div>
+				
+				
+				
 
 			<!-- Shopping Cart -->
 			<div style="background:#FFF; float:left;width:15%;">
