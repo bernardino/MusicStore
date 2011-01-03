@@ -96,7 +96,8 @@ class Manage
 	
 	
 	def editSong(song_name, song_length, song_genre, song_number, album_id, artist_id, description, image, release_date, current_price, product_id)
-		$db.execute("	UPDATE song
+		begin
+		  $db.execute("	UPDATE song
 						SET song_name = '#{song_name}',
 							song_length = '#{song_length}',
 							song_genre = '#{song_genre}',
@@ -104,7 +105,13 @@ class Manage
 							alb_product_id = #{album_id}
 						WHERE product_id = #{product_id}
 					")
-		$db.execute("	UPDATE product
+		rescue
+		  $db.execute("rollback")
+		  return -1
+	  end
+	  
+	  begin
+		  $db.execute("	UPDATE product
 						SET artist_id = #{artist_id},
 							description = '#{description}',
 							image = '#{image}',
@@ -112,16 +119,27 @@ class Manage
 							current_price = #{current_price}
 						WHERE product_id = #{product_id}
 					")
+		rescue
+		  $db.execute("rollback")
+		  return -1
+	  end
 		$db.execute("Commit")
 	end
 	
 	
 	def editMerch(merchandise_name, artist_id, description, image, release_date, current_price, stock, product_id)
-		$db.execute("	UPDATE merchandise
+		begin
+		  $db.execute("	UPDATE merchandise
 						SET merchandise_name = '#{merchandise_name}'
 						WHERE product_id = #{product_id}
 					")
-		$db.execute("	UPDATE product
+		rescue
+		  $db.execute("rollback")
+		  return -1
+		end
+		
+		begin
+		  $db.execute("	UPDATE product
 						SET artist_id = #{artist_id},
 							description = '#{description}',
 							image = '#{image}',
@@ -130,7 +148,11 @@ class Manage
 							stock = #{stock}
 						WHERE product_id = #{product_id}
 					")
-		$db.execute("Commit")
+		$ db.execute("Commit")
+	  rescue
+	    $db.execute("rollback")
+	    return -1
+	  end
 	end
 	
 	

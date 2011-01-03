@@ -395,8 +395,13 @@ end
 
 
 post '/editSong' do
-	$manage.editSong(params[:songName], params[:songLength], params[:songGenre], params[:songNumber], params[:songAlbum], params[:songArtist], params[:songDescription], params[:songImage], params[:songDate], params[:songPrice], params[:songID])
-
+	res = $manage.editSong(params[:songName], params[:songLength], params[:songGenre], params[:songNumber], params[:songAlbum], params[:songArtist], params[:songDescription], params[:songImage], params[:songDate], params[:songPrice], params[:songID])
+  
+  if res == 0
+    redirect '/admin'
+  else
+    redirect '/admin?error=badsongdata'
+  
 	erb :admin
 end
 
@@ -429,9 +434,12 @@ end
 
 
 post '/editMerch' do
-	$manage.editMerch(params[:merchName], params[:merchArtist], params[:merchDescription], params[:merchImage], params[:merchDate], params[:merchPrice], params[:merchStock], Integer(params[:merchID]))
-
-	erb :admin
+	res = $manage.editMerch(params[:merchName], params[:merchArtist], params[:merchDescription], params[:merchImage], params[:merchDate], params[:merchPrice], params[:merchStock], Integer(params[:merchID]))
+  
+  if res == 0
+    redirect '/admin'
+  else
+    redirect '/admin?error=badmerchdata'
 end
 
 
