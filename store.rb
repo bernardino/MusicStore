@@ -22,16 +22,6 @@ configure do
 	enable :sessions
 end
 
-class ArtistError < StandardError
-end
-
-class AlbumError < StandardError
-end
-
-class SongError < StandardError
-end
-
-#template(:layout) { :index }
 
 before do
 	if session[:id]
@@ -41,6 +31,9 @@ before do
 		else
 			@admin = false
 		end
+		
+		res = $db.select("select credits from client where client_id = '#{session[:id]}'")
+		@credits = res.first
 	else
 		@logged = false
 	end
@@ -52,18 +45,6 @@ before do
   
 end
 
-=begin
-helpers do
-  #def partial template
-  #  erb template.to_sym, :layout => false
-  #end
-  
-  def partial(template, options={})
-     options.merge!(:layout => false)
-     erb template.to_sym, options
-   end
-end
-=end
 
 get '/' do
 	@albums = $get.recentlyAddedAlbums()
