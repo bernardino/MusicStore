@@ -157,19 +157,19 @@ class Lastfm
 	end
 	
 	
-	def update_artist(name)
+	def updateArtist(artist_id)
 		res = get_artist(name)
 		$db.execute("	UPDATE artist 
 						SET artist_image = '#{res[0]}' ,
 						artist_bio = '#{res[1]}'
-						WHERE upper(artist_name) LIKE upper('#{name}')
+						WHERE artist_id = #{artist_id})
 					")
 					
 		$db.execute("Commit")
 	end
 	
 	
-	def update_album(artist_name,album_name)
+	def updateAlbum(artist_name,album_name)
 		res = get_album(artist_name,album_name)
 		
 		info = $db.select("SELECT product_id

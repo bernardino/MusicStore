@@ -92,7 +92,15 @@ class Manage
 	
 	
 	
-	
+	def editArtist(artist_name, artist_bio, artist_image, artist_id)
+		$db.execute("	UPDATE artist
+						SET artist_name = '#{artist_name}', 
+							artist_bio = '#{artist_bio}',
+							artist_image = '#{artist_image}'
+						WHERE artist_id = #{artist_id}
+					")
+		$db.execute("Commit")
+	end
 	
 	
 	def editSong(song_name, song_length, song_genre, song_number, album_id, artist_id, description, image, release_date, current_price, product_id)

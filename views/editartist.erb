@@ -36,26 +36,14 @@
 	}
 	
 	
-	function disableButton(){
-		if (songForm.songName.value=="" ||
-			songForm.songLength.value=="" ||
-			songForm.songGenre.value=="" ||
-			songForm.songArtist.value=="" ||
-			songForm.songDescription.value=="" ||
-			songForm.songImage.value=="" ||
-			songForm.songDate.value=="" ||
-			songForm.songPrice.value=="" ||
-			(songForm.songAlbum.value!="" && songForm.songNumber.value=="") ||
-			(songForm.songAlbum.value=="" && songForm.songNumber.value!="") ||
-			isNaN(songForm.songAlbum.value) ||
-			isNaN(songForm.songNumber.value) ||
-			isNaN(songForm.songArtist.value) ||
-			isNaN(songForm.songDate.value) ||
-			isNaN(songForm.songPrice.value)){
-			songForm.editButton.disabled=true;
+	function disableAButton(){
+		if (artistForm.artistName.value=="" ||
+			artistForm.artistBio.value=="" ||
+			artistForm.artistImage.value==""){
+			artistForm.submitButton.disabled=true;
 		}
 		else {
-			songForm.editButton.disabled=false;
+			artistForm.submitButton.disabled=false;
 		}
 	}
 
@@ -127,6 +115,8 @@
 				</form>
 			</div>
 			<% end %>
+
+
 			<div id="menu" align="left" style="background:#EEE; float:left;width:70%>
 				<br/>
 				<span id="artistsButton" width="100" class="link">Artists</span>
@@ -135,68 +125,45 @@
 				<span id="merchButton" width="100" class="link">Merchandising</span>
 				<span id="clientsButton" width="100" class="link">Clients</span>
 
-
-				<div id="songs" align="left" style="background:#EEE; float:left;width:70%">
+				<div id="artists" align="left" style="background:#EEE; float:left;width:70%">
 					<br/>
-					<span id="addSongButton" width="100" class="link">Add</span>
-					<span id="editSongButton" width="100" class="link">Edit</span>
-					<span id="deleteSongButton" width="100" class="link">Delete</span>
+					<span id="addArtistButton" width="100" class="link">Add</span>
+					<span id="editArtistButton" width="100" class="link">Edit</span>
+					<span id="deleteArtistButton" width="100" class="link">Delete</span>
 					<br/>
-					<br/>					
-					<div id="editSong" align="left" style="background:#EEE; float:left;width:70%">
-						<form name="songForm" action="/editSong" method="post">
-							<table width="400" onkeyup="disableButton()">
-								<tr>
-									<td class="label" width="130">Name:</td>
-									<td><input type="text" name="songName" value="<%=@song[0]%>"/></td>
-								</tr>
-								<tr>
-									<td class="label">Length:</td>
-									<td><input type="text" name="songLength" value="<%=@song[1]%>"/></td>
-								</tr>
-								<tr>
-									<td class="label">Genre:</td>
-									<td><input type="text" name="songGenre" value="<%=@song[2]%>"/></td>
-								</tr>
-								<tr>
-									<td class="label">Number:</td>
-									<td><input type="text" name="songNumber" value="<%=@song[3]%>"/></td>
-								</tr>
-								<tr>
-									<td class="label">Album ID:</td>
-									<td><input type="text" name="songAlbum" value="<%=@song[4]%>"/></td>
-								</tr>
-								<tr>
-									<td class="label">Artist ID:</td>
-									<td><input type="text" name="songArtist" value="<%=@song[5]%>"/></td>
-								</tr>
-								<tr>
-									<td class="label">Description:</td>
-									<td><input type="text" name="songDescription" value="<%=@song[6]%>"/></td>
-								</tr>
-								<tr>
-									<td class="label">Image:</td>
-									<td><input type="text" name="songImage" value="<%=@song[7]%>"/></td>
-								</tr>
-								<tr>
-									<td class="label">Release Year:</td>
-									<td><input type="text" name="songDate" value="<%=@song[8]%>"/></td>
-								</tr>
-								<tr>
-									<td class="label">Price:</td>
-									<td><input type="text" name="songPrice" value="<%=@song[9]%>"/></td>
-								</tr>
-								<tr>
-									<td><input type="hidden" name="songID" value="<%=@song[10]%>"/></td>
-								</tr>
-							</table>
-							<input type="submit" value="Edit" name="editButton" disabled="true"/>
-						</form>
+					<br/>
+					<div id="editArtist" align="left" style="background:#EEE; float:left;width:70%">
+						<span id="editArtistManualButton" width="100" class="link" onClick="showContent(displayed3, 'editArtistManual')">Manually</span>
+						<span id="editArtistLastfmButton" width="100" class="link" onClick="showContent(displayed3, 'editArtistLastfm')">Using last.fm</span>
+						<br/>
+						<br/>
+						<div id="editArtist" align="left" style="background:#EEE; float:left;width:70%">
+							<form name="artistForm" action="/editArtistManual" method="post">
+								<table onkeyup="disableButton()" width="300">
+									<tr>
+										<td class="label" width="65">Name:</td>
+										<td><input type="text" name="artistName" value="<%=@artist[0]%>"/></td>
+									</tr>
+									<tr>
+										<td class="label">Bio:</td>
+										<td><input type="text" name="artistBio" value="<%=@artist[1]%>"/></td>
+									</tr>
+									<tr>
+										<td class="label">Image:</td>
+										<td><input type="text" name="artistImage" value="<%=@artist[2]%>"/></td>
+									</tr>
+									<tr>
+										<td><input type="hidden" name="artistID" value="<%=@artist[3]%>" /></td>
+									</tr>
+								</table>
+								<input type="submit" value="Edit" name="submitButton"/>
+							</form>
+						</div>
 					</div>
 				</div>
 				
-				
-				
+
+			</div>
 
 			<!-- Shopping Cart -->
 			<div style="background:#FFF; float:left;width:15%;">

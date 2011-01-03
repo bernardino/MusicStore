@@ -12,6 +12,13 @@ class Get
 						")
 	end
 	
+	
+	def artistToEdit(artist_id)
+		return $db.select("	SELECT artist_name, artist_bio, artist_image, artist_id
+							FROM artist
+							WHERE artist_id = #{artist_id}
+						")
+	end
 
 	def album(album_id)
 		return $db.select("	SELECT artist_name, album_name, image, description, release_date, album_length, album_genre, album_label, rating, votes, current_price
