@@ -299,33 +299,56 @@ end
 
 
 post '/addArtistManual' do
-  url = "http://tinyurl.com/api-create.php?url=#{params[:artistImage]}"
-  resp = Net::HTTP.get_response(URI.parse(url))
-  image=resp.body
+	url = "http://tinyurl.com/api-create.php?url=#{params[:artistImage]}"
+	resp = Net::HTTP.get_response(URI.parse(url))
+	image = resp.body
   
 	result = $manage.addArtist(params[:artistName], image, params[:artistBio])
   
-  if result == 0
-    redirect '/admin'
-  elsif result == -1
-    redirect '/admin?error=badartistdata'
-  else
-    redirect '/admin?error=dberror'
-  end
+	if result == 0
+		redirect '/admin'
+	elsif result == -1
+		redirect '/admin?error=badartistdata'
+	else
+		redirect '/admin?error=dberror'
+	end
 end
 
 
 post '/addArtistLastfm' do
 	result = $lf.addArtist(params[:artistName])
 	if result == 0
-	  redirect '/admin'
+		redirect '/admin'
 	elsif result == -1
-	  redirect '/admin?error=badartistdata'
+		redirect '/admin?error=badartistdata'
 	elsif result == -3
 		redirect '/admin?error=artistnotfound'
-  else
-    redirect '/admin?error=dberror'
-  end	
+	else
+		redirect '/admin?error=dberror'
+	end	
+end
+
+
+post '/getArtist' do
+	@artist = $get.artistToEdit(params[:ID])
+	
+	unless @artist[0]
+		redirect '/admin?error=badartistid'
+	end
+	
+	erb :editartist
+end
+
+
+post '/editArtistManual' do
+	$manage.editArtist(params[:artistName], params[:artistBio], params[:artistImage], params[:artistID])
+
+	erb :admin
+end
+
+
+post '/editArtistLastfm' do
+	
 end
 
 
@@ -334,15 +357,14 @@ post '/addAlbumManual' do
 	params[:albumArtist], params[:albumDescription], params[:albumImage], params[:albumDate], Float(params[:albumPrice]), params[:albumStock].to_i)
 	
 	if result.first ==0
-	  redirect '/admin'
-  elsif result.first == -1
-    redirect '/admin?error=badalbumdata'
-  elsif result.first == -3
-    redirect '/admin?error=albumnotfound'
-  else
-    redirect '/admin?error=dberror'
-  end
-	
+		redirect '/admin'
+	elsif result.first == -1
+		redirect '/admin?error=badalbumdata'
+	elsif result.first == -3
+		redirect '/admin?error=albumnotfound'
+	else
+		redirect '/admin?error=dberror'
+	end
 end
 
 
@@ -350,18 +372,18 @@ post '/addAlbumLastfm' do
 	result = $lf.addAlbum(params[:albumName], params[:albumLength], params[:albumGenre], params[:albumLabel], params[:albumArtist], params[:albumPrice], params[:albumStock])
 	
 	if result.first ==0
-	  redirect '/admin'
-  elsif result.first == -1
-    redirect '/admin?error=badalbumdata'
-  elsif result.first == -3
-    redirect '/admin?error=albumnotfound'
-  elsif result.first == -4
-    redirect '/admin?error=badartistid'
-  elsif result.first == -5
-    redirect '/admin?error=badlastfmsongdata'
-  else
-    redirect '/admin?error=dberror'
-  end
+		redirect '/admin'
+	elsif result.first == -1
+		redirect '/admin?error=badalbumdata'
+	elsif result.first == -3
+		redirect '/admin?error=albumnotfound'
+	elsif result.first == -4
+		redirect '/admin?error=badartistid'
+	elsif result.first == -5
+		redirect '/admin?error=badlastfmsongdata'
+	else
+		redirect '/admin?error=dberror'
+	end
 	
 end
 
@@ -372,14 +394,37 @@ post '/addSong' do
 	else
 		result = $manage.addSong('null', params[:songName], params[:songLength], params[:songGenre], 'null', params[:songArtist], params[:songDescription], params[:songImage], params[:songDate], params[:songPrice], '-1')
 	end
-  $db.execute("commit")
-  if result == 0
-	  redirect '/admin'
+	$db.execute("commit")
+	if result == 0
+		redirect '/admin'
 	elsif result == -1
-	  redirect '/admin?error=badsongdata'
+		redirect '/admin?error=badsongdata'
+	else
+		redirect '/admin?error=dberror'
+	end
+end
+
+
+post '/getSong' do
+	@song = $get.songToEdit(params[:ID])
+	
+	unless @song[0]
+		redirect '/admin?error=badsongid'
+	end
+	
+	erb :editsong
+end
+
+
+post '/editSong' do
+	res = $manage.editSong(params[:songName], params[:songLength], params[:songGenre], params[:songNumber], params[:songAlbum], params[:songArtist], params[:songDescription], params[:songImage], params[:songDate], params[:songPrice], params[:songID])
+  
+  if res == 0
+    redirect '/admin'
   else
-    redirect '/admin?error=dberror'
-  end
+    redirect '/admin?error=badsongdata'
+  
+	erb :admin
 end
 
 
@@ -411,9 +456,12 @@ end
 
 
 post '/editMerch' do
-	$manage.editMerch(params[:merchName], params[:merchArtist], params[:merchDescription], params[:merchImage], params[:merchDate], params[:merchPrice], params[:merchStock], 140)
-
-	erb :admin
+	res = $manage.editMerch(params[:merchName], params[:merchArtist], params[:merchDescription], params[:merchImage], params[:merchDate], params[:merchPrice], params[:merchStock], Integer(params[:merchID]))
+  
+  if res == 0
+    redirect '/admin'
+  else
+    redirect '/admin?error=badmerchdata'
 end
 
 

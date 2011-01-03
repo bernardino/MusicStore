@@ -117,16 +117,6 @@
 	}
 
 
-	function disableAddArtistLastfmButton(){
-		if (addArtistLastfmForm.artistName.value==""){
-			addArtistLastfmForm.submitButton.disabled=true;
-		}
-		else {
-			addArtistLastfmForm.submitButton.disabled=false;
-		}
-	}
-
-
 	function disableAddAlbumManualButton(){
 		if (addAlbumManualForm.albumName.value=="" ||
 			addAlbumManualForm.albumLength.value=="" ||
@@ -389,7 +379,7 @@
 								<table width="300">
 									<tr>
 										<td class="label" width="65">Name:</td>
-										<td><input type="text" name="artistName" onkeyup="disableAddArtistLastfmButton()"/></td>
+										<td><input type="text" name="artistName" onkeyup="disableSubmitButton()"/></td>
 									</tr>
 								</table>
 								<input type="submit" value="Add" name="submitButton" disabled="true"/>
@@ -402,10 +392,26 @@
 						<br/>
 						<br/>
 						<div id="editArtistManual" align="left" style="background:#EEE; float:left;width:70%; display:none">
-							<h3>Manually</h3>
+							<form name="editArtistManualForm" action="/getArtist" method="post">
+								<table width="300">
+									<tr>
+										<td class="label" width="90">Artist ID:</td>
+										<td><input type="text" name="ID"/></td>
+									</tr>
+								</table>
+								<input type="submit" value="Get Info" name="submitButton"/>
+							</form>
 						</div>
 						<div id="editArtistLastfm" align="left" style="background:#EEE; float:left;width:70%; display:none">
-							<h3>Using last.fm</h3>
+							<form name="editArtistLastfmForm" action="/editArtistLastfm" method="post">
+								<table width="300">
+									<tr>
+										<td class="label" width="90">Artist ID:</td>
+										<td><input type="text" name="ID"/></td>
+									</tr>
+								</table>
+								<input type="submit" value="Edit" name="submitButton"/>
+							</form>
 						</div>
 					</div>
 					<div id="deleteArtist" align="left" style="background:#EEE; float:left;width:70%; display:none">
@@ -608,7 +614,15 @@
 						</form>
 					</div>
 					<div id="editSong" align="left" style="background:#EEE; float:left;width:70%; display:none">
-						<h3>Song2</h3>
+						<form name="editSongForm" action="/getSong" method="post">
+							<table>
+								<tr>
+									<td class="label">Song ID:</td>
+									<td><input type="text" name="ID" onkeyup="disableSubmitButton(editSongForm)"/></td>
+								</tr>
+							</table>
+							<input type="submit" value="Get Info" name="submitButton" disabled="true"/>
+						</form>
 					</div>
 					<div id="deleteSong" align="left" style="background:#EEE; float:left;width:70%; display:none">
 						<form name="deleteSongForm" action="/deleteSong" method="post">
@@ -666,7 +680,6 @@
 						</form>
 					</div>
 					<div id="editMerch" align="left" style="background:#EEE; float:left;width:70%; display:none">
-
 						<form name="editMerchForm" action="/getMerch" method="post">
 							<table width="330">
 								<tr>
@@ -676,7 +689,6 @@
 							</table>
 							<input type="submit" value="Get Info" name="submitButton" disabled="true"/>
 						</form>
-						
 					</div>
 					<div id="deleteMerch" align="left" style="background:#EEE; float:left;width:70%; display:none">
 						<form name="deleteMerchForm" action="/deleteMerch" method="post">

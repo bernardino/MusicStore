@@ -8,86 +8,49 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<title>Welcome to Music Store</title>
 	<script type="text/javascript">
+
 	function goTo(page){
 		if (page=='index')
-		window.location='/';
+			window.location='/';
 		else {
 			window.location='/'+page;
 		}
 	}
 	
-	function rating(){
-		var rating= Math.ceil(<%= @res[7] %>);
-		var i=0;
-		var img;
-		
-		for(i=0; i<rating ;i++){
-			img=document.getElementById("star"+i);
-			img.src="/img/star.png";
-		}
-		for(i; i<5 ;i++){
-			img=document.getElementById("star"+i);
-			img.src="/img/blank.png";
-		}
-	}
-	
-	function imgOver(id){
-		for(i=0; i<id+1 ;i++){
-			img=document.getElementById("star"+i);
-			img.src="/img/star.png";
-		}
-		for(i; i<5 ;i++){
-			img=document.getElementById("star"+i);
-			img.src="/img/blank.png";
-		}
-	}
-	
-	function vote(id){
-		window.location="/addvote?page=<%= request.fullpath %>&v="+id+"&id=<%= params[:id] %>";
-	}
 	
 	function remove(id){
 		window.location="/removeorder?id="+id+"&page=<%= request.fullpath %>";
 	}
-	
+
+
 	function add(id){
 		window.location="/addorder?id="+id+"&page=<%= request.fullpath %>";
 	}
-	
+
+
 	function del(id,currQ){
 		if(currQ-1!=0)
-			window.location="/del?id="+id+"&page=<%= request.fullpath %>";
+		window.location="/del?id="+id+"&page=<%= request.fullpath %>";
 		else
-			window.location="/removeorder?id="+id+"&page=<%= request.fullpath %>";
+		window.location="/removeorder?id="+id+"&page=<%= request.fullpath %>";
 	}
 	
-	function credits() {
-		var txt = document.getElementById('credits_txt');
-		var btn = document.getElementById('credits_btn');
-		if(txt.style.display=='none'){
-			txt.style.display='';
-			btn.disabled=true;
-		} else {
-			window.location='/addcredits?c='+txt.value+'&page=<%= request.fullpath %>';
-			txt.style.display='none';
+	
+	function disableAButton(){
+		if (artistForm.artistName.value=="" ||
+			artistForm.artistBio.value=="" ||
+			artistForm.artistImage.value==""){
+			artistForm.submitButton.disabled=true;
+		}
+		else {
+			artistForm.submitButton.disabled=false;
 		}
 	}
-	
-	function justInt() {
-		var txt = document.getElementById('credits_txt');
-		var btn = document.getElementById('credits_btn');
-		if( !isNaN(parseInt(txt.value))){
-			txt.value=parseInt(txt.value);
-			btn.disabled=false;
-		} else {
-			btn.disabled=true;
-		}
-	}
-	
+
 	</script>
 </head>
 
-<body onload="rating();">
+<body onLoad="displayError()">
 	<div class="container" style="overflow: hidden;">
 		<div align="center" class="header" >
 			<table>
@@ -110,6 +73,7 @@
 					<span width="100" class="link" onClick="goTo('artists')">Artists</span>
 					<span width="100" class="link" onClick="goTo('albums')">Albums</span>
 					<span width="100" class="link" onClick="goTo('merchandising')">Merchandising</span>
+					<span width="100" class="link" onClick="goTo('admin')">Manage Store</span>
 
 					<div style="float:right">
 						<form name="searchForm" action="/search" method="post">
@@ -119,7 +83,6 @@
 								<option value="album">Albums</option>
 								<option value="song">Songs</option>
 								<option value="merch">Merchandising</option>
-								<option value="genre">Genre</option>
 							</select>
 							<input type="submit" value="Go">
 						</form>
@@ -132,7 +95,6 @@
 			<% if @logged %>
 			<div style="background:#FFF; float:left;width:15%">
 				<h1 class="head"><%= session[:id] %></h1>
-				<p class="prepo">You have <%= @credits %> credits</p>
 				<a class="search" href="/client"> Edit your account</a>
 				<br />
 				<input id="credits_txt" type="text" size="5" style="display:none;" onkeyup="justInt()" /><br />
@@ -141,51 +103,78 @@
 				<a href="/logout">Logout</a>
 			</div>
 			<% else %>
-			<div style="background:#FFF; float:left;width:15%;">
-				<form action="/login?p=<%= request.fullpath %>" method="post" accept-charset="utf-8">
-					<h1 class="head">Login</h1>
-					<h3>Username</h3><input type="text" name="username" />
-					<h3>Password</h3><input type="password" name="password"/><br />
+			<div style="background:#FFF; float:left;width:20%;">
+				<form action="/login" method="post" accept-charset="utf-8">
+					<h1>Login</h1>
+					<h3>Username</h3><input type="text" name="username" /><br />
+					<h3>Password</h3><input type="password" name="password"/><br /><br />
 					<input type="submit" value="Login">
-					<br />
+					<br /><br />
 					<a href="/register">Not Registered?</a>
 					<br />
 				</form>
 			</div>
 			<% end %>
-			<!-- Cenas -->
-			<div style="background-color:#EEE; float:left;width:70%">
-		      	<%= @songID %>
-				<div style="float:right;margin:20px;">
-					<img src="<%= @res[10] %>" border="2"/>
-				</div>
 
-				<div align="left" style="margin: 20px;">
-					<a class="headline"><%= @res[1] %></a>
-					<br/><br/>
-					<a class="prepo">by </a><a class="subheadlink" href="/artist/<%=params[:name]%>"><%= @res[0] %></a>
-					<br/><br/>
-					<% if @res[2] != "None" %>
-						<a class="prepo">in </a><a class="subheadlink" href="/artist/<%=params[:name]%>/album/<%=@res[11]%>"><%= @res[2] %></a><br/><br/>
-					<% end %>
-					<a class="subhead">Track Number:</a> <a class="item"> <%= @res[3] %></a><br/>
-					<a class="subhead">Length:</a> <a class="item"> <%= @res[4] %></a><br/>
-					<a class="subhead">Genre:</a> <a class="item"> <%= @res[5] %></a><br/>
-					<a class="subhead">Release Date:</a> <a class="item"> <%= @res[6] %></a><br/>
-					<a class="subhead">Rating: </a> <img id="star0" onmouseover="imgOver(0)" onmouseout="rating()" onmouseup="vote(1)" src="/img/blank.png"><img id="star1" onmouseover="imgOver(1)" onmouseout="rating()" onmouseup="vote(2)" src="/img/blank.png"><img id="star2" onmouseover="imgOver(2)" onmouseout="rating()" onmouseup="vote(3)" src="/img/blank.png"><img id="star3" onmouseover="imgOver(3)" onmouseout="rating()" onmouseup="vote(4)" src="/img/blank.png"><img id="star4" onmouseup="vote(5)" onmouseover="imgOver(4)" onmouseout="rating()" src="/img/blank.png"></a></br>
-					<a class="subhead">Price: </a> <a class="item"><%= @res[9] %> €</a><br/>
-					<a href="/addorder?page=<%= request.fullpath %>&id=<%= params[:id] %>&type=s"><input type="button" value="Buy"></a>
+
+			<div id="menu" align="left" style="background:#EEE; float:left;width:70%>
+				<br/>
+				<span id="artistsButton" width="100" class="link">Artists</span>
+				<span id="albumsButton" width="100" class="link">Albums</span>
+				<span id="songsButton" width="100" class="link">Songs</span>
+				<span id="merchButton" width="100" class="link">Merchandising</span>
+				<span id="clientsButton" width="100" class="link">Clients</span>
+
+				<div id="artists" align="left" style="background:#EEE; float:left;width:70%">
+					<br/>
+					<span id="addArtistButton" width="100" class="link">Add</span>
+					<span id="editArtistButton" width="100" class="link">Edit</span>
+					<span id="deleteArtistButton" width="100" class="link">Delete</span>
+					<br/>
+					<br/>
+					<div id="editArtist" align="left" style="background:#EEE; float:left;width:70%">
+						<span id="editArtistManualButton" width="100" class="link" onClick="showContent(displayed3, 'editArtistManual')">Manually</span>
+						<span id="editArtistLastfmButton" width="100" class="link" onClick="showContent(displayed3, 'editArtistLastfm')">Using last.fm</span>
+						<br/>
+						<br/>
+						<div id="editArtist" align="left" style="background:#EEE; float:left;width:70%">
+							<form name="artistForm" action="/editArtistManual" method="post">
+								<table onkeyup="disableButton()" width="300">
+									<tr>
+										<td class="label" width="65">Name:</td>
+										<td><input type="text" name="artistName" value="<%=@artist[0]%>"/></td>
+									</tr>
+									<tr>
+										<td class="label">Bio:</td>
+										<td><input type="text" name="artistBio" value="<%=@artist[1]%>"/></td>
+									</tr>
+									<tr>
+										<td class="label">Image:</td>
+										<td><input type="text" name="artistImage" value="<%=@artist[2]%>"/></td>
+									</tr>
+									<tr>
+										<td><input type="hidden" name="artistID" value="<%=@artist[3]%>" /></td>
+									</tr>
+								</table>
+								<input type="submit" value="Edit" name="submitButton"/>
+							</form>
+						</div>
+					</div>
 				</div>
-		      </div>
+				
+
+			</div>
+
 			<!-- Shopping Cart -->
 			<div style="background:#FFF; float:left;width:15%;">
 				<h1 class="head">Shopping Cart</h1>
 				<% if params[:erro] == "f" %>
-					<p class="prepo">Your order was done sucessfully. Thanks for using our store</p>
+					<p>Your order was done sucessfully. Thanks for using our store</p>
 				<% end %>
 				<% if session[:orders]=={}%>
-					<p class="prepo">No orders</p>
+					<p>No orders</p>
 				<% else %>
+					<p>You have some orders</p>
 					<% session[:orders].keys.each do |order| %>
 					<p align="left" style="margin:10%">Product: <%= session[:orders][order][1] %> (<%= session[:orders][order][2] %>)<br />Quantity: <%= session[:orders][order][0] %> <img style="cursor:pointer" onmouseup="add(<%= order %>)" src="/img/plus.png">  <img style="cursor:pointer" onmouseup="del(<%= order %>,<%= session[:orders][order][0] %>)" src="/img/minus.png"><br /><img style="cursor:pointer" onmouseup="remove(<%= order %>)" src="/img/cross.png"></p>
 					<% end %>
@@ -195,13 +184,14 @@
 						<input type="button" onClick="goTo('checkout')" value="Checkout" disabled="true">
 						<br />You need to be logged in to proceed to checkout! 
 					<%end%>
-					<p class="prepo">(a) - album / (s) - song / (m) - merchandise</p>
+					<p>(a) - album / (s) - song / (m) - merchandise</p>
 				<%end%>
 			</div>
 		</div>
 	</div>
 	<div align="center" id="footer">
-			Copyright © 2010 - Guilherme Simões, João Penetra, Ricardo Bernardino
+		Copyright © 2010 - Guilherme Simões, João Penetra, Ricardo Bernardino
 	</div>
+</div>
 </body>
 </html>
