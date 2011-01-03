@@ -92,6 +92,7 @@
 								<option value="album">Albums</option>
 								<option value="song">Songs</option>
 								<option value="merch">Merchandising</option>
+								<option value="genre">Genre</option>
 							</select>
 							<input type="submit" value="Go">
 						</form>
@@ -104,6 +105,7 @@
 			<% if @logged %>
 			<div style="background:#FFF; float:left;width:15%">
 				<h1 class="head"><%= session[:id] %></h1>
+				<p class="prepo">You have <%= @credits %> credits</p>
 				<a class="search" href="/client"> Edit your account</a>
 				<br />
 				<input id="credits_txt" type="text" size="5" style="display:none;" onkeyup="justInt()" /><br />
@@ -139,10 +141,10 @@
 										<a class="list" href="/artist/<%= @albums[i+4] %>/album/<%= @albums[i] %>"><img src="<%= @albums[i+3] %>" height="60" width="60" border="2"/></a>
 									</td>
 									<td>
-										<a class="list" href="/artist/<%= @albums[i+4] %>/album/<%= @albums[i] %>"><%= @albums[i+2] %> - <%= @albums[i+1] %></a>
+										<a class="list" href="/artist/<%= @albums[i+4] %>/album/<%= @albums[i] %>"><%= @albums[i+2] %> - <%= @albums[i+1] %><br /> <%= @albums[i+5] %> €</a>
 									</td>
 								</tr>
-								<% i=i+5 %>
+								<% i=i+6 %>
 							<% end %>
 						</table>
 					</div>
@@ -158,10 +160,10 @@
 											<a class="list" href="/artist/<%= @songs[i+4] %>/song/<%= @songs[i] %>"><img src="<%= @songs[i+3] %>" height="60" width="60" border="2"/></a>
 										</td>
 										<td>
-											<a class="list" href="/artist/<%= @songs[i+4] %>/song/<%= @songs[i] %>"><%= @songs[i+2] %> - <%= @songs[i+1] %></a>
+											<a class="list" href="/artist/<%= @songs[i+4] %>/song/<%= @songs[i] %>"><%= @songs[i+2] %> - <%= @songs[i+1] %><br /> <%= @songs[i+5] %> €</a>
 										</td>
 									</tr>
-								<% i=i+5 %>
+								<% i=i+6 %>
 							<% end %>
 						
 						</table>
@@ -178,16 +180,12 @@
 											<a class="list" href="/artist/<%=@merch[i+4] %>/merch/<%= @merch[i] %>"><img src="<%= @merch[i+3] %>" height="60" width="60" border="2"/></a>
 										</td>
 										<td>
-											<a class="list" href="/artist/<%=@merch[i+4] %>/merch/<%= @merch[i] %>"><%= @merch[i+2] %> - <%= @merch[i+1] %></a>
+											<a class="list" href="/artist/<%=@merch[i+4] %>/merch/<%= @merch[i] %>"><%= @merch[i+2] %> - <%= @merch[i+1] %><br /> <%= @merch[i+5] %> €</a>
 										</td>
-										
 									</tr>
-								<% i=i+5 %>
+								<% i=i+6 %>
 							<% end %>
 						</table>
-					</div>
-					<div style="background:#EEE; float:left;width:50%;">
-						<h1>User Recommendations</h1>
 					</div>
 				</div>
 			</div>
@@ -200,7 +198,6 @@
 				<% if session[:orders]=={}%>
 					<p>No orders</p>
 				<% else %>
-					<p>You have some orders</p>
 					<% session[:orders].keys.each do |order| %>
 					<p align="left" style="margin:10%">Product: <%= session[:orders][order][1] %> (<%= session[:orders][order][2] %>)<br />Quantity: <%= session[:orders][order][0] %> <img style="cursor:pointer" onmouseup="add(<%= order %>)" src="/img/plus.png">  <img style="cursor:pointer" onmouseup="del(<%= order %>,<%= session[:orders][order][0] %>)" src="/img/minus.png"><br /><img style="cursor:pointer" onmouseup="remove(<%= order %>)" src="/img/cross.png"></p>
 					<% end %>

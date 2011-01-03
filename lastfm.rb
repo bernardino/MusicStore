@@ -129,13 +129,18 @@ class Lastfm
 			unless result.first == 0
 			  return result
 		  end
+		  
+			song_length = "3:00"
+			song_genre = "Other"
+			song_desc = "N/A"
 			
 			i = 3		
 			while i < arr.length			
-				res = $manage.addSong(result[1], arr[i], '3:00', 'Other', (i-2), artist_id, 'N/A', arr[1], arr[2], '0.99', '-1')
+				res = $manage.addSong(result[1].to_i, arr[i], song_length, song_genre, (i-2), artist_id, song_desc, arr[1], arr[2], '0.99', '-1')
 				
 				unless res == 0
 				  result[0] = -5
+				  $db.execute("rollback")
 				  return result;
 			  end
 			  
@@ -146,7 +151,7 @@ class Lastfm
 		  result << -4
 			return result
 		end
-		
+		$db.execute("commit")
 		result
 	end
 	

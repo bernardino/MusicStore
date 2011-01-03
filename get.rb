@@ -177,39 +177,39 @@ class Get
 
 	def recentlyAddedAlbums()
 		return $db.select(" SELECT *
-							FROM (	SELECT p.product_id, al.album_name, ar.artist_name, p.image, ar.artist_id
+							FROM (	SELECT p.product_id, al.album_name, ar.artist_name, p.image, ar.artist_id, p.current_price
 									FROM product p, album al, artist ar
 									WHERE p.product_id = al.product_id
 									AND p.artist_id = ar.artist_id
 									ORDER by p.added_date DESC
 								)
-							WHERE rownum < 4
+							WHERE rownum < 5
 						")
 	end
 	
 	
 	def recentlyAddedSongs()
 		return $db.select(" SELECT *
-							FROM (	SELECT p.product_id, s.song_name, ar.artist_name, p.image, ar.artist_id
+							FROM (	SELECT p.product_id, s.song_name, ar.artist_name, p.image, ar.artist_id, p.current_price
 									FROM product p, song s, artist ar
 									WHERE p.product_id = s.product_id
 									AND p.artist_id = ar.artist_id
 									ORDER by p.added_date DESC
 								)
-							WHERE rownum < 4
+							WHERE rownum < 5
 						")
 	end	
 	
 	
 	def recentlyAddedMerch()
 		return $db.select(" SELECT *
-							FROM (	SELECT p.product_id, m.merchandise_name, ar.artist_name, p.image, ar.artist_id
+							FROM (	SELECT p.product_id, m.merchandise_name, ar.artist_name, p.image, ar.artist_id, p.current_price
 									FROM product p, merchandise m, artist ar
 									WHERE p.product_id = m.product_id
 									AND p.artist_id = ar.artist_id
 									ORDER by p.added_date DESC
 								)
-							WHERE rownum < 4
+							WHERE rownum < 5
 						")
 	end
 	

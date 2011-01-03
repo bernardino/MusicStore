@@ -22,16 +22,6 @@ configure do
 	enable :sessions
 end
 
-class ArtistError < StandardError
-end
-
-class AlbumError < StandardError
-end
-
-class SongError < StandardError
-end
-
-#template(:layout) { :index }
 
 before do
 	if session[:id]
@@ -41,6 +31,9 @@ before do
 		else
 			@admin = false
 		end
+		
+		res = $db.select("select credits from client where client_id = '#{session[:id]}'")
+		@credits = res.first
 	else
 		@logged = false
 	end
@@ -52,18 +45,6 @@ before do
   
 end
 
-=begin
-helpers do
-  #def partial template
-  #  erb template.to_sym, :layout => false
-  #end
-  
-  def partial(template, options={})
-     options.merge!(:layout => false)
-     erb template.to_sym, options
-   end
-end
-=end
 
 get '/' do
 	@albums = $get.recentlyAddedAlbums()
@@ -218,6 +199,9 @@ post '/search' do
 			@res = $search.song(@searchTerm)
 		elsif @options == 'merch'
 			@res = $search.merchandise(@searchTerm)
+		elsif @options == 'genre'
+			@res = $search.album_genre(@searchTerm)
+			@res_song = $search.song_genre(@searchTerm)
 		end
 		
 		if @res.length == 0
@@ -383,13 +367,12 @@ end
 
 
 post '/addSong' do
-  
 	if (params[:songAlbum] != '')
 		result = $manage.addSong(params[:songAlbum], params[:songName], params[:songLength], params[:songGenre], params[:songNumber], params[:songArtist], params[:songDescription], params[:songImage], params[:songDate], params[:songPrice], '-1')
 	else
 		result = $manage.addSong('null', params[:songName], params[:songLength], params[:songGenre], 'null', params[:songArtist], params[:songDescription], params[:songImage], params[:songDate], params[:songPrice], '-1')
 	end
-  
+  $db.execute("commit")
   if result == 0
 	  redirect '/admin'
 	elsif result == -1
