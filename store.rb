@@ -350,18 +350,18 @@ post '/addAlbumLastfm' do
 	result = $lf.addAlbum(params[:albumName], params[:albumLength], params[:albumGenre], params[:albumLabel], params[:albumArtist], params[:albumPrice], params[:albumStock])
 	
 	if result.first ==0
-	  redirect '/admin'
-  elsif result.first == -1
-    redirect '/admin?error=badalbumdata'
-  elsif result.first == -3
-    redirect '/admin?error=albumnotfound'
-  elsif result.first == -4
-    redirect '/admin?error=badartistid'
-  elsif result.first == -5
-    redirect '/admin?error=badlastfmsongdata'
-  else
-    redirect '/admin?error=dberror'
-  end
+		redirect '/admin'
+	elsif result.first == -1
+		redirect '/admin?error=badalbumdata'
+	elsif result.first == -3
+		redirect '/admin?error=albumnotfound'
+	elsif result.first == -4
+		redirect '/admin?error=badartistid'
+	elsif result.first == -5
+		redirect '/admin?error=badlastfmsongdata'
+	else
+		redirect '/admin?error=dberror'
+	end
 	
 end
 

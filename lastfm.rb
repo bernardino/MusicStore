@@ -45,6 +45,7 @@ class Lastfm
 		url = "http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=#{name.gsub(' ','+')}&api_key=b25b959554ed76058ac220b7b2e0a026" #LAST.FM REST API
 		resp = Net::HTTP.get_response(URI.parse(url))
 		image = String.new
+		bio = String.new
 
 		doc = Hpricot resp.body
 		
@@ -73,26 +74,26 @@ class Lastfm
 	
 	#Use Last.fm API to get information we want about this album
 	def addAlbum(name, length, genre, label, artist_id, price, stock)
-		
+
 		artist_name = $get.artistName(artist_id)
-	
+
 		if (artist_name[0])
 			url = "http://ws.audioscrobbler.com/2.0/?method=album.getinfo&artist=#{artist_name[0].gsub(' ','+')}&album=#{name.gsub(' ','+')}&api_key=b25b959554ed76058ac220b7b2e0a026"
 			resp = Net::HTTP.get_response(URI.parse(url)).body
 			arr = Array.new
 			date = String.new
-			
+
 			doc = Hpricot resp
-			
+
 			(doc/"lfm").each do |err|
   		  if err.attributes["status"] == 'failed'
   		    arr << -3
   		    return arr
   	    end
   	  end
-			
+
 			arr[0] = getOrclStr((doc/"lfm/album/wiki/summary").inner_html.gsub(']]>','').gsub('<![CDATA[',''))
-			
+
 			if (arr[0]==nil || arr[0].length<5)
 				arr[0] = "N/A"
 			end
@@ -102,7 +103,7 @@ class Lastfm
 					arr[1] = r.inner_html
 				end
 			end
-			
+
 			date = (doc/"lfm/album/releasedate").inner_html
 			if (date.length<5)
 				arr[2] = -1
@@ -116,34 +117,34 @@ class Lastfm
 					i=i+1
 				end
 			end
-			
+
 			i=3
 			(doc/"lfm/album/tracks/track/name").each do |r|
 				arr[i] = getOrclStr(r.inner_html)
 				i=i+1
 			end
-			
+
 			result = Array.new
 			result = $manage.addAlbum(name, length, genre, label, artist_id, arr[0], arr[1], arr[2], price, stock)
-			
+
 			unless result.first == 0
 			  return result
 		  end
-		  
+
 			song_length = "3:00"
 			song_genre = "Other"
 			song_desc = "N/A"
-			
+
 			i = 3		
 			while i < arr.length			
-				res = $manage.addSong(result[1].to_i, arr[i], song_length, song_genre, (i-2), artist_id, song_desc, arr[1], arr[2], '0.99', '-1')
-				
+				res = $manage.addSong(result[1].to_i, arr[i], song_length, genre, (i-2), artist_id, song_desc, arr[1], arr[2], '0.99', '-1')
+
 				unless res == 0
 				  result[0] = -5
 				  $db.execute("rollback")
 				  return result;
 			  end
-			  
+
 				i=i+1
 			end
 		else
