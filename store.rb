@@ -73,12 +73,12 @@ post '/register' do
   cursor.bind_param(0, -1, Integer)
   cursor.exec()
   
-  if cursor[0]==0 #client successfully added
-    session[:id] = params[:username]
+	if cursor[0]==0 #client successfully added
+		session[:id] = params[:username]
 		redirect '/'
-  else
-    redirect '/register?message=error'
-  end
+	else
+		redirect '/register?message=error'
+	end
 end
 
 
@@ -388,6 +388,29 @@ post '/addAlbumLastfm' do
 end
 
 
+post '/getAlbum' do
+	@album = $get.albumToEdit(params[:ID])
+	
+	unless @album[0]
+		redirect '/admin?error=badalbumid'
+	end
+	
+	erb :editalbum
+end
+
+
+post '/editAlbumManual' do
+	$manage.editAlbum(params[:albumName], params[:albumLength], params[:albumGenre], params[:albumLabel], params[:albumArtist], params[:albumDescription], params[:albumImage], params[:albumDate], params[:albumPrice], params[:albumStock], params[:albumID])
+
+	erb :admin
+end
+
+
+post '/editAlbumLastfm' do
+	
+end
+
+
 post '/addSong' do
 	if (params[:songAlbum] != '')
 		result = $manage.addSong(params[:songAlbum], params[:songName], params[:songLength], params[:songGenre], params[:songNumber], params[:songArtist], params[:songDescription], params[:songImage], params[:songDate], params[:songPrice], '-1')
@@ -419,11 +442,12 @@ end
 post '/editSong' do
 	res = $manage.editSong(params[:songName], params[:songLength], params[:songGenre], params[:songNumber], params[:songAlbum], params[:songArtist], params[:songDescription], params[:songImage], params[:songDate], params[:songPrice], params[:songID])
   
-  if res == 0
-    redirect '/admin'
-  else
-    redirect '/admin?error=badsongdata'
-  end
+	if res == 0
+		redirect '/admin'
+	else
+		redirect '/admin?error=badsongdata'
+	end
+	
 	erb :admin
 end
 
@@ -435,9 +459,9 @@ post '/addMerch' do
   
 	result = $manage.addMerch(params[:merchName], params[:merchArtist], params[:merchDescription], image, params[:merchDate], params[:merchPrice], params[:merchStock])
 	if result == 0
-	  redirect '/admin'
+		redirect '/admin'
 	elsif result == -1    
-	  redirect '/admin?error=badmerchdata'
+		redirect '/admin?error=badmerchdata'
 	else
 		redirect '/admin?error=dberror'
 	end
@@ -463,6 +487,9 @@ post '/editMerch' do
 	else
 		redirect '/admin?error=badmerchdata'
 	end
+	
+	erb :admin
+	
 end
 
 

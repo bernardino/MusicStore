@@ -35,26 +35,27 @@
 		window.location="/removeorder?id="+id+"&page=<%= request.fullpath %>";
 	}
 	
-	
-	function disableButton(){
-		if (merchForm.merchName.value=="" ||
-			merchForm.merchArtist.value=="" ||
-			merchForm.merchDescription.value=="" ||
-			merchForm.merchImage.value=="" ||
-			merchForm.merchDate.value=="" ||
-			merchForm.merchPrice.value=="" ||
-			merchForm.merchStock.value=="" ||
-			isNaN(merchForm.merchArtist.value) ||
-			isNaN(merchForm.merchDate.value) ||
-			isNaN(merchForm.merchPrice.value) ||
-			isNaN(merchForm.merchStock.value)){
-			merchForm.editButton.disabled=true;
+		function disableEditButton(){
+		if (albumForm.albumName.value=="" ||
+			albumForm.albumLength.value=="" ||
+			albumForm.albumGenre.value=="" ||
+			albumForm.albumLabel.value=="" ||
+			albumForm.albumArtist.value=="" ||
+			albumForm.albumDescription.value=="" ||
+			albumForm.albumImage.value=="" ||
+			albumForm.albumDate.value=="" ||
+			albumForm.albumPrice.value=="" ||
+			albumForm.albumStock.value=="" ||
+			isNaN(albumForm.albumArtist.value) ||
+			isNaN(albumForm.albumDate.value) ||
+			isNaN(albumForm.albumPrice.value) ||
+			isNaN(albumForm.albumStock.value)){
+			albumForm.submitButton.disabled=true;
 		}
 		else {
-			merchForm.editButton.disabled=false;
+			albumForm.submitButton.disabled=false;
 		}
 	}
-
 	</script>
 </head>
 
@@ -125,61 +126,82 @@
 			<% end %>
 
 
-			<div id="menu" align="left" style="background:#EEE; float:left;width:70%">
+			<div id="menu" align="left" style="background:#EEE; float:left;width:70%>
 				<br/>
 				<span id="artistsButton" width="100" class="link">Artists</span>
 				<span id="albumsButton" width="100" class="link">Albums</span>
 				<span id="songsButton" width="100" class="link">Songs</span>
 				<span id="merchButton" width="100" class="link">Merchandising</span>
 				<span id="clientsButton" width="100" class="link">Clients</span>
-				<div id="merch" align="left" style="background:#EEE; float:left;width:70%">
+				<div id="albums" align="left" style="background:#EEE; float:left;width:70%">
 					<br/>
-					<span id="addMerchButton" width="100" class="link">Add</span>
-					<span id="editMerchButton" width="100" class="link">Edit</span>
-					<span id="deleteMerchButton" width="100" class="link">Delete</span>
+					<span id="addAlbumButton" width="100" class="link">Add</span>
+					<span id="editAlbumButton" width="100" class="link">Edit</span>
+					<span id="deleteAlbumButton" width="100" class="link">Delete</span>
 					<br/>
-					<br/>					
-					<div id="editMerch" align="left" style="background:#EEE; float:left;width:70%">
-						<form name="merchForm" action="/editMerch" method="post">
-							<table width="400" onkeyup="disableButton()">
-								<tr>
-									<td class="label" width="130">Name:</td>
-									<td><input type="text" name="merchName" value="<%=@merch[0]%>"/></td>
-								</tr>
-								<tr>
-									<td class="label">Artist ID:</td>
-									<td><input type="text" name="merchArtist" value="<%=@merch[1]%>"/></td>
-								</tr>
-								<tr>
-									<td class="label">Description:</td>
-									<td><input type="text" name="merchDescription" value="<%=@merch[2]%>"/></td>
-								</tr>
-								<tr>
-									<td class="label">Image:</td>
-									<td><input type="text" name="merchImage" value="<%=@merch[3]%>"/></td>
-								</tr>
-								<tr>
-									<td class="label">Release Year:</td>
-									<td><input type="text" name="merchDate" value="<%=@merch[4]%>"/></td>
-								</tr>
-								<tr>
-									<td class="label">Price:</td>
-									<td><input type="text" name="merchPrice" value="<%=@merch[5]%>"/></td>
-								</tr>
-								<tr>
-									<td class="label">Stock:</td>
-									<td><input type="text" name="merchStock" value="<%=@merch[6]%>"/></td>
-								</tr>
-								<tr>
-									<td><input type="hidden" name="merchID" value="<%=@merch[7]%>" /></td>
-								</tr>
-							</table>
-							<input type="submit" value="Edit" name="editButton"/>
-							<br/>
-							<br/>
-						</form>
+					<br/>
+					<div id="editAlbum" align="left" style="background:#EEE; float:left;width:70%">
+						<span id="editAlbumManualButton" width="100" class="link"">Manually</span>
+						<span id="editAlbumLastfmButton" width="100" class="link" ">Using last.fm</span>
+						<br/>
+						<br/>
+						<div id="editAlbumManual" align="left" style="background:#EEE; float:left;width:70%">
+							<form name="albumForm" action="/editAlbumManual" method="post">
+								<table onkeyup="disableEditButton()" width="400">
+								
+									
+									<tr>
+										<td class="label" width="130">Name:</td>
+										<td><input type="text" name="albumName" value="<%=@album[0]%>"/></td>
+									</tr>
+									<tr>
+										<td class="label">Length:</td>
+										<td><input type="text" name="albumLength" value="<%=@album[1]%>"/></td>
+									</tr>
+									<tr>
+										<td class="label">Genre:</td>
+										<td><input type="text" name="albumGenre" value="<%=@album[2]%>"/></td>
+									</tr>
+									<tr>
+										<td class="label">Label:</td>
+										<td><input type="text" name="albumLabel" value="<%=@album[3]%>"/></td>
+									</tr>
+									<tr>
+										<td class="label">Artist ID:</td>
+										<td><input type="text" name="albumArtist" value="<%=@album[4]%>"/></td>
+									</tr>
+									<tr>
+										<td class="label">Description:</td>
+										<td><input type="text" name="albumDescription" value="<%=@album[5]%>"/></td>
+									</tr>
+									<tr>
+										<td class="label">Image:</td>
+										<td><input type="text" name="albumImage" value="<%=@album[6]%>"/></td>
+									</tr>
+									<tr>
+										<td class="label">Release Year:</td>
+										<td><input type="text" name="albumDate" value="<%=@album[7]%>"/></td>
+									</tr>
+									<tr>
+										<td class="label">Price:</td>
+										<td><input type="text" name="albumPrice" value="<%=@album[8]%>"/></td>
+									</tr>
+									<tr>
+										<td class="label">Stock:</td>
+										<td><input type="text" name="albumStock" value="<%=@album[9]%>"/></td>
+									</tr>
+									<tr>
+										<td><input type="hidden" name="albumID" value="<%=@album[10]%>" /></td>
+									</tr>
+								</table>
+								<input type="submit" value="Edit" name="submitButton" disabled="true"/>
+							</form>
+						</div>
 					</div>
+					
 				</div>
+				
+
 			</div>
 
 			<!-- Shopping Cart -->
