@@ -372,14 +372,32 @@ post '/addSong' do
 	else
 		result = $manage.addSong('null', params[:songName], params[:songLength], params[:songGenre], 'null', params[:songArtist], params[:songDescription], params[:songImage], params[:songDate], params[:songPrice], '-1')
 	end
-  $db.execute("commit")
-  if result == 0
-	  redirect '/admin'
+	$db.execute("commit")
+	if result == 0
+		redirect '/admin'
 	elsif result == -1
-	  redirect '/admin?error=badsongdata'
-  else
-    redirect '/admin?error=dberror'
-  end
+		redirect '/admin?error=badsongdata'
+	else
+		redirect '/admin?error=dberror'
+	end
+end
+
+
+post '/getSong' do
+	@song = $get.songToEdit(params[:ID])
+	
+	unless @song[0]
+		redirect '/admin?error=badsongid'
+	end
+	
+	erb :editsong
+end
+
+
+post '/editSong' do
+	$manage.editSong(params[:songName], params[:songLength], params[:songGenre], params[:songNumber], params[:songAlbum], params[:songArtist], params[:songDescription], params[:songImage], params[:songDate], params[:songPrice], params[:songID])
+
+	erb :admin
 end
 
 
@@ -411,7 +429,7 @@ end
 
 
 post '/editMerch' do
-	$manage.editMerch(params[:merchName], params[:merchArtist], params[:merchDescription], params[:merchImage], params[:merchDate], params[:merchPrice], params[:merchStock], 140)
+	$manage.editMerch(params[:merchName], params[:merchArtist], params[:merchDescription], params[:merchImage], params[:merchDate], params[:merchPrice], params[:merchStock], Integer(params[:merchID]))
 
 	erb :admin
 end

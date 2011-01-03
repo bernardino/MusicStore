@@ -608,7 +608,15 @@
 						</form>
 					</div>
 					<div id="editSong" align="left" style="background:#EEE; float:left;width:70%; display:none">
-						<h3>Song2</h3>
+						<form name="editSongForm" action="/getSong" method="post">
+							<table>
+								<tr>
+									<td class="label">Song ID:</td>
+									<td><input type="text" name="ID" onkeyup="disableSubmitButton(editSongForm)"/></td>
+								</tr>
+							</table>
+							<input type="submit" value="Get Info" name="submitButton" disabled="true"/>
+						</form>
 					</div>
 					<div id="deleteSong" align="left" style="background:#EEE; float:left;width:70%; display:none">
 						<form name="deleteSongForm" action="/deleteSong" method="post">
@@ -666,7 +674,6 @@
 						</form>
 					</div>
 					<div id="editMerch" align="left" style="background:#EEE; float:left;width:70%; display:none">
-
 						<form name="editMerchForm" action="/getMerch" method="post">
 							<table width="330">
 								<tr>
@@ -676,7 +683,6 @@
 							</table>
 							<input type="submit" value="Get Info" name="submitButton" disabled="true"/>
 						</form>
-						
 					</div>
 					<div id="deleteMerch" align="left" style="background:#EEE; float:left;width:70%; display:none">
 						<form name="deleteMerchForm" action="/deleteMerch" method="post">
