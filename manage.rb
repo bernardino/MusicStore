@@ -157,7 +157,7 @@ class Manage
 							stock = #{stock}
 						WHERE product_id = #{product_id}
 					")
-		$ db.execute("Commit")
+		$db.execute("Commit")
 	  rescue
 	    $db.execute("rollback")
 	    return -1

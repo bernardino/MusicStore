@@ -423,7 +423,7 @@ post '/editSong' do
     redirect '/admin'
   else
     redirect '/admin?error=badsongdata'
-  
+  end
 	erb :admin
 end
 
@@ -438,9 +438,9 @@ post '/addMerch' do
 	  redirect '/admin'
 	elsif result == -1    
 	  redirect '/admin?error=badmerchdata'
-  else
-    redirect '/admin?error=dberror'
-  end
+	else
+		redirect '/admin?error=dberror'
+	end
 end
 
 
@@ -458,10 +458,11 @@ end
 post '/editMerch' do
 	res = $manage.editMerch(params[:merchName], params[:merchArtist], params[:merchDescription], params[:merchImage], params[:merchDate], params[:merchPrice], params[:merchStock], Integer(params[:merchID]))
   
-  if res == 0
-    redirect '/admin'
-  else
-    redirect '/admin?error=badmerchdata'
+	if res == 0
+		redirect '/admin'
+	else
+		redirect '/admin?error=badmerchdata'
+	end
 end
 
 
