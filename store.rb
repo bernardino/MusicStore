@@ -417,18 +417,20 @@ end
 
 
 post '/getMerch' do
-	@merch = $get.merchandise(params[:ID])
+	@merch = $get.merchToEdit(params[:ID])
 	
-	if @merch[0]
-		redirect '/admin?error=merche'
+	unless @merch[0]
+		redirect '/admin?error=badmerchid'
 	end
 	
-	redirect '/admin?error=badmerchid'
+	erb :editmerch
 end
 
 
 post '/editMerch' do
+	$manage.editMerch(params[:merchName], params[:merchArtist], params[:merchDescription], params[:merchImage], params[:merchDate], params[:merchPrice], params[:merchStock], 140)
 
+	erb :admin
 end
 
 

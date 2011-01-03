@@ -57,6 +57,15 @@ class Get
 	end
 	
 	
+	def merchToEdit(merchandise_id)
+		return $db.select("	SELECT merchandise_name, artist_id, description, image, release_date, current_price, stock, p.product_id
+							FROM merchandise m, product p
+							WHERE p.product_id = m.product_id
+							AND m.product_id = #{merchandise_id}
+						")
+	end
+	
+	
 	def client(client_id)
 		return $db.select("	SELECT name, address, telephone, email
 							FROM client c

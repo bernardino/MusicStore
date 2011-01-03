@@ -665,72 +665,15 @@
 					</div>
 					<div id="editMerch" align="left" style="background:#EEE; float:left;width:70%; display:none">
 
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-					
-						<form name="editMerchForm" action="/editMerch" method="post">
-							<table width="400">
+						<form name="editMerchForm" action="/getMerch" method="post">
+							<table width="330">
 								<tr>
-									<td class="label" width="130">Name:</td>
-									<td><input type="text" disabled="true" name="merchName"/></td>
-								</tr>
-								<tr>
-									<td class="label">Artist ID:</td>
-									<td><input type="text" disabled="true" name="merchArtist"/></td>
-								</tr>
-								<tr>
-									<td class="label">Description:</td>
-									<td><input type="text" disabled="true" name="merchDescription"/></td>
-								</tr>
-								<tr>
-									<td class="label">Image:</td>
-									<td><input type="text" disabled="true" name="merchImage"/></td>
-								</tr>
-								<tr>
-									<td class="label">Release Year:</td>
-									<td><input type="text" disabled="true" name="merchDate"/></td>
-								</tr>
-								<tr>
-									<td class="label">Price:</td>
-									<td><input type="text" disabled="true" name="merchPrice"/></td>
-								</tr>
-								<tr>
-									<td class="label">Stock:</td>
-									<td><input type="text" disabled="true" name="merchStock"/></td>
+									<td class="label">Merchandise ID:</td>
+									<td><input type="text" name="ID" onkeyup="disableSubmitButton(editMerchForm)"/></td>
 								</tr>
 							</table>
-							<input type="submit" value="Edit" name="editButton" disabled="true"/>
-							<br/>
-							<br/>
+							<input type="submit" value="Get Info" name="submitButton" disabled="true"/>
 						</form>
-						<form name="getMerchForm" action="/getMerch" method="post">
-							<table width="400">
-								<tr>
-									<td width="130"><input type="submit" value="Get" name="submitButton" disabled="true"/></td>
-									<td><input type="text" name="ID" onkeyup="disableSubmitButton(getMerchForm)"/></td>
-								</tr>
-							</table>
-						</form>
-
-						
-						
-						
-						
-						
-						
-						
-						
-						
 						
 					</div>
 					<div id="deleteMerch" align="left" style="background:#EEE; float:left;width:70%; display:none">
