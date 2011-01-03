@@ -44,29 +44,29 @@ class Lastfm
 	def addArtist(name)
 		url = "http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=#{name.gsub(' ','+')}&api_key=b25b959554ed76058ac220b7b2e0a026" #LAST.FM REST API
 		resp = Net::HTTP.get_response(URI.parse(url))
-		arr = Array.new
+		image = String.new
 
 		doc = Hpricot resp.body
 		
 		(doc/"lfm").each do |err|
-		  if err.attributes["status"] == 'failed'
-		    return -3
-	    end
-	  end
+			if err.attributes["status"] == 'failed'
+				return -3
+			end
+		end
 	  
+		
 		(doc/"lfm/artist/image").each do |ing|
 			if ing.attributes["size"] == 'large'
-				arr[0] = ing.inner_html
+				url = "http://tinyurl.com/api-create.php?url=#{ing.inner_html}"
+				resp = Net::HTTP.get_response(URI.parse(url))
+				image = resp.body
 			end
 		end
 		
-		arr[1] = getOrclStr((doc/"lfm/artist/bio/summary").inner_html.gsub(']]>',"").gsub('<![CDATA[',""))
 		
-		url = "http://tinyurl.com/api-create.php?url=#{arr[0]}"
-    resp = Net::HTTP.get_response(URI.parse(url))
-    image=resp.body
+		bio = getOrclStr((doc/"lfm/artist/bio/summary").inner_html.gsub(']]>',"").gsub('<![CDATA[',""))
 		
-		result = $manage.addArtist(name, image, arr[1])
+		result = $manage.addArtist(name, image, bio)
 		result
 	end	
 	

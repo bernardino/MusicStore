@@ -7,10 +7,10 @@ class Manage
 	
 	def addArtist(artist_name, artist_image, artist_bio)
 		cursor = $db.conn.parse("BEGIN addArtist('#{artist_name}','#{artist_bio}','#{artist_image}',:b1); END;")
-    cursor.bind_param(0, -1, Integer)
-    cursor.exec()
+		cursor.bind_param(0, -1, Integer)
+		cursor.exec()
     
-    cursor[0] # :b1 result of the procedure
+		cursor[0] # :b1 result of the procedure
 	end
 	
 	
@@ -38,7 +38,7 @@ class Manage
 	
 	
 	def addSong(alb_product_id, song_name, song_length, song_genre, song_number, artist_id, description, image, release_date, current_price, stock)
-		cursor = $db.conn.parse("BEGIN addSong(#{alb_product_id},'#{song_name}','#{song_length}','#{song_genre}',#{song_number}, #{artist_id},'#{description}','#{image}',#{release_date},#{current_price},#{stock},:b1); END;")
+		cursor = $db.conn.parse("BEGIN addSong(#{alb_product_id}, '#{song_name}', '#{song_length}', '#{song_genre}', #{song_number}, #{artist_id}, '#{description}', '#{image}',#{release_date},#{current_price},#{stock},:b1); END;")
     cursor.bind_param(0, -1, Integer)
     
     cursor.exec()
@@ -84,7 +84,36 @@ class Manage
 		
 		$db.execute("Commit")
 	end
+		
 	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	def editMerch(merchandise_name, artist_id, description, image, release_date, current_price, stock, product_id)
+		$db.execute("	UPDATE merchandise
+						SET merchandise_name = '#{merchandise_name}'
+						WHERE product_id = '#{product_id}'
+					")
+		$db.execute("	UPDATE product
+						SET artist_id = #{artist_id},
+							description = '#{description}',
+							image = '#{image}',
+							release_date = #{release_date},
+							current_price = #{current_price},
+							stock = #{stock}
+						WHERE product_id = '#{product_id}'
+					")
+		$db.execute("Commit")
+	end
 	
 	
 	def deleteArtist(artist_id)
