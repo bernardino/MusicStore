@@ -124,6 +124,7 @@ class Manage
 		  return -1
 	  end
 		$db.execute("Commit")
+		return 0
 	end
 	
 	
@@ -153,6 +154,7 @@ class Manage
 	    $db.execute("rollback")
 	    return -1
 	  end
+	  return 0
 	end
 	
 	
