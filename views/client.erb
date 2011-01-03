@@ -201,8 +201,11 @@
 			<!-- Shopping Cart -->
 			<div style="background:#FFF; float:left;width:15%;">
 				<h1 class="head">Shopping Cart</h1>
+				<% if params[:erro] == "f" %>
+					<p class="prepo">Your order was done sucessfully. Thanks for using our store</p>
+				<% end %>
 				<% if session[:orders]=={}%>
-					<p>No orders</p>
+					<p class="prepo">No orders</p>
 				<% else %>
 					<% session[:orders].keys.each do |order| %>
 					<p align="left" style="margin:10%">Product: <%= session[:orders][order][1] %> (<%= session[:orders][order][2] %>)<br />Quantity: <%= session[:orders][order][0] %> <img style="cursor:pointer" onmouseup="add(<%= order %>)" src="/img/plus.png">  <img style="cursor:pointer" onmouseup="del(<%= order %>,<%= session[:orders][order][0] %>)" src="/img/minus.png"><br /><img style="cursor:pointer" onmouseup="remove(<%= order %>)" src="/img/cross.png"></p>
@@ -213,7 +216,7 @@
 						<input type="button" onClick="goTo('checkout')" value="Checkout" disabled="true">
 						<br />You need to be logged in to proceed to checkout! 
 					<%end%>
-					<p>(a) - album / (s) - song / (m) - merchandise</p>
+					<p class="prepo">(a) - album / (s) - song / (m) - merchandise</p>
 				<%end%>
 			</div>
 		</div>
