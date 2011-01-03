@@ -540,10 +540,26 @@
 						<br/>
 						<br/>
 						<div id="editAlbumManual" align="left" style="background:#EEE; float:left;width:70%; display:none">
-							<h3>Manually</h3>
+							<form name="editAlbumManualForm" action="/getAlbum" method="post">
+							<table>
+								<tr>
+									<td class="label">Album ID:</td>
+									<td><input type="text" name="ID" onkeyup="disableSubmitButton(editAlbumManualForm)"/></td>
+								</tr>
+							</table>
+							<input type="submit" value="Get Info" name="submitButton" disabled="true"/>
+						</form>
 						</div>
 						<div id="editAlbumLastfm" align="left" style="background:#EEE; float:left;width:70%; display:none">
-							<h3>Using last.fm</h3>
+							<form name="editAlbumLastfmForm" action="/admin" method="post">
+							<table>
+								<tr>
+									<td class="label">Album ID:</td>
+									<td><input type="text" name="ID" onkeyup="disableSubmitButton(editAlbumLastfmForm)"/></td>
+								</tr>
+							</table>
+							<input type="submit" value="Edit" name="submitButton" disabled="true"/>
+						</form>
 						</div>
 					</div>
 					<div id="deleteAlbum" align="left" style="background:#EEE; float:left;width:70%; display:none">

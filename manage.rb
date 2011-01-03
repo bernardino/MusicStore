@@ -103,6 +103,29 @@ class Manage
 	end
 	
 	
+	def editAlbum(album_name, album_length, album_genre, album_label, artist_id, description, image, release_date, current_price, stock, product_id)
+		$db.execute("	UPDATE album
+						SET album_name = '#{album_name}',
+							album_length = '#{album_length}',
+							album_genre = '#{album_genre}',
+							album_label = '#{album_label}'
+						WHERE product_id = #{product_id}
+					")
+		
+		$db.execute("	UPDATE product
+						SET artist_id = #{artist_id},
+							description = '#{description}',
+							image = '#{image}',
+							release_date = '#{release_date}',
+							current_price = #{current_price},
+							stock = #{stock}
+						WHERE product_id = #{product_id}
+					")
+		
+		$db.execute("Commit")
+	end
+	
+	
 	def editSong(song_name, song_length, song_genre, song_number, album_id, artist_id, description, image, release_date, current_price, product_id)
 		begin
 		  $db.execute("	UPDATE song
@@ -157,7 +180,7 @@ class Manage
 							stock = #{stock}
 						WHERE product_id = #{product_id}
 					")
-		$ db.execute("Commit")
+		$db.execute("Commit")
 	  rescue
 	    $db.execute("rollback")
 	    return -1

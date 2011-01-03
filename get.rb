@@ -30,6 +30,15 @@ class Get
 	end
 	
 	
+	def albumToEdit(album_id)
+		return $db.select("	SELECT album_name, album_length, album_genre, album_label, artist_id, description, image, release_date, current_price, stock, p.product_id
+							FROM album al, product p
+							WHERE p.product_id = al.product_id
+							AND al.product_id = #{album_id}
+						")
+	end
+	
+	
 	def song(song_id)
 		return $db.select("	SELECT 	artist_name,
 									song_name,

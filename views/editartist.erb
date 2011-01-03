@@ -34,19 +34,6 @@
 		else
 		window.location="/removeorder?id="+id+"&page=<%= request.fullpath %>";
 	}
-	
-	
-	function disableAButton(){
-		if (artistForm.artistName.value=="" ||
-			artistForm.artistBio.value=="" ||
-			artistForm.artistImage.value==""){
-			artistForm.submitButton.disabled=true;
-		}
-		else {
-			artistForm.submitButton.disabled=false;
-		}
-	}
-
 	</script>
 </head>
 
@@ -133,8 +120,8 @@
 					<br/>
 					<br/>
 					<div id="editArtist" align="left" style="background:#EEE; float:left;width:70%">
-						<span id="editArtistManualButton" width="100" class="link" onClick="showContent(displayed3, 'editArtistManual')">Manually</span>
-						<span id="editArtistLastfmButton" width="100" class="link" onClick="showContent(displayed3, 'editArtistLastfm')">Using last.fm</span>
+						<span id="editArtistManualButton" width="100" class="link">Manually</span>
+						<span id="editArtistLastfmButton" width="100" class="link">Using last.fm</span>
 						<br/>
 						<br/>
 						<div id="editArtist" align="left" style="background:#EEE; float:left;width:70%">
