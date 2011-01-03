@@ -22,27 +22,8 @@ class Lastfm
 	end
 	
 	
-	def cenas(name)
-		url = "http://www.discogs.com/release/123?f=xml&api_key=78e3013970"
-		headers = {'Accept-Encoding' => 'gzip', 'User-Agent' => 'MyDiscogsClient/1.0 +http://mydiscogsclient.org'}
-		begin
-			response = open(url, headers)
-			begin
-				data = Zlib::GzipReader.new(response)
-			rescue Zlib::GzipFile::Error
-				response.seek(0)
-				data = response.read
-			end
-		rescue OpenURI::HTTPError => e
-			data = e.io.read
-		end
-		data
-	
-	end
-	
-	
 	def addArtist(name)
-		url = "http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=#{name.gsub(' ','+')}&api_key=b25b959554ed76058ac220b7b2e0a026" #LAST.FM REST API
+		url = "http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=#{name.gsub(' ','+')}&api_key=8ea76991c5d4936f71710eb66b2e63ac" #LAST.FM REST API
 		resp = Net::HTTP.get_response(URI.parse(url))
 		image = String.new
 
@@ -77,7 +58,7 @@ class Lastfm
 		artist_name = $get.artistName(artist_id)
 	
 		if (artist_name[0])
-			url = "http://ws.audioscrobbler.com/2.0/?method=album.getinfo&artist=#{artist_name[0].gsub(' ','+')}&album=#{name.gsub(' ','+')}&api_key=b25b959554ed76058ac220b7b2e0a026"
+			url = "http://ws.audioscrobbler.com/2.0/?method=album.getinfo&artist=#{artist_name[0].gsub(' ','+')}&album=#{name.gsub(' ','+')}&api_key=8ea76991c5d4936f71710eb66b2e63ac"
 			resp = Net::HTTP.get_response(URI.parse(url)).body
 			arr = Array.new
 			date = String.new
@@ -224,9 +205,7 @@ class Lastfm
 		api_sig = Digest::MD5.hexdigest("api_key8ea76991c5d4936f71710eb66b2e63acmethodauth.getSessiontoken#{token}ec28bf8d372e5c1f1531603ba606a561")
 		
 		#api_key8ea76991c5d4936f71710eb66b2e63acmethodauth.getSessiontokenada733945e8a06a5eff32814244de55bec28bf8d372e5c1f1531603ba606a561
-		
-		
-		
+			
 		
 		url = "http://ws.audioscrobbler.com/2.0/?method=auth.getSession&api_key=8ea76991c5d4936f71710eb66b2e63ac&api_sig=#{api_sig}&token=#{token}"
 		resp = Net::HTTP.get_response(URI.parse(url)).body

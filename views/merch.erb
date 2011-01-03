@@ -159,8 +159,8 @@
 					<img src="<%= @res[2] %>" width="150" height="150"/>
 				</div>
 				<div align="left" style="margin: 10px;">
-					<a class="headline" href =""> <%= @res[0] %></a><br/><br/>
-					<a class="subhead">Name: </a> <a class="item"><%= @res[1] %></a><br/>
+					<a class="headlinelink" href ="/artist/<%=params[:name]%>"> <%= @res[0] %></a><br/><br/>
+					<a class="subhead">Name: </a> <info><%= @res[1] %></info><br/>
 					<a class="subhead">Description:</a> <info><%= @res[3] %></info><br/>
 					<a class="subhead">Rating: </a> <img id="star0" onmouseover="imgOver(0)" onmouseout="rating()" onmouseup="vote(1)" src="/img/blank.png"><img id="star1" onmouseover="imgOver(1)" onmouseout="rating()" onmouseup="vote(2)" src="/img/blank.png"><img id="star2" onmouseover="imgOver(2)" onmouseout="rating()" onmouseup="vote(3)" src="/img/blank.png"><img id="star3" onmouseover="imgOver(3)" onmouseout="rating()" onmouseup="vote(4)" src="/img/blank.png"><img id="star4" onmouseup="vote(5)" onmouseover="imgOver(4)" onmouseout="rating()" src="/img/blank.png"></a></br>
 					<a class="subhead">Price: </a> <a class="item"> <%= @res[7] %> €</a><br/>
