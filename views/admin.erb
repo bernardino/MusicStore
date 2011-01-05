@@ -71,9 +71,9 @@
 			else if (error[1] == "badlastfmsongdata")
 				alert("A Song could not be added to the database using last.fm\nTry adding it manually");
 			else if (error[1] == "badartistdata")
-			alert("The Artist you entered already exists\nPlease try again");
+				alert("The Artist you entered already exists\nPlease try again");
 			else if (error[1] == "badalbumdata")
-			alert("The Album you entered already exists\nPlease try again");
+				alert("The Album you entered already exists\nPlease try again");
 			else if (error[1] == "badsongdata")
 				alert("The Song details you entered were invalid\nPlease try again");
 			else if (error[1] == "badmerchdata")
@@ -87,20 +87,9 @@
 			else if (error[1] == "badmerchid")
 				alert("The Merchandise ID you entered is incorrect");
 			else if (error[1] == "badclientid")
-			alert("The Username you entered is incorrect");
+				alert("The Username you entered is incorrect");
 			else if (error[1] == "dberror")
-			alert("Database Error! Please try again");
-			else if (error[1] == "merche"){
-				document.getElementById('merchButton').className='link2';
-				document.getElementById('merch').style.display='inline';
-				displayed='merch';
-				document.getElementById('editMerchButton').className='link2';
-				document.getElementById('editMerch').style.display='inline';
-				displayed2='editMerch';
-				
-				
-				
-			}
+				alert("Database Error! Please try again");
 		}
 	}
 
@@ -113,6 +102,16 @@
 		}
 		else {
 			addArtistManualForm.submitButton.disabled=false;
+		}
+	}
+	
+	
+	function disableAddArtistLastfmButton(){
+		if(addArtistLastfmForm.artistName.value==""){
+			addArtistLastfmForm.submitButton.disabled=true;
+		}
+		else {
+			addArtistLastfmForm.submitButton.disabled=false;
 		}
 	}
 
@@ -379,7 +378,7 @@
 								<table width="300">
 									<tr>
 										<td class="label" width="65">Name:</td>
-										<td><input type="text" name="artistName" onkeyup="disableSubmitButton()"/></td>
+										<td><input type="text" name="artistName" onkeyup="disableAddArtistLastfmButton()"/></td>
 									</tr>
 								</table>
 								<input type="submit" value="Add" name="submitButton" disabled="true"/>
