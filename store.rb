@@ -447,7 +447,7 @@ post '/editSong' do
 	else
 		redirect '/admin?error=badsongdata'
 	end
-  
+	
 	erb :admin
 end
 
@@ -489,6 +489,7 @@ post '/editMerch' do
 	end
 	
 	erb :admin
+	
 end
 
 

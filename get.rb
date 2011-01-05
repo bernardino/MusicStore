@@ -54,7 +54,8 @@ class Get
 									rating,
 									votes,
 									current_price,
-									image
+									image,
+									alb_product_id
 							FROM song s, artist a, product p
 							WHERE a.artist_id = p.artist_id
 							AND p.product_id = s.product_id

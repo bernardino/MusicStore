@@ -166,7 +166,7 @@
 					<a class="prepo">by </a><a class="subheadlink" href="/artist/<%=params[:name]%>"><%= @res[0] %></a>
 					<br/><br/>
 					<% if @res[2] != "None" %>
-						<a class="prepo">in </a><a class="subhead"><%= @res[2] %></a><br/><br/>
+						<a class="prepo">in </a><a class="subheadlink" href="/artist/<%=params[:name]%>/album/<%=@res[11]%>"><%= @res[2] %></a><br/><br/>
 					<% end %>
 					<a class="subhead">Track Number:</a> <a class="item"> <%= @res[3] %></a><br/>
 					<a class="subhead">Length:</a> <a class="item"> <%= @res[4] %></a><br/>
